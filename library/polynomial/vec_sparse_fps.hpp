@@ -63,7 +63,7 @@ namespace suisen {
             std::sort(data.begin(), data.end(), [](auto &p1, auto &p2) { return p1.first < p2.first; });
             VecSparseFPS h;
             for (auto &[i, a] : data) {
-                h.add_to_last(i, std::move(a));
+                h.add_to_last({i, std::move(a)});
             }
             return h;
         }
@@ -116,7 +116,7 @@ namespace suisen {
 
         static value_type bostan_mori(VecSparseFPS P, std::vector<value_type> Q, long long m) {
             for (; m; m >>= 1) {
-                std::vector<mint> mQ = Q;
+                std::vector<value_type> mQ = Q;
                 for (int i = 1; i < int(Q.size()); i += 2) mQ[i] = -mQ[i];
                 auto nP = P * mQ;
                 P.clear();
