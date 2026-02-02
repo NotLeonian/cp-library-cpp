@@ -28,12 +28,6 @@ namespace suisen {
             }
         }
     };
-
-    template <typename T, typename F, T(*mapping)(F, T), F(*composition)(F, F), F(*id)()>
-    DualSegmentTree(int, T)->DualSegmentTree<T, F, mapping, composition, id>;
-
-    template <typename T, typename F, T(*mapping)(F, T), F(*composition)(F, F), F(*id)()>
-    DualSegmentTree(std::vector<T>)->DualSegmentTree<T, F, mapping, composition, id>;
 } // namespace suisen
 
 
