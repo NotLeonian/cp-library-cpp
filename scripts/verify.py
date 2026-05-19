@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 from collections import OrderedDict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import json
@@ -8,7 +9,10 @@ from pathlib import Path
 import threading
 from typing import Dict, Iterable, List
 
+import onlinejudge_verify.config
+import onlinejudge_verify.documentation.main
 import onlinejudge_verify.languages.list
+import onlinejudge_verify.main as oj_verify_main
 import onlinejudge_verify.marker
 import onlinejudge_verify.verify
 
@@ -27,6 +31,8 @@ MAX_WORKERS = int(os.environ.get("VERIFY_JOBS", str(os.cpu_count() or 2)))
 VERIFY_TIMEOUT = float(os.environ.get("VERIFY_TIMEOUT", "6000"))
 TLE = float(os.environ.get("VERIFY_TLE", "60"))
 OJ_TEST_JOBS = int(os.environ.get("OJ_TEST_JOBS", "1"))
+DOCS_JOBS = int(os.environ.get("VERIFY_DOCS_JOBS", os.environ.get("VERIFY_JOBS", "1")))
+DEFAULT_BRANCH = os.environ.get("VERIFY_DEFAULT_BRANCH", "main")
 
 _download_lock = threading.Lock()
 
@@ -42,6 +48,10 @@ def dump_json(path: Path, data: Dict[str, str]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w") as fh:
         json.dump(data, fh, indent=4, sort_keys=True)
+
+
+def setup_verify_helper_config() -> None:
+    onlinejudge_verify.config.set_config_path(Path(onlinejudge_verify.config.default_config_path))
 
 
 def patch_atcoder_to_sample_only() -> None:
@@ -169,7 +179,8 @@ def run_bucket(
     return load_json(worker_timestamp_file)
 
 
-def main() -> None:
+def run_verification() -> None:
+    setup_verify_helper_config()
     patch_atcoder_to_sample_only()
 
     base_timestamp = load_json(TIMESTAMP_FILE)
@@ -196,6 +207,57 @@ def main() -> None:
             merged_timestamp.update(future.result())
 
     dump_json(TIMESTAMP_FILE, merged_timestamp)
+
+
+def deploy_docs() -> None:
+    setup_verify_helper_config()
+
+    if "GITHUB_ACTION" in os.environ:
+        expected_ref = f"refs/heads/{DEFAULT_BRANCH}"
+        actual_ref = os.environ.get("GITHUB_REF", "")
+        if actual_ref != expected_ref:
+            print(
+                "Updating GitHub Pages is skipped: "
+                f'this execution is on "{actual_ref}", not "{expected_ref}".'
+            )
+            return
+
+        if not os.environ.get("GH_PAT"):
+            raise RuntimeError("GH_PAT is required to deploy documents to GitHub Pages")
+
+    oj_verify_main.generate_gitignore()
+
+    print("generate documents...")
+    onlinejudge_verify.documentation.main.main(jobs=DOCS_JOBS)
+
+    if "GITHUB_ACTION" in os.environ:
+        print("upload documents...")
+        oj_verify_main.push_documents_to_gh_pages(
+            src_dir=VERIFY_HELPER_DIR / "markdown",
+        )
+    else:
+        print(f"documents generated at {VERIFY_HELPER_DIR / 'markdown'}")
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "command",
+        nargs="?",
+        choices=("run", "docs"),
+        default="run",
+        help="run verification in parallel or generate/deploy documentation",
+    )
+    return parser.parse_args()
+
+
+def main() -> None:
+    args = parse_args()
+
+    if args.command == "run":
+        run_verification()
+    elif args.command == "docs":
+        deploy_docs()
 
 
 if __name__ == "__main__":
