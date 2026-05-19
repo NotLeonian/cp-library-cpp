@@ -26,6 +26,29 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install "setuptools<82" "online-judge-verify-helper==5.6.0"
 
+    - name: Patch verification-helper for AtCoder sample-only verification
+      run: |
+        python <<'PY'
+        import pathlib
+        import onlinejudge_verify.verify
+
+        path = pathlib.Path(onlinejudge_verify.verify.__file__)
+        text = path.read_text()
+
+        old = "        command = ['oj', 'download', '--system', '-d', str(directory / 'test'), '--silent', url]\n"
+        new = (
+            "        command = ['oj', 'download', '-d', str(directory / 'test'), '--silent', url]\n"
+            "        if not isinstance(problem, onlinejudge.service.atcoder.AtCoderProblem):\n"
+            "            command.insert(2, '--system')\n"
+        )
+
+        if old not in text:
+            raise RuntimeError(f"patch target not found: {path}")
+
+        path.write_text(text.replace(old, new))
+        print(f"patched {path}: AtCoder uses sample cases, others keep --system")
+        PY
+
     - name: Run tests
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
