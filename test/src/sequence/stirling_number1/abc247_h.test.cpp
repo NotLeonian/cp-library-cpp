@@ -1,4 +1,4 @@
-#define PROBLEM "https://atcoder.jp/contests/abc247/tasks/abc247_Ex"
+#define PROBLEM "https://atcoder.jp/contests/abc247/tasks/abc247_h"
 
 #include <iostream>
 #include <queue>
