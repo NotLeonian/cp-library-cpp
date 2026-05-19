@@ -287,6 +287,7 @@
 "test/src/optimization/alien_dp/arc168_e_1.test.cpp": "2024-01-30 21:41:27 +0900",
 "test/src/optimization/alien_dp/arc168_e_2.test.cpp": "2024-01-30 21:41:27 +0900",
 "test/src/optimization/k_project_selection_problem/arc129_e.test.cpp": "2024-01-30 21:53:51 +0900",
+"test/src/optimization/project_selection_problem/arc085_c.test.cpp": "2026-05-19 18:21:59 +0900",
 "test/src/polynomial/berlekamp_massey/find_linear_recurrence.test.cpp": "2024-01-30 20:59:32 +0900",
 "test/src/polynomial/bostan_mori/kth_term_of_linearly_recurrent_sequence.test.cpp": "2024-01-30 21:00:15 +0900",
 "test/src/polynomial/bostan_mori/kth_term_of_linearly_recurrent_sequence_2.test.cpp": "2024-01-30 21:00:59 +0900",
