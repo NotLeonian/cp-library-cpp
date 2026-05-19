@@ -36,14 +36,14 @@ namespace suisen {
         }
         // binom(n, r) の逆数
         // binom(n, r) = 0 の場合は assert 違反となる
-        static value_type binom_inv(int n, int r) {
+        static value_type binom_inv(long long n, long long r) {
             assert(r >= 0 and n >= r);
             return _binom_inv_lucas(n, r);
         }
         // n 種類から重複を許して r 個選ぶ場合の数
         // x_1+x_2+...+x_n=r（x_i は非負整数）となる x の個数でもある
         // multichoose(n, r) = binom(n + r - 1, r)
-        static value_type multichoose(int n, int r) {
+        static value_type multichoose(long long n, long long r) {
             if (n < 0 or r < 0) return 0;
             if (r == 0) return value_type(1);
             if (n == 0) return value_type(0);
@@ -53,7 +53,7 @@ namespace suisen {
         // x_1+x_2+...+x_n=r（x_i は非負整数）となる x の個数の逆数でもある
         // multichoose(n, r) = binom(n + r - 1, r)
         // multichoose(n, r) = 0 の場合は assert 違反となる
-        static value_type multichoose_inv(int n, int r) {
+        static value_type multichoose_inv(long long n, long long r) {
             assert(n >= 0 and r >= 0);
             if (r == 0) return value_type(1);
             assert(n > 0);
@@ -78,11 +78,11 @@ namespace suisen {
             return fac(n) * fac_inv(n - r);
         }
     private:
-        static value_type _binom_under_mod(int n, int r) {
+        static value_type _binom_under_mod(long long n, long long r) {
             if (r < 0 or n < r) return 0;
             return fac(n) * fac_inv(r) * fac_inv(n - r);
         }
-        static value_type _binom_inv_under_mod(int n, int r) {
+        static value_type _binom_inv_under_mod(long long n, long long r) {
             assert(r >= 0 and n >= r);
             return fac_inv(n) * fac(r) * fac(n - r);
         }
