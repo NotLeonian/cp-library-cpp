@@ -30,9 +30,34 @@ namespace suisen {
             assert(n < (long long) mint::mod());
             return n <= threshold ? factorial<mint>{}.fac_inv(n) : _large_fac(n).inv();
         }
-        static value_type binom(int n, int r) {
-            if (r < 0 or r > n) return 0;
-            return fac(n) * fac_inv(r) * fac_inv(n - r);
+        static value_type binom(long long n, long long r) {
+            if (n < 0 or r < 0 or n < r) return 0;
+            return _binom_lucas(n, r);
+        }
+        // binom(n, r) の逆数
+        // binom(n, r) = 0 の場合は assert 違反となる
+        static value_type binom_inv(long long n, long long r) {
+            assert(r >= 0 and n >= r);
+            return _binom_inv_lucas(n, r);
+        }
+        // n 種類から重複を許して r 個選ぶ場合の数
+        // x_1+x_2+...+x_n=r（x_i は非負整数）となる x の個数でもある
+        // multichoose(n, r) = binom(n + r - 1, r)
+        static value_type multichoose(long long n, long long r) {
+            if (n < 0 or r < 0) return 0;
+            if (r == 0) return value_type(1);
+            if (n == 0) return value_type(0);
+            return binom(n + r - 1, r);
+        }
+        // n 種類から重複を許して r 個選ぶ場合の数 multichoose(n, r) の逆数
+        // x_1+x_2+...+x_n=r（x_i は非負整数）となる x の個数の逆数でもある
+        // multichoose(n, r) = binom(n + r - 1, r)
+        // multichoose(n, r) = 0 の場合は assert 違反となる
+        static value_type multichoose_inv(long long n, long long r) {
+            assert(n >= 0 and r >= 0);
+            if (r == 0) return value_type(1);
+            assert(n > 0);
+            return binom_inv(n + r - 1, r);
         }
         template <typename ...Ds, std::enable_if_t<std::conjunction_v<std::is_integral<Ds>...>, std::nullptr_t> = nullptr>
         static value_type polynom(const int n, const Ds& ...ds) {
@@ -53,6 +78,51 @@ namespace suisen {
             return fac(n) * fac_inv(n - r);
         }
     private:
+        static value_type _binom_under_mod(long long n, long long r) {
+            if (r < 0 or n < r) return 0;
+            return fac(n) * fac_inv(r) * fac_inv(n - r);
+        }
+        static value_type _binom_inv_under_mod(long long n, long long r) {
+            assert(r >= 0 and n >= r);
+            return fac_inv(n) * fac(r) * fac(n - r);
+        }
+        static value_type _binom_lucas(long long n, long long r) {
+            if (n < 0 or r < 0 or n < r) return 0;
+
+            value_type res = 1;
+            const int p = value_type::mod();
+
+            while (n or r) {
+                const int ni = n % p;
+                const int ri = r % p;
+
+                if (ri > ni) return 0;
+                res *= _binom_under_mod(ni, ri);
+
+                n /= p;
+                r /= p;
+            }
+            return res;
+        }
+        static value_type _binom_inv_lucas(long long n, long long r) {
+            assert(0 <= r and r <= n);
+
+            value_type res = 1;
+            const int p = value_type::mod();
+
+            while (n or r) {
+                const int ni = n % p;
+                const int ri = r % p;
+
+                assert(ri <= ni);
+                res *= _binom_inv_under_mod(ni, ri);
+
+                n /= p;
+                r /= p;
+            }
+            return res;
+        }
+
         static inline std::vector<value_type> _block_fac{};
 
         static void _build() {
