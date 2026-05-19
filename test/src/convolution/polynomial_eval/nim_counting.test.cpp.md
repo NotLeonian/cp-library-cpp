@@ -1,0 +1,202 @@
+---
+data:
+  _extendedDependsOn:
+  - icon: ':heavy_check_mark:'
+    path: library/convolution/polynomial_eval.hpp
+    title: "\u5217\u3092\u5909\u6570\u3068\u3057\u3066\u6301\u3064\u591A\u9805\u5F0F\
+      \u306E\u8A55\u4FA1"
+  - icon: ':heavy_check_mark:'
+    path: library/transform/kronecker_power.hpp
+    title: "\u30AF\u30ED\u30CD\u30C3\u30AB\u30FC\u51AA\u306B\u3088\u308B\u7DDA\u5F62\
+      \u5909\u63DB (\u4EEE\u79F0)"
+  - icon: ':heavy_check_mark:'
+    path: library/transform/walsh_hadamard.hpp
+    title: "Walsh Hadamard \u5909\u63DB"
+  - icon: ':heavy_check_mark:'
+    path: library/type_traits/type_traits.hpp
+    title: Type Traits
+  - icon: ':heavy_check_mark:'
+    path: library/util/default_operator.hpp
+    title: Default Operator
+  _extendedRequiredBy: []
+  _extendedVerifiedWith: []
+  _isVerificationFailed: false
+  _pathExtension: cpp
+  _verificationStatusIcon: ':heavy_check_mark:'
+  attributes:
+    '*NOT_SPECIAL_COMMENTS*': ''
+    PROBLEM: https://atcoder.jp/contests/abc212/tasks/abc212_h
+    links:
+    - https://atcoder.jp/contests/abc212/tasks/abc212_h
+  bundledCode: "#line 1 \"test/src/convolution/polynomial_eval/nim_counting.test.cpp\"\
+    \n#define PROBLEM \"https://atcoder.jp/contests/abc212/tasks/abc212_h\"\n\n#include\
+    \ <iostream>\n#include <atcoder/modint>\n\n#line 1 \"library/transform/walsh_hadamard.hpp\"\
+    \n\n\n\n#line 1 \"library/transform/kronecker_power.hpp\"\n\n\n\n#include <cassert>\n\
+    #include <utility>\n#include <vector>\n\n#line 1 \"library/util/default_operator.hpp\"\
+    \n\n\n\nnamespace suisen {\n    namespace default_operator {\n        template\
+    \ <typename T>\n        auto zero() -> decltype(T { 0 }) { return T { 0 }; }\n\
+    \        template <typename T>\n        auto one()  -> decltype(T { 1 }) { return\
+    \ T { 1 }; }\n        template <typename T>\n        auto add(const T &x, const\
+    \ T &y) -> decltype(x + y) { return x + y; }\n        template <typename T>\n\
+    \        auto sub(const T &x, const T &y) -> decltype(x - y) { return x - y; }\n\
+    \        template <typename T>\n        auto mul(const T &x, const T &y) -> decltype(x\
+    \ * y) { return x * y; }\n        template <typename T>\n        auto div(const\
+    \ T &x, const T &y) -> decltype(x / y) { return x / y; }\n        template <typename\
+    \ T>\n        auto mod(const T &x, const T &y) -> decltype(x % y) { return x %\
+    \ y; }\n        template <typename T>\n        auto neg(const T &x) -> decltype(-x)\
+    \ { return -x; }\n        template <typename T>\n        auto inv(const T &x)\
+    \ -> decltype(one<T>() / x)  { return one<T>() / x; }\n    } // default_operator\n\
+    \    namespace default_operator_noref {\n        template <typename T>\n     \
+    \   auto zero() -> decltype(T { 0 }) { return T { 0 }; }\n        template <typename\
+    \ T>\n        auto one()  -> decltype(T { 1 }) { return T { 1 }; }\n        template\
+    \ <typename T>\n        auto add(T x, T y) -> decltype(x + y) { return x + y;\
+    \ }\n        template <typename T>\n        auto sub(T x, T y) -> decltype(x -\
+    \ y) { return x - y; }\n        template <typename T>\n        auto mul(T x, T\
+    \ y) -> decltype(x * y) { return x * y; }\n        template <typename T>\n   \
+    \     auto div(T x, T y) -> decltype(x / y) { return x / y; }\n        template\
+    \ <typename T>\n        auto mod(T x, T y) -> decltype(x % y) { return x % y;\
+    \ }\n        template <typename T>\n        auto neg(T x) -> decltype(-x) { return\
+    \ -x; }\n        template <typename T>\n        auto inv(T x) -> decltype(one<T>()\
+    \ / x)  { return one<T>() / x; }\n    } // default_operator\n} // namespace suisen\n\
+    \n\n#line 9 \"library/transform/kronecker_power.hpp\"\n\nnamespace suisen {\n\
+    \    namespace kronecker_power_transform {\n        namespace internal {\n   \
+    \         template <typename UnitTransform, typename ReferenceGetter, std::size_t...\
+    \ Seq>\n            void unit_transform(UnitTransform transform, ReferenceGetter\
+    \ ref_getter, std::index_sequence<Seq...>) {\n                transform(ref_getter(Seq)...);\n\
+    \            }\n        }\n\n        template <typename T, std::size_t D, auto\
+    \ unit_transform>\n        void kronecker_power_transform(std::vector<T> &x) {\n\
+    \            const std::size_t n = x.size();\n            for (std::size_t block\
+    \ = 1; block < n; block *= D) {\n                for (std::size_t l = 0; l < n;\
+    \ l += D * block) {\n                    for (std::size_t offset = l; offset <\
+    \ l + block; ++offset) {\n                        const auto ref_getter = [&](std::size_t\
+    \ i) -> T& { return x[offset + i * block]; };\n                        internal::unit_transform(unit_transform,\
+    \ ref_getter, std::make_index_sequence<D>());\n                    }\n       \
+    \         }\n            }\n        }\n\n        template <typename T, typename\
+    \ UnitTransform>\n        void kronecker_power_transform(std::vector<T> &x, const\
+    \ std::size_t D, UnitTransform unit_transform) {\n            const std::size_t\
+    \ n = x.size();\n            std::vector<T> work(D);\n            for (std::size_t\
+    \ block = 1; block < n; block *= D) {\n                for (std::size_t l = 0;\
+    \ l < n; l += D * block) {\n                    for (std::size_t offset = l; offset\
+    \ < l + block; ++offset) {\n                        for (std::size_t i = 0; i\
+    \ < D; ++i) work[i] = x[offset + i * block];\n                        unit_transform(work);\n\
+    \                        for (std::size_t i = 0; i < D; ++i) x[offset + i * block]\
+    \ = work[i];\n                    }\n                }\n            }\n      \
+    \  }\n\n        template <typename T, auto e = default_operator::zero<T>, auto\
+    \ add = default_operator::add<T>, auto mul = default_operator::mul<T>>\n     \
+    \   auto kronecker_power_transform(std::vector<T> &x, const std::vector<std::vector<T>>\
+    \ &A) -> decltype(e(), add(std::declval<T>(), std::declval<T>()), mul(std::declval<T>(),\
+    \ std::declval<T>()), void()) {\n            const std::size_t D = A.size();\n\
+    \            assert(D == A[0].size());\n            auto unit_transform = [&](std::vector<T>\
+    \ &x) {\n                std::vector<T> y(D, e());\n                for (std::size_t\
+    \ i = 0; i < D; ++i) for (std::size_t j = 0; j < D; ++j) {\n                 \
+    \   y[i] = add(y[i], mul(A[i][j], x[j]));\n                }\n               \
+    \ x.swap(y);\n            };\n            kronecker_power_transform<T>(x, D, unit_transform);\n\
+    \        }\n    }\n} // namespace suisen\n\n\n\n#line 5 \"library/transform/walsh_hadamard.hpp\"\
+    \n\nnamespace suisen::walsh_hadamard_transform {\n    namespace internal {\n \
+    \       template <typename T, auto add = default_operator::add<T>, auto sub =\
+    \ default_operator::sub<T>>\n        void unit_transform(T& x0, T& x1) {\n   \
+    \         T y0 = x0, y1 = x1;\n            x0 = add(y0, y1);   // 1,  1\n    \
+    \        x1 = sub(y0, y1);   // 1, -1\n        }\n    } // namespace internal\n\
+    \n    using kronecker_power_transform::kronecker_power_transform;\n\n    template\
+    \ <typename T, auto add = default_operator::add<T>, auto sub = default_operator::sub<T>>\n\
+    \    void walsh_hadamard(std::vector<T>& a) {\n        kronecker_power_transform<T,\
+    \ 2, internal::unit_transform<T, add, sub>>(a);\n    }\n    template <typename\
+    \ T, auto add = default_operator::add<T>, auto sub = default_operator::sub<T>,\
+    \ auto div = default_operator::div<T>, std::enable_if_t<std::is_integral_v<T>,\
+    \ std::nullptr_t> = nullptr>\n    void walsh_hadamard_inv(std::vector<T>& a) {\n\
+    \        walsh_hadamard<T, add, sub>(a);\n        const T n{ a.size() };\n   \
+    \     for (auto& val : a) val = div(val, n);\n    }\n    template <typename T,\
+    \ auto add = default_operator::add<T>, auto sub = default_operator::sub<T>, auto\
+    \ mul = default_operator::mul<T>, auto inv = default_operator::inv<T>, std::enable_if_t<std::negation_v<std::is_integral<T>>,\
+    \ std::nullptr_t> = nullptr>\n    void walsh_hadamard_inv(std::vector<T>& a) {\n\
+    \        walsh_hadamard<T, add, sub>(a);\n        const T n{ a.size() };\n   \
+    \     const T inv_n = inv(n);\n        for (auto& val : a) val = mul(val, inv_n);\n\
+    \    }\n} // namespace suisen::walsh_hadamard_transform\n\n\n\n#line 1 \"library/convolution/polynomial_eval.hpp\"\
+    \n\n\n\n#line 5 \"library/convolution/polynomial_eval.hpp\"\n\n#line 1 \"library/type_traits/type_traits.hpp\"\
+    \n\n\n\n#include <limits>\n#line 6 \"library/type_traits/type_traits.hpp\"\n#include\
+    \ <type_traits>\n\nnamespace suisen {\n    template <typename ...Constraints>\
+    \ using constraints_t = std::enable_if_t<std::conjunction_v<Constraints...>, std::nullptr_t>;\n\
+    \n    template <typename T, typename = std::nullptr_t> struct bitnum { static\
+    \ constexpr int value = 0; };\n    template <typename T> struct bitnum<T, constraints_t<std::is_integral<T>>>\
+    \ { static constexpr int value = std::numeric_limits<std::make_unsigned_t<T>>::digits;\
+    \ };\n    template <typename T> static constexpr int bitnum_v = bitnum<T>::value;\n\
+    \    template <typename T, size_t n> struct is_nbit { static constexpr bool value\
+    \ = bitnum_v<T> == n; };\n    template <typename T, size_t n> static constexpr\
+    \ bool is_nbit_v = is_nbit<T, n>::value;\n\n    template <typename T, typename\
+    \ = std::nullptr_t> struct safely_multipliable { using type = T; };\n    template\
+    \ <typename T> struct safely_multipliable<T, constraints_t<std::is_signed<T>,\
+    \ is_nbit<T, 32>>> { using type = long long; };\n    template <typename T> struct\
+    \ safely_multipliable<T, constraints_t<std::is_signed<T>, is_nbit<T, 64>>> { using\
+    \ type = __int128_t; };\n    template <typename T> struct safely_multipliable<T,\
+    \ constraints_t<std::is_unsigned<T>, is_nbit<T, 32>>> { using type = unsigned\
+    \ long long; };\n    template <typename T> struct safely_multipliable<T, constraints_t<std::is_unsigned<T>,\
+    \ is_nbit<T, 64>>> { using type = __uint128_t; };\n    template <typename T> using\
+    \ safely_multipliable_t = typename safely_multipliable<T>::type;\n\n    template\
+    \ <typename T, typename = void> struct rec_value_type { using type = T; };\n \
+    \   template <typename T> struct rec_value_type<T, std::void_t<typename T::value_type>>\
+    \ {\n        using type = typename rec_value_type<typename T::value_type>::type;\n\
+    \    };\n    template <typename T> using rec_value_type_t = typename rec_value_type<T>::type;\n\
+    \n    template <typename T> class is_iterable {\n        template <typename T_>\
+    \ static auto test(T_ e) -> decltype(e.begin(), e.end(), std::true_type{});\n\
+    \        static std::false_type test(...);\n    public:\n        static constexpr\
+    \ bool value = decltype(test(std::declval<T>()))::value;\n    };\n    template\
+    \ <typename T> static constexpr bool is_iterable_v = is_iterable<T>::value;\n\
+    \    template <typename T> class is_writable {\n        template <typename T_>\
+    \ static auto test(T_ e) -> decltype(std::declval<std::ostream&>() << e, std::true_type{});\n\
+    \        static std::false_type test(...);\n    public:\n        static constexpr\
+    \ bool value = decltype(test(std::declval<T>()))::value;\n    };\n    template\
+    \ <typename T> static constexpr bool is_writable_v = is_writable<T>::value;\n\
+    \    template <typename T> class is_readable {\n        template <typename T_>\
+    \ static auto test(T_ e) -> decltype(std::declval<std::istream&>() >> e, std::true_type{});\n\
+    \        static std::false_type test(...);\n    public:\n        static constexpr\
+    \ bool value = decltype(test(std::declval<T>()))::value;\n    };\n    template\
+    \ <typename T> static constexpr bool is_readable_v = is_readable<T>::value;\n\
+    } // namespace suisen\n\n#line 7 \"library/convolution/polynomial_eval.hpp\"\n\
+    \nnamespace suisen {\n    template <typename T, auto transform, auto transform_inv,\
+    \ typename F, constraints_t<std::is_invocable_r<T, F, T>> = nullptr>\n    std::vector<T>\
+    \ polynomial_eval(std::vector<T> &&a, F f) {\n        transform(a);\n        for\
+    \ (auto &x : a) x = f(x);\n        transform_inv(a);\n        return a;\n    }\n\
+    \n    template <typename T, auto transform, auto transform_inv, typename F, constraints_t<std::is_invocable_r<T,\
+    \ F, T>> = nullptr>\n    std::vector<T> polynomial_eval(const std::vector<T> &a,\
+    \ F f) {\n        return polynomial_eval<T, transform, transform_inv>(std::vector<T>(a),\
+    \ f);\n    }\n} // namespace suisen\n\n\n#line 8 \"test/src/convolution/polynomial_eval/nim_counting.test.cpp\"\
+    \nusing namespace suisen;\n\nusing mint = atcoder::modint998244353;\n\nconstexpr\
+    \ int M = 1 << 16;\n\nint main() {\n    std::ios::sync_with_stdio(false);\n  \
+    \  std::cin.tie(nullptr);\n\n    int n, k;\n    std::cin >> n >> k;\n\n    std::vector<mint>\
+    \ c(M, 0);\n    for (int i = 0; i < k; ++i) {\n        int v;\n        std::cin\
+    \ >> v;\n        ++c[v];\n    }\n\n    using namespace walsh_hadamard_transform;\n\
+    \n    auto res = suisen::polynomial_eval<mint, walsh_hadamard<mint>, walsh_hadamard_inv<mint>>(c,\
+    \ [n](mint x) {\n        return x == 1 ? n : x * (x.pow(n) - 1) / (x - 1);\n \
+    \       });\n\n    std::cout << std::accumulate(res.begin() + 1, res.end(), mint(0)).val()\
+    \ << std::endl;\n\n    return 0;\n}\n"
+  code: "#define PROBLEM \"https://atcoder.jp/contests/abc212/tasks/abc212_h\"\n\n\
+    #include <iostream>\n#include <atcoder/modint>\n\n#include \"library/transform/walsh_hadamard.hpp\"\
+    \n#include \"library/convolution/polynomial_eval.hpp\"\nusing namespace suisen;\n\
+    \nusing mint = atcoder::modint998244353;\n\nconstexpr int M = 1 << 16;\n\nint\
+    \ main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
+    \n    int n, k;\n    std::cin >> n >> k;\n\n    std::vector<mint> c(M, 0);\n \
+    \   for (int i = 0; i < k; ++i) {\n        int v;\n        std::cin >> v;\n  \
+    \      ++c[v];\n    }\n\n    using namespace walsh_hadamard_transform;\n\n   \
+    \ auto res = suisen::polynomial_eval<mint, walsh_hadamard<mint>, walsh_hadamard_inv<mint>>(c,\
+    \ [n](mint x) {\n        return x == 1 ? n : x * (x.pow(n) - 1) / (x - 1);\n \
+    \       });\n\n    std::cout << std::accumulate(res.begin() + 1, res.end(), mint(0)).val()\
+    \ << std::endl;\n\n    return 0;\n}"
+  dependsOn:
+  - library/transform/walsh_hadamard.hpp
+  - library/transform/kronecker_power.hpp
+  - library/util/default_operator.hpp
+  - library/convolution/polynomial_eval.hpp
+  - library/type_traits/type_traits.hpp
+  isVerificationFile: true
+  path: test/src/convolution/polynomial_eval/nim_counting.test.cpp
+  requiredBy: []
+  timestamp: '2023-09-15 20:02:25+09:00'
+  verificationStatus: TEST_ACCEPTED
+  verifiedWith: []
+documentation_of: test/src/convolution/polynomial_eval/nim_counting.test.cpp
+layout: document
+redirect_from:
+- /verify/test/src/convolution/polynomial_eval/nim_counting.test.cpp
+- /verify/test/src/convolution/polynomial_eval/nim_counting.test.cpp.html
+title: test/src/convolution/polynomial_eval/nim_counting.test.cpp
+---
