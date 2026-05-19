@@ -41,12 +41,11 @@ jobs:
 
         path = pathlib.Path(onlinejudge_verify.verify.__file__)
         text = path.read_text()
-
-        old = "        command = ['oj', 'download', '--system', '-d', str(directory / 'test'), '--silent', url]\n"
+        old = "            command = ['oj', 'download', '--system', '-d', str(directory / 'test'), '--silent', url]\n"
         new = (
-            "        command = ['oj', 'download', '-d', str(directory / 'test'), '--silent', url]\n"
-            "        if not isinstance(problem, onlinejudge.service.atcoder.AtCoderProblem):\n"
-            "            command.insert(2, '--system')\n"
+            "            command = ['oj', 'download', '-d', str(directory / 'test'), '--silent', url]\n"
+            "            if not isinstance(problem, onlinejudge.service.atcoder.AtCoderProblem):\n"
+            "                command.insert(2, '--system')\n"
         )
 
         if old not in text:
@@ -59,10 +58,10 @@ jobs:
     - name: Run tests
       env:
         YUKICODER_TOKEN: ${{ secrets.YUKICODER_TOKEN }}
-        GH_PAT: ${{ secrets.GH_PAT }}
-      run: oj-verify all --timeout 6000
+      run: oj-verify run --timeout 6000
 
     - name: Generate GitHub App token
+      if: success() && github.ref == 'refs/heads/main'
       id: app-token
       uses: actions/create-github-app-token@v2
       with:
@@ -87,3 +86,10 @@ jobs:
         git commit -m "[auto-verifier] verify commit ${GITHUB_SHA}"
         git pull --rebase origin main
         git push "https://x-access-token:${APP_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:main
+
+    - name: Deploy docs to gh-pages
+      if: success() && github.ref == 'refs/heads/main'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_PAT: ${{ secrets.GH_PAT }}
+      run: oj-verify docs
