@@ -2,6 +2,9 @@ name: verify-parallel
 
 on: workflow_dispatch
 
+permissions:
+  contents: write
+
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -28,7 +31,24 @@ jobs:
 
     - name: Run tests
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         YUKICODER_TOKEN: ${{ secrets.YUKICODER_TOKEN }}
-        GH_PAT: ${{ secrets.GH_PAT }}
+        VERIFY_JOBS: 4
+        VERIFY_BUCKET_SIZE: 20
+        VERIFY_TIMEOUT: 6000
+        VERIFY_TLE: 60
+        OJ_TEST_JOBS: 1
       run: python scripts/verify.py
+
+    - name: Commit verification timestamp
+      if: github.ref_type == 'branch'
+      run: |
+        git config --global user.name "GitHub"
+        git config --global user.email "noreply@github.com"
+
+        git add .verify-helper/timestamps.remote.json
+
+        if ! git diff --quiet --staged; then
+          git commit -m "[auto-verifier] verify commit ${GITHUB_SHA}"
+          git pull --rebase
+          git push
+        fi
