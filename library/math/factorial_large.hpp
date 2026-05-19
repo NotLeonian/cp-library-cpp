@@ -34,6 +34,27 @@ namespace suisen {
             if (r < 0 or r > n) return 0;
             return fac(n) * fac_inv(r) * fac_inv(n - r);
         }
+        // binom(n, r) の逆数
+        // binom(n, r) = 0 の場合は assert 違反となる
+        static value_type binom_inv(int n, int r) {
+            assert(r >= 0 and n >= r);
+            return fac_inv(n) * fac(r) * fac(n - r);
+        }
+        // n 種類から重複を許して r 個選ぶ場合の数
+        // x_1+x_2+...+x_n=r（x_i は非負整数）となる x の個数でもある
+        // multichoose(n, r) = binom(n + r - 1, r)
+        static value_type multichoose(int n, int r) {
+            if (n < 0 or r < 0) return 0;
+            return r > 0 ? binom(n + r - 1, r) : value_type(1);
+        }
+        // n 種類から重複を許して r 個選ぶ場合の数 multichoose(n, r) の逆数
+        // x_1+x_2+...+x_n=r（x_i は非負整数）となる x の個数の逆数でもある
+        // multichoose(n, r) = binom(n + r - 1, r)
+        // multichoose(n, r) = 0 の場合は assert 違反となる
+        static value_type multichoose_inv(int n, int r) {
+            assert(n >= 0 and r >= 0);
+            return r > 0 ? binom_inv(n + r - 1, r) : value_type(1);
+        }
         template <typename ...Ds, std::enable_if_t<std::conjunction_v<std::is_integral<Ds>...>, std::nullptr_t> = nullptr>
         static value_type polynom(const int n, const Ds& ...ds) {
             if (n < 0) return 0;
