@@ -7,25 +7,51 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v6
       with:
         submodules: true
         fetch-depth: 0
 
     - name: Set up Python
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v6
+      with:
+        python-version: '3.11'
 
     # ! dependents on other library
     - name: Update Submodules
       run: git submodule update --remote
 
     - name: Install dependencies
-      run: pip3 install -U online-judge-verify-helper
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install "setuptools<82" "online-judge-verify-helper==5.6.0"
+
+    - name: Patch verification-helper for AtCoder sample-only verification
+      run: |
+        python <<'PY'
+        import pathlib
+        import onlinejudge_verify.verify
+
+        path = pathlib.Path(onlinejudge_verify.verify.__file__)
+        text = path.read_text()
+
+        old = "        command = ['oj', 'download', '--system', '-d', str(directory / 'test'), '--silent', url]\n"
+        new = (
+            "        command = ['oj', 'download', '-d', str(directory / 'test'), '--silent', url]\n"
+            "        if not isinstance(problem, onlinejudge.service.atcoder.AtCoderProblem):\n"
+            "            command.insert(2, '--system')\n"
+        )
+
+        if old not in text:
+            raise RuntimeError(f"patch target not found: {path}")
+
+        path.write_text(text.replace(old, new))
+        print(f"patched {path}: AtCoder uses sample cases, others keep --system")
+        PY
 
     - name: Run tests
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         YUKICODER_TOKEN: ${{ secrets.YUKICODER_TOKEN }}
-        DROPBOX_TOKEN: ${{ secrets.DROPBOX_TOKEN }}
         GH_PAT: ${{ secrets.GH_PAT }}
       run: oj-verify all --timeout 6000
