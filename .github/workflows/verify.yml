@@ -2,8 +2,6 @@ name: verify
 
 on:
   push:
-    branches:
-      - main
     paths-ignore:
       - '.verify-helper/timestamps.remote.json'
 
