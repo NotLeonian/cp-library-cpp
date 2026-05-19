@@ -1,4 +1,4 @@
-#define PROBLEM "https://atcoder.jp/contests/abc266/tasks/abc266_Ex"
+#define PROBLEM "https://atcoder.jp/contests/abc266/tasks/abc266_h"
 
 #include "library/datastructure/fenwick_tree/compressed_fenwick_tree_prefix.hpp"
 
