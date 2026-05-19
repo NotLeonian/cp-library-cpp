@@ -41,6 +41,7 @@ jobs:
 
         path = pathlib.Path(onlinejudge_verify.verify.__file__)
         text = path.read_text()
+
         old = "        command = ['oj', 'download', '--system', '-d', str(directory / 'test'), '--silent', url]\n"
         new = (
             "        command = ['oj', 'download', '-d', str(directory / 'test'), '--silent', url]\n"
