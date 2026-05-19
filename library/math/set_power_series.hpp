@@ -12,7 +12,7 @@ namespace suisen {
 
         using polynomial_type = ranked_subset_transform::polynomial_t<value_type>;
 
-        using base_type::vector;
+        using base_type::base_type;
 
         SetPowerSeries(): SetPowerSeries(0) {}
         SetPowerSeries(size_type n): SetPowerSeries(n, value_type{ 0 }) {}
@@ -125,7 +125,7 @@ namespace suisen {
 
         struct ZetaSPS: public std::vector<polynomial_type> {
             using base_type = std::vector<polynomial_type>;
-            using base_type::vector;
+            using base_type::base_type;
             ZetaSPS() = default;
             ZetaSPS(const SetPowerSeries<value_type>& f): base_type::vector(ranked_subset_transform::ranked_zeta(f)), _d(f.cardinality()) {}
 
