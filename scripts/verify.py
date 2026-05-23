@@ -6,6 +6,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import json
 import os
 from pathlib import Path
+import shutil
 import threading
 from typing import Dict, Iterable, List
 
@@ -37,6 +38,10 @@ DEFAULT_BRANCH = os.environ.get("VERIFY_DEFAULT_BRANCH", "main")
 _download_lock = threading.Lock()
 
 
+def is_truthy(value: str | None) -> bool:
+    return (value or "").lower() in {"1", "true", "yes", "y", "on"}
+
+
 def load_json(path: Path) -> Dict[str, str]:
     if not path.exists():
         return {}
@@ -52,6 +57,15 @@ def dump_json(path: Path, data: Dict[str, str]) -> None:
 
 def setup_verify_helper_config() -> None:
     onlinejudge_verify.config.set_config_path(Path(onlinejudge_verify.config.default_config_path))
+
+
+def drop_verify_cache() -> None:
+    """
+    Full verification 用に timestamp とローカル verify cache を捨てる。
+    """
+    TIMESTAMP_FILE.unlink(missing_ok=True)
+    shutil.rmtree(VERIFY_HELPER_DIR / "cache", ignore_errors=True)
+    shutil.rmtree(WORKER_TIMESTAMP_DIR, ignore_errors=True)
 
 
 def patch_atcoder_to_sample_only() -> None:
@@ -179,9 +193,14 @@ def run_bucket(
     return load_json(worker_timestamp_file)
 
 
-def run_verification() -> None:
+def run_verification(*, full_verify: bool = False) -> None:
     setup_verify_helper_config()
     patch_atcoder_to_sample_only()
+
+    full_verify = full_verify or is_truthy(os.environ.get("VERIFY_FULL"))
+    if full_verify:
+        print("Full verification: ignore timestamp/cache")
+        drop_verify_cache()
 
     base_timestamp = load_json(TIMESTAMP_FILE)
     tests = list_test_files()
@@ -191,9 +210,10 @@ def run_verification() -> None:
     print(f"buckets: {len(buckets)}")
     print(f"max workers: {MAX_WORKERS}")
     print("AtCoder verification mode: sample-only")
+    print(f"full verification: {full_verify}")
 
     merged_timestamp = dict(base_timestamp)
-
+    shutil.rmtree(WORKER_TIMESTAMP_DIR, ignore_errors=True)
     WORKER_TIMESTAMP_DIR.mkdir(parents=True, exist_ok=True)
 
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
@@ -248,6 +268,11 @@ def parse_args() -> argparse.Namespace:
         default="run",
         help="run verification in parallel or generate/deploy documentation",
     )
+    parser.add_argument(
+        "--full",
+        action="store_true",
+        help="ignore timestamp/cache and re-run all verification",
+    )
     return parser.parse_args()
 
 
@@ -255,7 +280,7 @@ def main() -> None:
     args = parse_args()
 
     if args.command == "run":
-        run_verification()
+        run_verification(full_verify=args.full)
     elif args.command == "docs":
         deploy_docs()
 

@@ -3,11 +3,19 @@ name: verify-parallel
 on:
   workflow_dispatch:
     inputs:
+      full_verify:
+        description: "Ignore .verify-helper/timestamps.remote.json and re-run all verification"
+        required: false
+        default: false
+        type: boolean
       deploy_docs:
         description: Deploy generated docs to GitHub Pages
         required: false
         type: boolean
         default: true
+  schedule:
+    - cron: "37 7 1 * *"
+      timezone: "Asia/Tokyo"
 
 permissions:
   contents: read
@@ -45,6 +53,7 @@ jobs:
         VERIFY_TIMEOUT: 6000
         VERIFY_TLE: 60
         OJ_TEST_JOBS: 1
+        VERIFY_FULL: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.full_verify) }}
       run: python scripts/verify.py run
 
     - name: Generate GitHub App token
@@ -76,7 +85,16 @@ jobs:
         git push "https://x-access-token:${APP_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:${GITHUB_REF_NAME}"
 
     - name: Deploy docs to gh-pages
-      if: success() && github.ref_type == 'branch' && github.ref_name == github.event.repository.default_branch && inputs.deploy_docs
+      if: >-
+        ${{
+          success()
+          && github.ref_type == 'branch'
+          && github.ref_name == github.event.repository.default_branch
+          && (
+            github.event_name == 'schedule'
+            || (github.event_name == 'workflow_dispatch' && inputs.deploy_docs)
+          )
+        }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GH_PAT: ${{ secrets.GH_PAT }}

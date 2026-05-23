@@ -4,6 +4,13 @@ on:
   push:
     paths-ignore:
       - '.verify-helper/timestamps.remote.json'
+  workflow_dispatch:
+    inputs:
+      full_verify:
+        description: "Ignore .verify-helper/timestamps.remote.json and re-run all verification"
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -55,6 +62,12 @@ jobs:
         path.write_text(text.replace(old, new))
         print(f"patched {path}: AtCoder uses sample cases, others keep --system")
         PY
+
+    - name: Disable oj-verify timestamp cache for full verification
+      if: ${{ github.event_name == 'workflow_dispatch' && inputs.full_verify }}
+      run: |
+        rm -f .verify-helper/timestamps.remote.json
+        rm -rf .verify-helper/cache
 
     - name: Run tests
       env:
