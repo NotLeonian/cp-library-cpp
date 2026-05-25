@@ -152,18 +152,18 @@ title: "\u5217\u3092\u5909\u6570\u3068\u3057\u3066\u6301\u3064\u591A\u9805\u5F0F
 
   1. bitwise and convolution
 
-      [上位集合に対する高速ゼータ変換・高速メビウス変換](https://suisen-cp.github.io/cp-library-cpp/library/transform/supset.hpp)
+      [上位集合に対する高速ゼータ変換・高速メビウス変換](https://notleonian.github.io/cp-library-cpp/library/transform/supset.hpp)
   2. bitwise or convolution
 
-      [下位集合に対する高速ゼータ変換・高速メビウス変換](https://suisen-cp.github.io/cp-library-cpp/library/transform/subset.hpp)
+      [下位集合に対する高速ゼータ変換・高速メビウス変換](https://notleonian.github.io/cp-library-cpp/library/transform/subset.hpp)
   3. bitwise xor convolution
 
-      [Walsh Hadamard 変換](https://suisen-cp.github.io/cp-library-cpp/library/transform/walsh_hadamard.hpp)
+      [Walsh Hadamard 変換](https://notleonian.github.io/cp-library-cpp/library/transform/walsh_hadamard.hpp)
   4. gcd convolution
 
-      [倍数系ゼータ変換・メビウス変換](https://suisen-cp.github.io/cp-library-cpp/library/transform/multiple.hpp)
+      [倍数系ゼータ変換・メビウス変換](https://notleonian.github.io/cp-library-cpp/library/transform/multiple.hpp)
   5. lcm convolution
 
-      [約数系ゼータ変換・メビウス変換](https://suisen-cp.github.io/cp-library-cpp/library/transform/divisor.hpp)
+      [約数系ゼータ変換・メビウス変換](https://notleonian.github.io/cp-library-cpp/library/transform/divisor.hpp)
 
 -->

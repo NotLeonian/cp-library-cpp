@@ -217,7 +217,7 @@ title: Bitwise Xor Convolution
   - `div`: 二項演算 (除算)．デフォルトでは `operator/` が呼ばれるようになっています．
   - `inv`: 単項演算 (乗法逆元)．デフォルトでは `x` に対して `T{1}/x` と計算されます．
 
-  内部で用いている Walsh Hadamard 変換が原因で実装が 2 通りに分かれています．詳しくは [Walsh Hadamard 変換](https://suisen-cp.github.io/cp-library-cpp/library/transform/walsh_hadamard.hpp) のページを参照してください．
+  内部で用いている Walsh Hadamard 変換が原因で実装が 2 通りに分かれています．詳しくは [Walsh Hadamard 変換](https://notleonian.github.io/cp-library-cpp/library/transform/walsh_hadamard.hpp) のページを参照してください．
 
 - 返り値
   

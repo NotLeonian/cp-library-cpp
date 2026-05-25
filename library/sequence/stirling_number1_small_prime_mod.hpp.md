@@ -200,6 +200,6 @@ $$\begin{bmatrix} n \newline k \end{bmatrix} = \sum _ {c,d} (-1) ^ {a - c} \cdot
 
 $\begin{bmatrix} b \newline d \end{bmatrix}$ が非零になりうるのは $0\leq d\leq b\leq p-1$ の範囲なので、右辺は高々 $2$ 項の和として計算できる。
 
-$\displaystyle \binom{a}{c}$ は Lucas の定理を用いることで $\langle O(p ^ 2),O(\log _p n)\rangle$ で計算できる [[1]](https://suisen-cp.github.io/cp-library-cpp/library/sequence/binomial_coefficient_small_prime_mod.hpp)。また、全ての $0\leq n\lt p,0\leq k\lt p$ に対する $\begin{bmatrix} n \newline k \end{bmatrix}$ も $O(p ^ 2)$ 時間で計算できる [[2]](https://suisen-cp.github.io/cp-library-cpp/library/sequence/stirling_number1.hpp)。
+$\displaystyle \binom{a}{c}$ は Lucas の定理を用いることで $\langle O(p ^ 2),O(\log _p n)\rangle$ で計算できる [[1]](https://notleonian.github.io/cp-library-cpp/library/sequence/binomial_coefficient_small_prime_mod.hpp)。また、全ての $0\leq n\lt p,0\leq k\lt p$ に対する $\begin{bmatrix} n \newline k \end{bmatrix}$ も $O(p ^ 2)$ 時間で計算できる [[2]](https://notleonian.github.io/cp-library-cpp/library/sequence/stirling_number1.hpp)。
 
 以上より、任意の整数 $n,k$ に対する $\begin{bmatrix} n \newline k \end{bmatrix}$ を $\langle O(p ^ 2),O(\log _p n)\rangle$ で計算できた。
