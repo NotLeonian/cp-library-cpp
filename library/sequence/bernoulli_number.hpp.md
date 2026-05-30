@@ -91,8 +91,8 @@ data:
   timestamp: '2026-05-19 23:50:19+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test/src/sequence/bernoulli_number/bernoulli_number_2.test.cpp
   - test/src/sequence/bernoulli_number/bernoulli_number.test.cpp
+  - test/src/sequence/bernoulli_number/bernoulli_number_2.test.cpp
 documentation_of: library/sequence/bernoulli_number.hpp
 layout: document
 title: Bernoulli Number

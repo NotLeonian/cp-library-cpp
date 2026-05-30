@@ -181,11 +181,11 @@ data:
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/datastructure/monotonic_convex_hull_trick/EDPC_Z_max_dec.test.cpp
-  - test/src/datastructure/monotonic_convex_hull_trick/EDPC_Z_min_inc.test.cpp
+  - test/src/datastructure/monotonic_convex_hull_trick/abc228_h.test.cpp
   - test/src/datastructure/monotonic_convex_hull_trick/EDPC_Z_min_nonmonotonic.test.cpp
   - test/src/datastructure/monotonic_convex_hull_trick/EDPC_Z_max_nonmonotonic.test.cpp
-  - test/src/datastructure/monotonic_convex_hull_trick/abc228_h.test.cpp
   - test/src/datastructure/monotonic_convex_hull_trick/EDPC_Z_min_dec.test.cpp
+  - test/src/datastructure/monotonic_convex_hull_trick/EDPC_Z_min_inc.test.cpp
   - test/src/datastructure/monotonic_convex_hull_trick/EDPC_Z_max_inc.test.cpp
 documentation_of: library/datastructure/monotonic_convex_hull_trick.hpp
 layout: document

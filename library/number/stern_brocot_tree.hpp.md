@@ -271,8 +271,8 @@ data:
   timestamp: '2024-01-30 21:22:46+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test/src/number/stern_brocot_tree/stern_brocot_tree.test.cpp
   - test/src/number/stern_brocot_tree/abc273_h.test.cpp
+  - test/src/number/stern_brocot_tree/stern_brocot_tree.test.cpp
 documentation_of: library/number/stern_brocot_tree.hpp
 layout: document
 title: Stern Brocot Tree

@@ -143,8 +143,8 @@ data:
   isVerificationFile: false
   path: library/polynomial/shift_of_sampling_points.hpp
   requiredBy:
-  - library/math/sum_i^d_r^i.hpp
   - library/math/factorial_large.hpp
+  - library/math/sum_i^d_r^i.hpp
   - test/src/math/factorial_large/yuki502.cpp
   timestamp: '2026-05-19 23:50:19+09:00'
   verificationStatus: LIBRARY_ALL_AC
