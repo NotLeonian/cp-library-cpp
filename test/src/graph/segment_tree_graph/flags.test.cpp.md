@@ -11,11 +11,11 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
-    PROBLEM: https://atcoder.jp/contests/arc069/tasks/arc069_f
+    PROBLEM: https://atcoder.jp/contests/arc069/tasks/arc069_d
     links:
-    - https://atcoder.jp/contests/arc069/tasks/arc069_f
+    - https://atcoder.jp/contests/arc069/tasks/arc069_d
   bundledCode: "#line 1 \"test/src/graph/segment_tree_graph/flags.test.cpp\"\n#define\
-    \ PROBLEM \"https://atcoder.jp/contests/arc069/tasks/arc069_f\"\n\n#include <algorithm>\n\
+    \ PROBLEM \"https://atcoder.jp/contests/arc069/tasks/arc069_d\"\n\n#include <algorithm>\n\
     #include <iostream>\n#include <numeric>\n#include <atcoder/twosat>\n\n#line 1\
     \ \"library/graph/segment_tree_graph.hpp\"\n\n\n\n#include <cassert>\n#include\
     \ <type_traits>\n#include <vector>\n\nnamespace suisen {\n\nclass SegmentTreeGraph\
@@ -89,7 +89,7 @@ data:
     \ long l = 0, r = 1000000001;\n    while (r - l > 1) {\n        long long d =\
     \ (l + r) >> 1;\n        (check(d) ? l : r) = d;\n    }\n    std::cout << l <<\
     \ std::endl;\n\n    return 0;\n}\n"
-  code: "#define PROBLEM \"https://atcoder.jp/contests/arc069/tasks/arc069_f\"\n\n\
+  code: "#define PROBLEM \"https://atcoder.jp/contests/arc069/tasks/arc069_d\"\n\n\
     #include <algorithm>\n#include <iostream>\n#include <numeric>\n#include <atcoder/twosat>\n\
     \n#include \"library/graph/segment_tree_graph.hpp\"\nusing namespace suisen;\n\
     \nint main() {\n    int n;\n    std::cin >> n;\n\n    std::vector xys(2, std::vector<long\
@@ -122,7 +122,7 @@ data:
   isVerificationFile: true
   path: test/src/graph/segment_tree_graph/flags.test.cpp
   requiredBy: []
-  timestamp: '2021-09-21 22:18:33+09:00'
+  timestamp: '2026-06-01 12:57:11+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/graph/segment_tree_graph/flags.test.cpp

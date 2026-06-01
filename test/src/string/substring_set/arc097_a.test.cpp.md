@@ -14,11 +14,11 @@ data:
   _verificationStatusIcon: ':heavy_check_mark:'
   attributes:
     '*NOT_SPECIAL_COMMENTS*': ''
-    PROBLEM: https://atcoder.jp/contests/arc097/tasks/arc097_c
+    PROBLEM: https://atcoder.jp/contests/arc097/tasks/arc097_a
     links:
-    - https://atcoder.jp/contests/arc097/tasks/arc097_c
+    - https://atcoder.jp/contests/arc097/tasks/arc097_a
   bundledCode: "#line 1 \"test/src/string/substring_set/arc097_a.test.cpp\"\n#define\
-    \ PROBLEM \"https://atcoder.jp/contests/arc097/tasks/arc097_c\"\n\n#include <iostream>\n\
+    \ PROBLEM \"https://atcoder.jp/contests/arc097/tasks/arc097_a\"\n\n#include <iostream>\n\
     \n#line 1 \"library/string/substring_set.hpp\"\n\n\n\n#line 1 \"library/string/suffix_automaton.hpp\"\
     \n\n\n\n#include <algorithm>\n#include <cassert>\n#include <deque>\n#include <limits>\n\
     #include <map>\n#include <string>\n#include <tuple>\n#include <vector>\n\nnamespace\
@@ -228,7 +228,7 @@ data:
     \n\n#line 6 \"test/src/string/substring_set/arc097_a.test.cpp\"\nusing suisen::SubstringSet;\n\
     \nint main() {\n    std::string s;\n    int k;\n    std::cin >> s >> k;\n    std::cout\
     \ << SubstringSet(s)[k] << std::endl;\n    return 0;\n}\n"
-  code: "#define PROBLEM \"https://atcoder.jp/contests/arc097/tasks/arc097_c\"\n\n\
+  code: "#define PROBLEM \"https://atcoder.jp/contests/arc097/tasks/arc097_a\"\n\n\
     #include <iostream>\n\n#include \"library/string/substring_set.hpp\"\nusing suisen::SubstringSet;\n\
     \nint main() {\n    std::string s;\n    int k;\n    std::cin >> s >> k;\n    std::cout\
     \ << SubstringSet(s)[k] << std::endl;\n    return 0;\n}"
@@ -238,7 +238,7 @@ data:
   isVerificationFile: true
   path: test/src/string/substring_set/arc097_a.test.cpp
   requiredBy: []
-  timestamp: '2024-01-30 21:46:01+09:00'
+  timestamp: '2026-06-01 12:57:11+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/string/substring_set/arc097_a.test.cpp
