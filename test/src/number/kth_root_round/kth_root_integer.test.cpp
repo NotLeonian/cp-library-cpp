@@ -1,5 +1,6 @@
 #define PROBLEM "https://judge.yosupo.jp/problem/kth_root_integer"
 
+#include <cstdint>
 #include <iostream>
 
 #include "library/number/kth_root_round.hpp"

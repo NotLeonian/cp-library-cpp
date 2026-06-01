@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cassert>
 #include <iostream>
+#include <vector>
 
 #include "library/util/subset_iterator.hpp"
 

@@ -5,6 +5,7 @@
 #include <sstream>
 #include <string>
 #include <tuple>
+#include <utility>
 #include "library/util/object_pool.hpp"
 
 namespace suisen::bbst::internal {

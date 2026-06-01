@@ -3,6 +3,8 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdint>
+#include <iostream>
 #include <limits>
 #include <optional>
 #include <type_traits>

@@ -1,6 +1,8 @@
 #ifndef SUISEN_COMPARE_SUBSTRING
 #define SUISEN_COMPARE_SUBSTRING
 
+#include <limits>
+
 #include <atcoder/segtree>
 #include <atcoder/string>
 
