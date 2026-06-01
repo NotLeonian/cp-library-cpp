@@ -1,8 +1,7 @@
 #define PROBLEM "https://atcoder.jp/contests/abc228/tasks/abc228_h"
 
-#include <algorithm>
+#include <array>
 #include <iostream>
-#include <vector>
 
 #include "library/datastructure/monotonic_convex_hull_trick.hpp"
 
@@ -23,7 +22,7 @@ int main() {
     }
 
     suisen::MinMonotonicCHT<long long, suisen::inc_query_tag> cht;
-    
+
     long long ans = 0;
     long long s = 0, t = 0;
     cht.add_line(-s, t);
@@ -33,6 +32,6 @@ int main() {
         cht.add_line(-s, ans + t);
     }
     std::cout << ans << std::endl;
-    
+
     return 0;
 }

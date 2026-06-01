@@ -1,6 +1,8 @@
 #define PROBLEM "https://atcoder.jp/contests/dp/tasks/dp_v"
 
+#include <array>
 #include <iostream>
+
 #include <atcoder/modint>
 
 using mint = atcoder::modint;

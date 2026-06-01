@@ -1,5 +1,6 @@
 #define PROBLEM "https://atcoder.jp/contests/abc206/tasks/abc206_e"
 
+#include <array>
 #include <iostream>
 #include <unordered_map>
 

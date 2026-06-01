@@ -3,7 +3,6 @@
 
 #include <deque>
 #include <limits>
-#include <queue>
 #include <tuple>
 #include <vector>
 #include "library/graph/csr_graph.hpp"

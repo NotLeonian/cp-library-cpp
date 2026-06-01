@@ -14,7 +14,7 @@ int main() {
 
     suisen::CompareSubstring cmp(s);
     using Substring = decltype(cmp.substr(0, 0));
-    
+
     auto is_ok = [&](int w) {
         std::map<Substring, int> st;
         for (int i = 0; i + w <= n; ++i) {
@@ -34,6 +34,6 @@ int main() {
         (is_ok(w) ? l : r) = w;
     }
     std::cout << l << std::endl;
-    
+
     return 0;
 }

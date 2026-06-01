@@ -4,6 +4,7 @@
 #include <cassert>
 #include <chrono>
 #include <iostream>
+#include <vector>
 
 #include "library/util/subset_iterator.hpp"
 

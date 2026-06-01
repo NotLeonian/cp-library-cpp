@@ -1,5 +1,6 @@
 #define PROBLEM "https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ITP1_1_A"
 
+#include <array>
 #include <iostream>
 #include <random>
 

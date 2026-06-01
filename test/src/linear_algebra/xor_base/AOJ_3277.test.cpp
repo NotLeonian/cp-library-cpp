@@ -1,5 +1,6 @@
 #define PROBLEM "https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=3277"
 
+#include <cstdint>
 #include <iostream>
 
 #include "library/linear_algebra/xor_base.hpp"
