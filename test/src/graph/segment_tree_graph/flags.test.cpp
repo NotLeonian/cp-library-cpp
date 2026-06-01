@@ -1,4 +1,4 @@
-#define PROBLEM "https://atcoder.jp/contests/arc069/tasks/arc069_f"
+#define PROBLEM "https://atcoder.jp/contests/arc069/tasks/arc069_d"
 
 #include <algorithm>
 #include <iostream>

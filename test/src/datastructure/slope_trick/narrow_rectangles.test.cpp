@@ -1,4 +1,4 @@
-#define PROBLEM "https://atcoder.jp/contests/arc070/tasks/arc070_e"
+#define PROBLEM "https://atcoder.jp/contests/arc070/tasks/arc070_c"
 
 #include <iostream>
 
