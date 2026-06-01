@@ -21,7 +21,7 @@ namespace suisen {
         iterator ptr = stk.begin();
         std::vector<iterator> pos(n, stk.end());
         std::vector<int8_t> vis(n);
-        auto dfs = [&](auto dfs, int u, int p = -1, const weight_type &w) -> bool {
+        auto dfs = [&](auto &&dfs, int u, int p, const weight_type &w) -> bool {
             int c = 0;
             pos[u] = ptr;
             for (const auto &e : g[u]) {
@@ -60,7 +60,7 @@ namespace suisen {
         iterator ptr = stk.begin();
         std::vector<iterator> pos(n, stk.end());
         std::vector<int8_t> vis(n);
-        auto dfs = [&](auto dfs, int u) -> bool {
+        auto dfs = [&](auto &&dfs, int u) -> bool {
             pos[u] = ptr;
             for (const auto &e : g[u]) {
                 const int v = e;
