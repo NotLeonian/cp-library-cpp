@@ -13,7 +13,7 @@ int main() {
 
     std::vector<std::pair<int, int>> points(n);
     for (auto &[x, y] : points) std::cin >> x >> y;
-    
+
     suisen::integral_geometry::sort_points_by_argument(points);
 
     for (auto &[x, y] : points) {
