@@ -25,8 +25,8 @@ data:
     - https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ITP1_1_A
   bundledCode: "#line 1 \"test/src/datastructure/fenwick_tree/rectangle_add_rectangle_sum/dummy.test.cpp\"\
     \n#define PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ITP1_1_A\"\
-    \n\n#include <iostream>\n#include <random>\n\n#include <atcoder/modint>\nusing\
-    \ mint = atcoder::modint998244353;\n\n#line 1 \"library/datastructure/fenwick_tree/rectangle_add_rectangle_sum.hpp\"\
+    \n\n#include <array>\n#include <iostream>\n#include <random>\n\n#include <atcoder/modint>\n\
+    using mint = atcoder::modint998244353;\n\n#line 1 \"library/datastructure/fenwick_tree/rectangle_add_rectangle_sum.hpp\"\
     \n\n\n\n#line 1 \"library/util/tuple_ops.hpp\"\n\n\n\n#include <tuple>\n\nnamespace\
     \ suisen {\n    namespace internal::tuple_ops {\n        template <std::size_t\
     \ N, typename F, typename ...Args>\n        std::tuple<Args...>& update(std::tuple<Args...>\
@@ -171,7 +171,7 @@ data:
     \ const {\n            static constexpr int inf = std::numeric_limits<int>::max();\n\
     \            auto [a, b, c, d] = _seg.sum(-inf, r, -inf, u);\n            return\
     \ a * r * u + b * r + c * u + d;\n        }\n    };\n} // namespace suisen\n\n\
-    \n#line 10 \"test/src/datastructure/fenwick_tree/rectangle_add_rectangle_sum/dummy.test.cpp\"\
+    \n#line 11 \"test/src/datastructure/fenwick_tree/rectangle_add_rectangle_sum/dummy.test.cpp\"\
     \nusing suisen::RectangleAddRectangleSum;\n\ntemplate <typename T, int H, int\
     \ W>\nstruct RectangleAddRectangleSumNaive {\n    using value_type = T;\n    RectangleAddRectangleSumNaive()\
     \ {\n        for (auto& row : _dat) row.fill(T{ 0 });\n    }\n\n    void add(int\
@@ -198,8 +198,8 @@ data:
     \   }\n    }\n}\n\nint main() {\n    random_test<1000, 1000, 2000>();\n    std::cout\
     \ << \"Hello World\" << std::endl;\n    return 0;\n}\n"
   code: "#define PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ITP1_1_A\"\
-    \n\n#include <iostream>\n#include <random>\n\n#include <atcoder/modint>\nusing\
-    \ mint = atcoder::modint998244353;\n\n#include \"library/datastructure/fenwick_tree/rectangle_add_rectangle_sum.hpp\"\
+    \n\n#include <array>\n#include <iostream>\n#include <random>\n\n#include <atcoder/modint>\n\
+    using mint = atcoder::modint998244353;\n\n#include \"library/datastructure/fenwick_tree/rectangle_add_rectangle_sum.hpp\"\
     \nusing suisen::RectangleAddRectangleSum;\n\ntemplate <typename T, int H, int\
     \ W>\nstruct RectangleAddRectangleSumNaive {\n    using value_type = T;\n    RectangleAddRectangleSumNaive()\
     \ {\n        for (auto& row : _dat) row.fill(T{ 0 });\n    }\n\n    void add(int\
@@ -224,7 +224,7 @@ data:
     \           sol1.add(l, r, d, u, v), sol2.add(l, r, d, u, v);\n        } else\
     \ {\n            assert(sol1.sum(l, r, d, u) == sol2.sum(l, r, d, u));\n     \
     \   }\n    }\n}\n\nint main() {\n    random_test<1000, 1000, 2000>();\n    std::cout\
-    \ << \"Hello World\" << std::endl;\n    return 0;\n}"
+    \ << \"Hello World\" << std::endl;\n    return 0;\n}\n"
   dependsOn:
   - library/datastructure/fenwick_tree/rectangle_add_rectangle_sum.hpp
   - library/util/tuple_ops.hpp
@@ -233,7 +233,7 @@ data:
   isVerificationFile: true
   path: test/src/datastructure/fenwick_tree/rectangle_add_rectangle_sum/dummy.test.cpp
   requiredBy: []
-  timestamp: '2023-07-09 04:04:16+09:00'
+  timestamp: '2026-06-01 16:32:36+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/datastructure/fenwick_tree/rectangle_add_rectangle_sum/dummy.test.cpp

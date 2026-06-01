@@ -20,28 +20,28 @@ data:
   bundledCode: "#line 1 \"test/src/string/compare_substring/abc141_e.test.cpp\"\n\
     #define PROBLEM \"https://atcoder.jp/contests/abc141/tasks/abc141_e\"\n\n#include\
     \ <iostream>\n#include <map>\n\n#line 1 \"library/string/compare_substring.hpp\"\
-    \n\n\n\n#include <atcoder/segtree>\n#include <atcoder/string>\n\n#line 1 \"library/datastructure/sparse_table.hpp\"\
-    \n\n\n\n#include <vector>\n\nnamespace suisen {\n    template <typename T, T(*op)(T,\
-    \ T), T(*e)()>\n    struct SparseTable {\n        SparseTable() = default;\n \
-    \       SparseTable(std::vector<T>&& a) : n(a.size()), log(floor_log2(n)), table(log\
-    \ + 1), flog(n + 1, 0) {\n            build_table(std::move(a));\n           \
-    \ build_flog_table();\n        }\n        SparseTable(const std::vector<T>& a)\
-    \ : SparseTable(std::vector<T>(a)) {}\n        T operator()(int l, int r) const\
-    \ {\n            if (l >= r) return e();\n            int i = flog[r - l];\n \
-    \           return op(table[i][l], table[i][r - (1 << i)]);\n        }\n     \
-    \   T prod(int l, int r) const {\n            return (*this)(l, r);\n        }\n\
-    \    private:\n        int n;\n        int log;\n        std::vector<std::vector<T>>\
-    \ table;\n        std::vector<int> flog;\n\n        void build_table(std::vector<T>&&\
-    \ a) {\n            table[0] = std::move(a);\n            for (int i = 0; i <\
-    \ log; ++i) {\n                int lmax = n - (1 << (i + 1));\n              \
-    \  table[i + 1].resize(lmax + 1);\n                for (int l = 0; l <= lmax;\
-    \ ++l) table[i + 1][l] = op(table[i][l], table[i][l + (1 << i)]);\n          \
-    \  }\n        }\n        void build_flog_table() {\n            for (int l = 0;\
-    \ l < log; ++l) {\n                std::fill(flog.begin() + (1 << l), flog.begin()\
-    \ + (1 << (l + 1)), l);\n            }\n            std::fill(flog.begin() + (1\
-    \ << log), flog.end(), log);\n        }\n        static int floor_log2(int i)\
-    \ {\n            return 31 - __builtin_clz(i);\n        }\n    };\n} // namespace\
-    \ suisen\n\n\n#line 8 \"library/string/compare_substring.hpp\"\n\nnamespace suisen\
+    \n\n\n\n#include <limits>\n\n#include <atcoder/segtree>\n#include <atcoder/string>\n\
+    \n#line 1 \"library/datastructure/sparse_table.hpp\"\n\n\n\n#include <vector>\n\
+    \nnamespace suisen {\n    template <typename T, T(*op)(T, T), T(*e)()>\n    struct\
+    \ SparseTable {\n        SparseTable() = default;\n        SparseTable(std::vector<T>&&\
+    \ a) : n(a.size()), log(floor_log2(n)), table(log + 1), flog(n + 1, 0) {\n   \
+    \         build_table(std::move(a));\n            build_flog_table();\n      \
+    \  }\n        SparseTable(const std::vector<T>& a) : SparseTable(std::vector<T>(a))\
+    \ {}\n        T operator()(int l, int r) const {\n            if (l >= r) return\
+    \ e();\n            int i = flog[r - l];\n            return op(table[i][l], table[i][r\
+    \ - (1 << i)]);\n        }\n        T prod(int l, int r) const {\n           \
+    \ return (*this)(l, r);\n        }\n    private:\n        int n;\n        int\
+    \ log;\n        std::vector<std::vector<T>> table;\n        std::vector<int> flog;\n\
+    \n        void build_table(std::vector<T>&& a) {\n            table[0] = std::move(a);\n\
+    \            for (int i = 0; i < log; ++i) {\n                int lmax = n - (1\
+    \ << (i + 1));\n                table[i + 1].resize(lmax + 1);\n             \
+    \   for (int l = 0; l <= lmax; ++l) table[i + 1][l] = op(table[i][l], table[i][l\
+    \ + (1 << i)]);\n            }\n        }\n        void build_flog_table() {\n\
+    \            for (int l = 0; l < log; ++l) {\n                std::fill(flog.begin()\
+    \ + (1 << l), flog.begin() + (1 << (l + 1)), l);\n            }\n            std::fill(flog.begin()\
+    \ + (1 << log), flog.end(), log);\n        }\n        static int floor_log2(int\
+    \ i) {\n            return 31 - __builtin_clz(i);\n        }\n    };\n} // namespace\
+    \ suisen\n\n\n#line 10 \"library/string/compare_substring.hpp\"\n\nnamespace suisen\
     \ {\n    namespace internal::compare_substring {\n        constexpr int op(int\
     \ x, int y) { return std::min(x, y); }\n        constexpr int e() { return std::numeric_limits<int>::max();\
     \ }\n    }\n    namespace compare_substring_rmq {\n        using SegmentTreeRmQ\
@@ -97,33 +97,33 @@ data:
     \ sa)) {}\n    };\n} // namespace suisen\n\n\n#line 7 \"test/src/string/compare_substring/abc141_e.test.cpp\"\
     \n\nint main() {\n    int n;\n    std::cin >> n;\n\n    std::string s;\n    std::cin\
     \ >> s;\n\n    suisen::CompareSubstring cmp(s);\n    using Substring = decltype(cmp.substr(0,\
-    \ 0));\n    \n    auto is_ok = [&](int w) {\n        std::map<Substring, int>\
-    \ st;\n        for (int i = 0; i + w <= n; ++i) {\n            Substring sub =\
-    \ cmp.substr(i, i + w);\n            if (auto it = st.find(sub); it != st.end())\
-    \ {\n                if (it->second + w <= i) return true;\n            } else\
-    \ {\n                st[sub] = i;\n            }\n        }\n        return false;\n\
-    \    };\n\n    int l = 0, r = n / 2 + 1;\n    while (r - l > 1) {\n        int\
-    \ w = (l + r) >> 1;\n        (is_ok(w) ? l : r) = w;\n    }\n    std::cout <<\
-    \ l << std::endl;\n    \n    return 0;\n}\n"
+    \ 0));\n\n    auto is_ok = [&](int w) {\n        std::map<Substring, int> st;\n\
+    \        for (int i = 0; i + w <= n; ++i) {\n            Substring sub = cmp.substr(i,\
+    \ i + w);\n            if (auto it = st.find(sub); it != st.end()) {\n       \
+    \         if (it->second + w <= i) return true;\n            } else {\n      \
+    \          st[sub] = i;\n            }\n        }\n        return false;\n   \
+    \ };\n\n    int l = 0, r = n / 2 + 1;\n    while (r - l > 1) {\n        int w\
+    \ = (l + r) >> 1;\n        (is_ok(w) ? l : r) = w;\n    }\n    std::cout << l\
+    \ << std::endl;\n\n    return 0;\n}\n"
   code: "#define PROBLEM \"https://atcoder.jp/contests/abc141/tasks/abc141_e\"\n\n\
     #include <iostream>\n#include <map>\n\n#include \"library/string/compare_substring.hpp\"\
     \n\nint main() {\n    int n;\n    std::cin >> n;\n\n    std::string s;\n    std::cin\
     \ >> s;\n\n    suisen::CompareSubstring cmp(s);\n    using Substring = decltype(cmp.substr(0,\
-    \ 0));\n    \n    auto is_ok = [&](int w) {\n        std::map<Substring, int>\
-    \ st;\n        for (int i = 0; i + w <= n; ++i) {\n            Substring sub =\
-    \ cmp.substr(i, i + w);\n            if (auto it = st.find(sub); it != st.end())\
-    \ {\n                if (it->second + w <= i) return true;\n            } else\
-    \ {\n                st[sub] = i;\n            }\n        }\n        return false;\n\
-    \    };\n\n    int l = 0, r = n / 2 + 1;\n    while (r - l > 1) {\n        int\
-    \ w = (l + r) >> 1;\n        (is_ok(w) ? l : r) = w;\n    }\n    std::cout <<\
-    \ l << std::endl;\n    \n    return 0;\n}"
+    \ 0));\n\n    auto is_ok = [&](int w) {\n        std::map<Substring, int> st;\n\
+    \        for (int i = 0; i + w <= n; ++i) {\n            Substring sub = cmp.substr(i,\
+    \ i + w);\n            if (auto it = st.find(sub); it != st.end()) {\n       \
+    \         if (it->second + w <= i) return true;\n            } else {\n      \
+    \          st[sub] = i;\n            }\n        }\n        return false;\n   \
+    \ };\n\n    int l = 0, r = n / 2 + 1;\n    while (r - l > 1) {\n        int w\
+    \ = (l + r) >> 1;\n        (is_ok(w) ? l : r) = w;\n    }\n    std::cout << l\
+    \ << std::endl;\n\n    return 0;\n}\n"
   dependsOn:
   - library/string/compare_substring.hpp
   - library/datastructure/sparse_table.hpp
   isVerificationFile: true
   path: test/src/string/compare_substring/abc141_e.test.cpp
   requiredBy: []
-  timestamp: '2022-05-29 02:48:02+09:00'
+  timestamp: '2026-06-01 16:32:36+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/string/compare_substring/abc141_e.test.cpp

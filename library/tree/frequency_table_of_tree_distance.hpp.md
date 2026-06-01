@@ -7,9 +7,6 @@ data:
   - icon: ':heavy_check_mark:'
     path: library/tree/centroid_decomposition.hpp
     title: "\u91CD\u5FC3\u5206\u89E3"
-  - icon: ':heavy_check_mark:'
-    path: library/util/timer.hpp
-    title: Timer
   _extendedRequiredBy: []
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
@@ -23,19 +20,18 @@ data:
       pair (u, v) s.t. dist(u, v) = k for k = 1, ..., N - 1.
     links: []
   bundledCode: "#line 1 \"library/tree/frequency_table_of_tree_distance.hpp\"\n\n\n\
-    \n#include <cmath>\n#include <iostream>\n#include <atcoder/convolution>\n#line\
-    \ 1 \"library/tree/centroid_decomposition.hpp\"\n\n\n\n#include <deque>\n#include\
-    \ <limits>\n#include <queue>\n#include <tuple>\n#include <vector>\n#line 1 \"\
-    library/graph/csr_graph.hpp\"\n\n\n\n#include <algorithm>\n#include <cassert>\n\
-    #line 7 \"library/graph/csr_graph.hpp\"\n#include <optional>\n#include <type_traits>\n\
-    #line 10 \"library/graph/csr_graph.hpp\"\n#include <utility>\n#line 12 \"library/graph/csr_graph.hpp\"\
-    \n\nnamespace suisen {\n    namespace internal::csr_graph { struct graph_base_tag\
-    \ {}; }\n    struct directed_graph_tag : internal::csr_graph::graph_base_tag {};\n\
-    \    struct undirected_graph_tag : internal::csr_graph::graph_base_tag {};\n \
-    \   template <typename T>\n    struct is_graph_tag { static constexpr bool value\
-    \ = std::is_base_of_v<internal::csr_graph::graph_base_tag, T>; };\n    template\
-    \ <typename T>\n    constexpr bool is_graph_tag_v = is_graph_tag<T>::value;\n\n\
-    \    template <typename WeightType = void>\n    struct Graph {\n        template\
+    \n#include <cmath>\n#include <atcoder/convolution>\n#line 1 \"library/tree/centroid_decomposition.hpp\"\
+    \n\n\n\n#include <deque>\n#include <limits>\n#include <tuple>\n#include <vector>\n\
+    #line 1 \"library/graph/csr_graph.hpp\"\n\n\n\n#include <algorithm>\n#include\
+    \ <cassert>\n#include <cstdint>\n#include <iostream>\n#line 9 \"library/graph/csr_graph.hpp\"\
+    \n#include <optional>\n#include <type_traits>\n#line 12 \"library/graph/csr_graph.hpp\"\
+    \n#include <utility>\n#line 14 \"library/graph/csr_graph.hpp\"\n\nnamespace suisen\
+    \ {\n    namespace internal::csr_graph { struct graph_base_tag {}; }\n    struct\
+    \ directed_graph_tag : internal::csr_graph::graph_base_tag {};\n    struct undirected_graph_tag\
+    \ : internal::csr_graph::graph_base_tag {};\n    template <typename T>\n    struct\
+    \ is_graph_tag { static constexpr bool value = std::is_base_of_v<internal::csr_graph::graph_base_tag,\
+    \ T>; };\n    template <typename T>\n    constexpr bool is_graph_tag_v = is_graph_tag<T>::value;\n\
+    \n    template <typename WeightType = void>\n    struct Graph {\n        template\
     \ <typename GraphTag, typename, std::enable_if_t<is_graph_tag_v<GraphTag>, std::nullptr_t>>\n\
     \        friend struct GraphBuilder;\n\n        using weight_type = WeightType;\n\
     \        static constexpr bool weighted = std::negation_v<std::is_same<weight_type,\
@@ -229,7 +225,7 @@ data:
     \    template <typename WeightType>\n    struct is_unweighted_graph<Graph<WeightType>>\
     \ { static constexpr bool value = not Graph<WeightType>::weighted; };\n    template\
     \ <typename T>\n    constexpr bool is_unweighted_graph_v = is_unweighted_graph<T>::value;\n\
-    } // namespace suisen\n\n\n#line 10 \"library/tree/centroid_decomposition.hpp\"\
+    } // namespace suisen\n\n\n#line 9 \"library/tree/centroid_decomposition.hpp\"\
     \n\nnamespace suisen {\n    namespace internal {\n        template <typename WeightType\
     \ = void>\n        struct CentroidDecomposition : Graph<WeightType> {\n      \
     \      friend struct CentroidDecompositionUnweighted;\n            template <typename\
@@ -303,20 +299,7 @@ data:
     \ = internal::CentroidDecompositionUnweighted;\n    template <typename WeightType,\
     \ std::enable_if_t<not std::is_same_v<WeightType, void>, std::nullptr_t> = nullptr>\n\
     \    using CentroidDecompositionWeighted = internal::CentroidDecompositionWeighted<WeightType>;\n\
-    \n} // namespace suisen\n\n\n#line 8 \"library/tree/frequency_table_of_tree_distance.hpp\"\
-    \n\n#line 1 \"library/util/timer.hpp\"\n\n\n\n#include <chrono>\n\nnamespace suisen\
-    \ {\n    struct Timer {\n        using minutes_t = std::chrono::minutes;\n   \
-    \     using seconds_t = std::chrono::seconds;\n        using milliseconds_t =\
-    \ std::chrono::milliseconds;\n        using microseconds_t = std::chrono::microseconds;\n\
-    \        using nanoseconds_t = std::chrono::nanoseconds;\n\n        Timer() {\
-    \ start(); }\n\n        void start() {\n            _start = std::chrono::system_clock::now();\n\
-    \        }\n        template <typename TimeUnit = std::chrono::milliseconds>\n\
-    \        double elapsed() const {\n            return std::chrono::duration_cast<TimeUnit>(std::chrono::system_clock::now()\
-    \ - _start).count();\n        }\n\n        template <typename TimeUnit = std::chrono::milliseconds,\
-    \ typename Proc>\n        static double measure(Proc &&proc) {\n            Timer\
-    \ timer;\n            proc();\n            return timer.elapsed<TimeUnit>();\n\
-    \        }\n    private:\n        decltype(std::chrono::system_clock::now()) _start;\n\
-    \    };\n} // namespace suisen\n\n\n\n#line 10 \"library/tree/frequency_table_of_tree_distance.hpp\"\
+    \n} // namespace suisen\n\n\n#line 7 \"library/tree/frequency_table_of_tree_distance.hpp\"\
     \n\nnamespace suisen {\n    /**\n     * @brief Given a tree with N vertices, calculates\
     \ the number of unordered pair (u, v) s.t. dist(u, v) = k for k = 1, ..., N -\
     \ 1.\n     * @param n size of tree\n     * @param edges edges of tree\n     *\
@@ -348,8 +331,7 @@ data:
     \            res[i] >>= 1;\n        }\n        return res;\n    }\n} // namespace\
     \ suisen\n\n\n\n"
   code: "#ifndef SUISEN_FREQUENCY_TABLE_OF_TREE_DISTANCE\n#define SUISEN_FREQUENCY_TABLE_OF_TREE_DISTANCE\n\
-    \n#include <cmath>\n#include <iostream>\n#include <atcoder/convolution>\n#include\
-    \ \"library/tree/centroid_decomposition.hpp\"\n\n#include \"library/util/timer.hpp\"\
+    \n#include <cmath>\n#include <atcoder/convolution>\n#include \"library/tree/centroid_decomposition.hpp\"\
     \n\nnamespace suisen {\n    /**\n     * @brief Given a tree with N vertices, calculates\
     \ the number of unordered pair (u, v) s.t. dist(u, v) = k for k = 1, ..., N -\
     \ 1.\n     * @param n size of tree\n     * @param edges edges of tree\n     *\
@@ -383,11 +365,10 @@ data:
   dependsOn:
   - library/tree/centroid_decomposition.hpp
   - library/graph/csr_graph.hpp
-  - library/util/timer.hpp
   isVerificationFile: false
   path: library/tree/frequency_table_of_tree_distance.hpp
   requiredBy: []
-  timestamp: '2022-10-30 21:38:10+09:00'
+  timestamp: '2026-06-01 16:32:36+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/tree/frequency_table_of_tree_distance/frequency_table_of_tree_distance.test.cpp

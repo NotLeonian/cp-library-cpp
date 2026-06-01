@@ -13,15 +13,16 @@ data:
     links: []
   bundledCode: "#line 1 \"library/graph/single_source_shortest_path_dag.hpp\"\n\n\n\
     \n#include <deque>\n#include <limits>\n#include <vector>\n\n#line 1 \"library/graph/csr_graph.hpp\"\
-    \n\n\n\n#include <algorithm>\n#include <cassert>\n#line 7 \"library/graph/csr_graph.hpp\"\
-    \n#include <optional>\n#include <type_traits>\n#include <tuple>\n#include <utility>\n\
-    #line 12 \"library/graph/csr_graph.hpp\"\n\nnamespace suisen {\n    namespace\
-    \ internal::csr_graph { struct graph_base_tag {}; }\n    struct directed_graph_tag\
-    \ : internal::csr_graph::graph_base_tag {};\n    struct undirected_graph_tag :\
-    \ internal::csr_graph::graph_base_tag {};\n    template <typename T>\n    struct\
-    \ is_graph_tag { static constexpr bool value = std::is_base_of_v<internal::csr_graph::graph_base_tag,\
-    \ T>; };\n    template <typename T>\n    constexpr bool is_graph_tag_v = is_graph_tag<T>::value;\n\
-    \n    template <typename WeightType = void>\n    struct Graph {\n        template\
+    \n\n\n\n#include <algorithm>\n#include <cassert>\n#include <cstdint>\n#include\
+    \ <iostream>\n#line 9 \"library/graph/csr_graph.hpp\"\n#include <optional>\n#include\
+    \ <type_traits>\n#include <tuple>\n#include <utility>\n#line 14 \"library/graph/csr_graph.hpp\"\
+    \n\nnamespace suisen {\n    namespace internal::csr_graph { struct graph_base_tag\
+    \ {}; }\n    struct directed_graph_tag : internal::csr_graph::graph_base_tag {};\n\
+    \    struct undirected_graph_tag : internal::csr_graph::graph_base_tag {};\n \
+    \   template <typename T>\n    struct is_graph_tag { static constexpr bool value\
+    \ = std::is_base_of_v<internal::csr_graph::graph_base_tag, T>; };\n    template\
+    \ <typename T>\n    constexpr bool is_graph_tag_v = is_graph_tag<T>::value;\n\n\
+    \    template <typename WeightType = void>\n    struct Graph {\n        template\
     \ <typename GraphTag, typename, std::enable_if_t<is_graph_tag_v<GraphTag>, std::nullptr_t>>\n\
     \        friend struct GraphBuilder;\n\n        using weight_type = WeightType;\n\
     \        static constexpr bool weighted = std::negation_v<std::is_same<weight_type,\
@@ -253,7 +254,7 @@ data:
   isVerificationFile: false
   path: library/graph/single_source_shortest_path_dag.hpp
   requiredBy: []
-  timestamp: '2022-10-30 21:38:10+09:00'
+  timestamp: '2026-06-01 16:32:36+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: library/graph/single_source_shortest_path_dag.hpp

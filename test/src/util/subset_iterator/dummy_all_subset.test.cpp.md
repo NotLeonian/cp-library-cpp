@@ -16,9 +16,9 @@ data:
     - https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ITP1_1_A
   bundledCode: "#line 1 \"test/src/util/subset_iterator/dummy_all_subset.test.cpp\"\
     \n#define PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ITP1_1_A\"\
-    \n\n#include <algorithm>\n#include <cassert>\n#include <iostream>\n\n#line 1 \"\
-    library/util/subset_iterator.hpp\"\n\n\n\n#ifdef _MSC_VER\n#  include <intrin.h>\n\
-    #else\n#  include <x86intrin.h>\n#endif\n\n#line 11 \"library/util/subset_iterator.hpp\"\
+    \n\n#include <algorithm>\n#include <cassert>\n#include <iostream>\n#include <vector>\n\
+    \n#line 1 \"library/util/subset_iterator.hpp\"\n\n\n\n#ifdef _MSC_VER\n#  include\
+    \ <intrin.h>\n#else\n#  include <x86intrin.h>\n#endif\n\n#line 11 \"library/util/subset_iterator.hpp\"\
     \n#include <cstdint>\n#line 13 \"library/util/subset_iterator.hpp\"\n#include\
     \ <limits>\n\nnamespace suisen {\n    template <typename T, std::enable_if_t<std::is_integral_v<T>,\
     \ std::nullptr_t> = nullptr>\n    struct all_subset {\n        struct all_subset_iter\
@@ -73,7 +73,7 @@ data:
     \ }\n            auto operator!=(std::nullptr_t) { return s; }\n        };\n \
     \       uint64_t s;\n        all_setbit_64(uint64_t s) : s(s) {}\n        auto\
     \ begin() { return all_setbit_iter_64(s); }\n        auto end() { return nullptr;\
-    \ }\n    };\n} // namespace suisen\n\n\n#line 8 \"test/src/util/subset_iterator/dummy_all_subset.test.cpp\"\
+    \ }\n    };\n} // namespace suisen\n\n\n#line 9 \"test/src/util/subset_iterator/dummy_all_subset.test.cpp\"\
     \n\nvoid test_all_subset(uint32_t s) {\n    std::vector<uint32_t> expected;\n\
     \    for (uint32_t i = 0; i <= s; ++i) if ((i & s) == i) {\n        expected.push_back(i);\n\
     \    }\n\n    std::vector<uint32_t> actual;\n    for (uint32_t t : suisen::all_subset(s))\
@@ -83,22 +83,22 @@ data:
     \    }\n}\n\nint main() {\n    run_test();\n    std::cout << \"Hello World\" <<\
     \ std::endl;\n    return 0;\n}\n"
   code: "#define PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ITP1_1_A\"\
-    \n\n#include <algorithm>\n#include <cassert>\n#include <iostream>\n\n#include\
-    \ \"library/util/subset_iterator.hpp\"\n\nvoid test_all_subset(uint32_t s) {\n\
-    \    std::vector<uint32_t> expected;\n    for (uint32_t i = 0; i <= s; ++i) if\
-    \ ((i & s) == i) {\n        expected.push_back(i);\n    }\n\n    std::vector<uint32_t>\
+    \n\n#include <algorithm>\n#include <cassert>\n#include <iostream>\n#include <vector>\n\
+    \n#include \"library/util/subset_iterator.hpp\"\n\nvoid test_all_subset(uint32_t\
+    \ s) {\n    std::vector<uint32_t> expected;\n    for (uint32_t i = 0; i <= s;\
+    \ ++i) if ((i & s) == i) {\n        expected.push_back(i);\n    }\n\n    std::vector<uint32_t>\
     \ actual;\n    for (uint32_t t : suisen::all_subset(s)) {\n        actual.push_back(t);\n\
     \    }\n\n    std::sort(expected.begin(), expected.end());\n    std::sort(actual.begin(),\
     \ actual.end());\n    assert(expected == actual);\n}\n\nvoid run_test() {\n  \
     \  for (uint32_t s = 0; s < 10000; ++s) {\n        test_all_subset(s);\n    }\n\
     }\n\nint main() {\n    run_test();\n    std::cout << \"Hello World\" << std::endl;\n\
-    \    return 0;\n}"
+    \    return 0;\n}\n"
   dependsOn:
   - library/util/subset_iterator.hpp
   isVerificationFile: true
   path: test/src/util/subset_iterator/dummy_all_subset.test.cpp
   requiredBy: []
-  timestamp: '2022-08-21 18:23:10+09:00'
+  timestamp: '2026-06-01 16:32:36+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/util/subset_iterator/dummy_all_subset.test.cpp

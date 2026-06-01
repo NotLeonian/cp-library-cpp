@@ -19,11 +19,11 @@ data:
     - https://judge.yosupo.jp/problem/cycle_detection
   bundledCode: "#line 1 \"test/src/graph/cycle_detection/cycle_detection.test.cpp\"\
     \n#define PROBLEM \"https://judge.yosupo.jp/problem/cycle_detection\"\n\n#include\
-    \ <algorithm>\n#include <iostream>\n\n#line 1 \"library/graph/cycle_detection.hpp\"\
-    \n\n\n\n#include <optional>\n#include <vector>\n\n#line 1 \"library/graph/csr_graph.hpp\"\
-    \n\n\n\n#line 5 \"library/graph/csr_graph.hpp\"\n#include <cassert>\n#include\
-    \ <limits>\n#line 8 \"library/graph/csr_graph.hpp\"\n#include <type_traits>\n\
-    #include <tuple>\n#include <utility>\n#line 12 \"library/graph/csr_graph.hpp\"\
+    \ <iostream>\n\n#line 1 \"library/graph/cycle_detection.hpp\"\n\n\n\n#include\
+    \ <optional>\n#include <vector>\n\n#line 1 \"library/graph/csr_graph.hpp\"\n\n\
+    \n\n#include <algorithm>\n#include <cassert>\n#include <cstdint>\n#line 8 \"library/graph/csr_graph.hpp\"\
+    \n#include <limits>\n#line 10 \"library/graph/csr_graph.hpp\"\n#include <type_traits>\n\
+    #include <tuple>\n#include <utility>\n#line 14 \"library/graph/csr_graph.hpp\"\
     \n\nnamespace suisen {\n    namespace internal::csr_graph { struct graph_base_tag\
     \ {}; }\n    struct directed_graph_tag : internal::csr_graph::graph_base_tag {};\n\
     \    struct undirected_graph_tag : internal::csr_graph::graph_base_tag {};\n \
@@ -231,28 +231,27 @@ data:
     \n        const int n = g.size();\n\n        std::vector<edge_type> res;\n\n \
     \       std::vector<edge_type> stk(n);\n        using iterator = typename std::vector<edge_type>::iterator;\n\
     \        iterator ptr = stk.begin();\n        std::vector<iterator> pos(n, stk.end());\n\
-    \        std::vector<int8_t> vis(n);\n        auto dfs = [&](auto dfs, int u,\
-    \ int p = -1, const weight_type &w) -> bool {\n            int c = 0;\n      \
-    \      pos[u] = ptr;\n            for (const auto &e : g[u]) {\n             \
-    \   const int v = e;\n                weight_type we = g.get_weight(e);\n    \
-    \            if (v == p and we == w and ++c == 1) continue;\n                if\
-    \ (not std::exchange(vis[v], true)) {\n                    *ptr++ = e;\n     \
-    \               if (dfs(dfs, v, u, we)) return true;\n                    --ptr;\n\
-    \                } else if (pos[v] != stk.end()) {\n                    *ptr++\
-    \ = e;\n                    res.resize(ptr - pos[v]);\n                    std::move(pos[v],\
-    \ ptr, res.begin());\n                    return true;\n                }\n  \
-    \          }\n            pos[u] = stk.end();\n            return false;\n   \
-    \     };\n        for (int i = 0; i < n; ++i) if (not std::exchange(vis[i], true))\
-    \ {\n            if (dfs(dfs, i, -1, {})) return res;\n        }\n        return\
-    \ std::nullopt;\n    }\n\n    template <typename T>\n    std::optional<std::vector<typename\
-    \ Graph<T>::edge_type>> get_cycle_directed(Graph<T> &g) {\n        using edge_type\
-    \ = typename Graph<T>::edge_type;\n        const int n = g.size();\n\n       \
-    \ std::vector<edge_type> res;\n\n        std::vector<edge_type> stk(n);\n    \
-    \    using iterator = typename std::vector<edge_type>::iterator;\n        iterator\
-    \ ptr = stk.begin();\n        std::vector<iterator> pos(n, stk.end());\n     \
-    \   std::vector<int8_t> vis(n);\n        auto dfs = [&](auto dfs, int u) -> bool\
-    \ {\n            pos[u] = ptr;\n            for (const auto &e : g[u]) {\n   \
-    \             const int v = e;\n                if (not std::exchange(vis[v],\
+    \        std::vector<int8_t> vis(n);\n        auto dfs = [&](auto &&dfs, int u,\
+    \ int p, const weight_type &w) -> bool {\n            int c = 0;\n           \
+    \ pos[u] = ptr;\n            for (const auto &e : g[u]) {\n                const\
+    \ int v = e;\n                weight_type we = g.get_weight(e);\n            \
+    \    if (v == p and we == w and ++c == 1) continue;\n                if (not std::exchange(vis[v],\
+    \ true)) {\n                    *ptr++ = e;\n                    if (dfs(dfs,\
+    \ v, u, we)) return true;\n                    --ptr;\n                } else\
+    \ if (pos[v] != stk.end()) {\n                    *ptr++ = e;\n              \
+    \      res.resize(ptr - pos[v]);\n                    std::move(pos[v], ptr, res.begin());\n\
+    \                    return true;\n                }\n            }\n        \
+    \    pos[u] = stk.end();\n            return false;\n        };\n        for (int\
+    \ i = 0; i < n; ++i) if (not std::exchange(vis[i], true)) {\n            if (dfs(dfs,\
+    \ i, -1, {})) return res;\n        }\n        return std::nullopt;\n    }\n\n\
+    \    template <typename T>\n    std::optional<std::vector<typename Graph<T>::edge_type>>\
+    \ get_cycle_directed(Graph<T> &g) {\n        using edge_type = typename Graph<T>::edge_type;\n\
+    \        const int n = g.size();\n\n        std::vector<edge_type> res;\n\n  \
+    \      std::vector<edge_type> stk(n);\n        using iterator = typename std::vector<edge_type>::iterator;\n\
+    \        iterator ptr = stk.begin();\n        std::vector<iterator> pos(n, stk.end());\n\
+    \        std::vector<int8_t> vis(n);\n        auto dfs = [&](auto &&dfs, int u)\
+    \ -> bool {\n            pos[u] = ptr;\n            for (const auto &e : g[u])\
+    \ {\n                const int v = e;\n                if (not std::exchange(vis[v],\
     \ true)) {\n                    *ptr++ = e;\n                    if (dfs(dfs,\
     \ v)) return true;\n                    --ptr;\n                } else if (pos[v]\
     \ != stk.end()) {\n                    *ptr++ = e;\n                    res.resize(ptr\
@@ -261,7 +260,7 @@ data:
     \ = stk.end();\n            return false;\n        };\n        for (int i = 0;\
     \ i < n; ++i) if (not std::exchange(vis[i], true)) {\n            if (dfs(dfs,\
     \ i)) return res;\n        }\n        return std::nullopt;\n    }\n} // namespace\
-    \ suisen\n\n\n#line 7 \"test/src/graph/cycle_detection/cycle_detection.test.cpp\"\
+    \ suisen\n\n\n#line 6 \"test/src/graph/cycle_detection/cycle_detection.test.cpp\"\
     \nusing namespace suisen;\n\nint main() {\n    std::ios::sync_with_stdio(false);\n\
     \    std::cin.tie(nullptr);\n\n    int n, m;\n    std::cin >> n >> m;\n    DirectedGraphBuilder<int>\
     \ gb(n);\n    for (int i = 0; i < m; ++i) {\n        int u, v;\n        std::cin\
@@ -272,23 +271,23 @@ data:
     \           std::cout << g.get_weight(cycle[i]) << '\\n';\n        }\n    } else\
     \ {\n        std::cout << -1 << '\\n';\n    }\n    return 0;\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/cycle_detection\"\n\n#include\
-    \ <algorithm>\n#include <iostream>\n\n#include \"library/graph/cycle_detection.hpp\"\
-    \nusing namespace suisen;\n\nint main() {\n    std::ios::sync_with_stdio(false);\n\
-    \    std::cin.tie(nullptr);\n\n    int n, m;\n    std::cin >> n >> m;\n    DirectedGraphBuilder<int>\
-    \ gb(n);\n    for (int i = 0; i < m; ++i) {\n        int u, v;\n        std::cin\
-    \ >> u >> v;\n        gb.emplace_edge(u, v, i);\n    }\n    Graph<int> g = gb.build();\n\
+    \ <iostream>\n\n#include \"library/graph/cycle_detection.hpp\"\nusing namespace\
+    \ suisen;\n\nint main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
+    \n    int n, m;\n    std::cin >> n >> m;\n    DirectedGraphBuilder<int> gb(n);\n\
+    \    for (int i = 0; i < m; ++i) {\n        int u, v;\n        std::cin >> u >>\
+    \ v;\n        gb.emplace_edge(u, v, i);\n    }\n    Graph<int> g = gb.build();\n\
     \n    const auto optional_cycle = get_cycle_directed(g);\n    if (optional_cycle.has_value())\
     \ {\n        const auto &cycle = *optional_cycle;\n        const int sz = cycle.size();\n\
     \        std::cout << sz << '\\n';\n        for (int i = 0; i < sz; ++i) {\n \
     \           std::cout << g.get_weight(cycle[i]) << '\\n';\n        }\n    } else\
-    \ {\n        std::cout << -1 << '\\n';\n    }\n    return 0;\n}"
+    \ {\n        std::cout << -1 << '\\n';\n    }\n    return 0;\n}\n"
   dependsOn:
   - library/graph/cycle_detection.hpp
   - library/graph/csr_graph.hpp
   isVerificationFile: true
   path: test/src/graph/cycle_detection/cycle_detection.test.cpp
   requiredBy: []
-  timestamp: '2022-10-30 21:38:10+09:00'
+  timestamp: '2026-06-01 16:32:36+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/graph/cycle_detection/cycle_detection.test.cpp

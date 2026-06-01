@@ -16,7 +16,7 @@ data:
     - https://atcoder.jp/contests/abc228/tasks/abc228_h
   bundledCode: "#line 1 \"test/src/datastructure/monotonic_convex_hull_trick/abc228_h.test.cpp\"\
     \n#define PROBLEM \"https://atcoder.jp/contests/abc228/tasks/abc228_h\"\n\n#include\
-    \ <algorithm>\n#include <iostream>\n#include <vector>\n\n#line 1 \"library/datastructure/monotonic_convex_hull_trick.hpp\"\
+    \ <array>\n#include <iostream>\n\n#line 1 \"library/datastructure/monotonic_convex_hull_trick.hpp\"\
     \n\n\n\n#include <cassert>\n#include <limits>\n#include <queue>\n#include <type_traits>\n\
     \nnamespace suisen {\n    namespace internal::monotonic_cht { struct query_tag_base\
     \ {}; }\n    struct inc_query_tag : internal::monotonic_cht::query_tag_base {};\n\
@@ -87,33 +87,33 @@ data:
     \      }\n    };\n\n    template <typename T, typename QueryTag>\n    using MinMonotonicCHT\
     \ = MonotonicCHT<T, true, QueryTag>;\n    template <typename T, typename QueryTag>\n\
     \    using MaxMonotonicCHT = MonotonicCHT<T, false, QueryTag>;\n} // namespace\
-    \ suisen\n\n\n#line 8 \"test/src/datastructure/monotonic_convex_hull_trick/abc228_h.test.cpp\"\
+    \ suisen\n\n\n#line 7 \"test/src/datastructure/monotonic_convex_hull_trick/abc228_h.test.cpp\"\
     \n\nconstexpr int M = 1000000;\n\nint main() {\n    std::ios::sync_with_stdio(false);\n\
     \    std::cin.tie(nullptr);\n\n    int n, x;\n    std::cin >> n >> x;\n\n    std::array<long\
     \ long, M + 1> cs{};\n    for (int i = 0; i < n; ++i) {\n        int a, c;\n \
     \       std::cin >> a >> c;\n        cs[a] += c;\n    }\n\n    suisen::MinMonotonicCHT<long\
-    \ long, suisen::inc_query_tag> cht;\n    \n    long long ans = 0;\n    long long\
-    \ s = 0, t = 0;\n    cht.add_line(-s, t);\n    for (long long a = 0; a <= M; ++a)\
+    \ long, suisen::inc_query_tag> cht;\n\n    long long ans = 0;\n    long long s\
+    \ = 0, t = 0;\n    cht.add_line(-s, t);\n    for (long long a = 0; a <= M; ++a)\
     \ if (long long c = cs[a]; c) {\n        s += c, t += a * c;\n        ans = cht.query(a)\
     \ + x + a * s - t;\n        cht.add_line(-s, ans + t);\n    }\n    std::cout <<\
-    \ ans << std::endl;\n    \n    return 0;\n}\n"
+    \ ans << std::endl;\n\n    return 0;\n}\n"
   code: "#define PROBLEM \"https://atcoder.jp/contests/abc228/tasks/abc228_h\"\n\n\
-    #include <algorithm>\n#include <iostream>\n#include <vector>\n\n#include \"library/datastructure/monotonic_convex_hull_trick.hpp\"\
+    #include <array>\n#include <iostream>\n\n#include \"library/datastructure/monotonic_convex_hull_trick.hpp\"\
     \n\nconstexpr int M = 1000000;\n\nint main() {\n    std::ios::sync_with_stdio(false);\n\
     \    std::cin.tie(nullptr);\n\n    int n, x;\n    std::cin >> n >> x;\n\n    std::array<long\
     \ long, M + 1> cs{};\n    for (int i = 0; i < n; ++i) {\n        int a, c;\n \
     \       std::cin >> a >> c;\n        cs[a] += c;\n    }\n\n    suisen::MinMonotonicCHT<long\
-    \ long, suisen::inc_query_tag> cht;\n    \n    long long ans = 0;\n    long long\
-    \ s = 0, t = 0;\n    cht.add_line(-s, t);\n    for (long long a = 0; a <= M; ++a)\
+    \ long, suisen::inc_query_tag> cht;\n\n    long long ans = 0;\n    long long s\
+    \ = 0, t = 0;\n    cht.add_line(-s, t);\n    for (long long a = 0; a <= M; ++a)\
     \ if (long long c = cs[a]; c) {\n        s += c, t += a * c;\n        ans = cht.query(a)\
     \ + x + a * s - t;\n        cht.add_line(-s, ans + t);\n    }\n    std::cout <<\
-    \ ans << std::endl;\n    \n    return 0;\n}"
+    \ ans << std::endl;\n\n    return 0;\n}\n"
   dependsOn:
   - library/datastructure/monotonic_convex_hull_trick.hpp
   isVerificationFile: true
   path: test/src/datastructure/monotonic_convex_hull_trick/abc228_h.test.cpp
   requiredBy: []
-  timestamp: '2022-10-30 21:37:43+09:00'
+  timestamp: '2026-06-01 16:32:36+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/datastructure/monotonic_convex_hull_trick/abc228_h.test.cpp

@@ -15,16 +15,16 @@ data:
     links:
     - https://atcoder.jp/contests/dp/tasks/dp_v
   bundledCode: "#line 1 \"test/src/tree/rerooting/edpc_v.test.cpp\"\n#define PROBLEM\
-    \ \"https://atcoder.jp/contests/dp/tasks/dp_v\"\n\n#include <iostream>\n#include\
-    \ <atcoder/modint>\n\nusing mint = atcoder::modint;\n\n#line 1 \"library/tree/rerooting.hpp\"\
-    \n\n\n\n#include <cassert>\n#include <tuple>\n#include <vector>\n#include <variant>\n\
-    \nnamespace suisen {\n    namespace internal::rerooting {\n        using void_weight\
-    \ = std::monostate;\n\n        template <typename VertexWeight, typename EdgeWeight>\n\
-    \        struct Rerooting {\n            using vertex_weight = VertexWeight;\n\
-    \            using edge_weight = EdgeWeight;\n    private:\n            using\
-    \ is_vertex_weight_void = std::is_same<vertex_weight, void_weight>;\n        \
-    \    using is_edge_weight_void = std::is_same<edge_weight, void_weight>;\n   \
-    \         static constexpr bool is_vertex_weight_void_v = is_vertex_weight_void::value;\n\
+    \ \"https://atcoder.jp/contests/dp/tasks/dp_v\"\n\n#include <array>\n#include\
+    \ <iostream>\n\n#include <atcoder/modint>\n\nusing mint = atcoder::modint;\n\n\
+    #line 1 \"library/tree/rerooting.hpp\"\n\n\n\n#include <cassert>\n#include <tuple>\n\
+    #include <vector>\n#include <variant>\n\nnamespace suisen {\n    namespace internal::rerooting\
+    \ {\n        using void_weight = std::monostate;\n\n        template <typename\
+    \ VertexWeight, typename EdgeWeight>\n        struct Rerooting {\n           \
+    \ using vertex_weight = VertexWeight;\n            using edge_weight = EdgeWeight;\n\
+    \    private:\n            using is_vertex_weight_void = std::is_same<vertex_weight,\
+    \ void_weight>;\n            using is_edge_weight_void = std::is_same<edge_weight,\
+    \ void_weight>;\n            static constexpr bool is_vertex_weight_void_v = is_vertex_weight_void::value;\n\
     \            static constexpr bool is_edge_weight_void_v = is_edge_weight_void::value;\n\
     \n            template <typename DP, typename AddSubtreeRoot>\n            using\
     \ is_add_subtree_root = std::conditional_t<\n                std::negation_v<is_vertex_weight_void>,\n\
@@ -130,7 +130,7 @@ data:
     \ using RerootingEdgeWeighted = internal::rerooting::Rerooting<internal::rerooting::void_weight,\
     \ EdgeWeight>;\n    template <typename VertexWeight, typename EdgeWeighted>\n\
     \    using RerootingWeighted = internal::rerooting::Rerooting<VertexWeight, EdgeWeighted>;\n\
-    } // namsepace suisen\n\n\n#line 9 \"test/src/tree/rerooting/edpc_v.test.cpp\"\
+    } // namsepace suisen\n\n\n#line 11 \"test/src/tree/rerooting/edpc_v.test.cpp\"\
     \n\nusing DP = std::array<mint, 2>;\n\nint main() {\n    std::ios::sync_with_stdio(false);\n\
     \    std::cin.tie(nullptr);\n\n    int n, m;\n    std::cin >> n >> m;\n\n    mint::set_mod(m);\n\
     \n    suisen::Rerooting g(n);\n\n    for (int i = 0; i < n - 1; ++i) {\n     \
@@ -143,10 +143,10 @@ data:
     \ x[0] + x[1] };\n        }\n    );\n\n    for (const DP& v : ans) {\n       \
     \ std::cout << v[1].val() << '\\n';\n    }\n}\n"
   code: "#define PROBLEM \"https://atcoder.jp/contests/dp/tasks/dp_v\"\n\n#include\
-    \ <iostream>\n#include <atcoder/modint>\n\nusing mint = atcoder::modint;\n\n#include\
-    \ \"library/tree/rerooting.hpp\"\n\nusing DP = std::array<mint, 2>;\n\nint main()\
-    \ {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\n   \
-    \ int n, m;\n    std::cin >> n >> m;\n\n    mint::set_mod(m);\n\n    suisen::Rerooting\
+    \ <array>\n#include <iostream>\n\n#include <atcoder/modint>\n\nusing mint = atcoder::modint;\n\
+    \n#include \"library/tree/rerooting.hpp\"\n\nusing DP = std::array<mint, 2>;\n\
+    \nint main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
+    \n    int n, m;\n    std::cin >> n >> m;\n\n    mint::set_mod(m);\n\n    suisen::Rerooting\
     \ g(n);\n\n    for (int i = 0; i < n - 1; ++i) {\n        int u, v;\n        std::cin\
     \ >> u >> v;\n        --u, --v;\n        g.add_edge(u, v);\n    }\n\n    std::vector\
     \ ans = g.run_dp(\n        [](const DP& x, const DP& y) {\n            return\
@@ -155,13 +155,13 @@ data:
     \ DP& x) {\n            return DP{ x[0], x[0] + x[1] };\n        },\n        [](const\
     \ DP& x) {\n            return DP{ x[0], x[0] + x[1] };\n        }\n    );\n\n\
     \    for (const DP& v : ans) {\n        std::cout << v[1].val() << '\\n';\n  \
-    \  }\n}"
+    \  }\n}\n"
   dependsOn:
   - library/tree/rerooting.hpp
   isVerificationFile: true
   path: test/src/tree/rerooting/edpc_v.test.cpp
   requiredBy: []
-  timestamp: '2023-05-11 13:28:20+09:00'
+  timestamp: '2026-06-01 16:32:36+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/tree/rerooting/edpc_v.test.cpp

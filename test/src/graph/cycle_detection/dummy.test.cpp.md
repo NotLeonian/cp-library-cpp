@@ -21,15 +21,16 @@ data:
     \ PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ITP1_1_A\"\
     \n\n#include <iostream>\n#include <set>\n\n#line 1 \"library/graph/cycle_detection.hpp\"\
     \n\n\n\n#include <optional>\n#include <vector>\n\n#line 1 \"library/graph/csr_graph.hpp\"\
-    \n\n\n\n#include <algorithm>\n#include <cassert>\n#include <limits>\n#line 8 \"\
-    library/graph/csr_graph.hpp\"\n#include <type_traits>\n#include <tuple>\n#include\
-    \ <utility>\n#line 12 \"library/graph/csr_graph.hpp\"\n\nnamespace suisen {\n\
-    \    namespace internal::csr_graph { struct graph_base_tag {}; }\n    struct directed_graph_tag\
-    \ : internal::csr_graph::graph_base_tag {};\n    struct undirected_graph_tag :\
-    \ internal::csr_graph::graph_base_tag {};\n    template <typename T>\n    struct\
-    \ is_graph_tag { static constexpr bool value = std::is_base_of_v<internal::csr_graph::graph_base_tag,\
-    \ T>; };\n    template <typename T>\n    constexpr bool is_graph_tag_v = is_graph_tag<T>::value;\n\
-    \n    template <typename WeightType = void>\n    struct Graph {\n        template\
+    \n\n\n\n#include <algorithm>\n#include <cassert>\n#include <cstdint>\n#line 8\
+    \ \"library/graph/csr_graph.hpp\"\n#include <limits>\n#line 10 \"library/graph/csr_graph.hpp\"\
+    \n#include <type_traits>\n#include <tuple>\n#include <utility>\n#line 14 \"library/graph/csr_graph.hpp\"\
+    \n\nnamespace suisen {\n    namespace internal::csr_graph { struct graph_base_tag\
+    \ {}; }\n    struct directed_graph_tag : internal::csr_graph::graph_base_tag {};\n\
+    \    struct undirected_graph_tag : internal::csr_graph::graph_base_tag {};\n \
+    \   template <typename T>\n    struct is_graph_tag { static constexpr bool value\
+    \ = std::is_base_of_v<internal::csr_graph::graph_base_tag, T>; };\n    template\
+    \ <typename T>\n    constexpr bool is_graph_tag_v = is_graph_tag<T>::value;\n\n\
+    \    template <typename WeightType = void>\n    struct Graph {\n        template\
     \ <typename GraphTag, typename, std::enable_if_t<is_graph_tag_v<GraphTag>, std::nullptr_t>>\n\
     \        friend struct GraphBuilder;\n\n        using weight_type = WeightType;\n\
     \        static constexpr bool weighted = std::negation_v<std::is_same<weight_type,\
@@ -230,28 +231,27 @@ data:
     \n        const int n = g.size();\n\n        std::vector<edge_type> res;\n\n \
     \       std::vector<edge_type> stk(n);\n        using iterator = typename std::vector<edge_type>::iterator;\n\
     \        iterator ptr = stk.begin();\n        std::vector<iterator> pos(n, stk.end());\n\
-    \        std::vector<int8_t> vis(n);\n        auto dfs = [&](auto dfs, int u,\
-    \ int p = -1, const weight_type &w) -> bool {\n            int c = 0;\n      \
-    \      pos[u] = ptr;\n            for (const auto &e : g[u]) {\n             \
-    \   const int v = e;\n                weight_type we = g.get_weight(e);\n    \
-    \            if (v == p and we == w and ++c == 1) continue;\n                if\
-    \ (not std::exchange(vis[v], true)) {\n                    *ptr++ = e;\n     \
-    \               if (dfs(dfs, v, u, we)) return true;\n                    --ptr;\n\
-    \                } else if (pos[v] != stk.end()) {\n                    *ptr++\
-    \ = e;\n                    res.resize(ptr - pos[v]);\n                    std::move(pos[v],\
-    \ ptr, res.begin());\n                    return true;\n                }\n  \
-    \          }\n            pos[u] = stk.end();\n            return false;\n   \
-    \     };\n        for (int i = 0; i < n; ++i) if (not std::exchange(vis[i], true))\
-    \ {\n            if (dfs(dfs, i, -1, {})) return res;\n        }\n        return\
-    \ std::nullopt;\n    }\n\n    template <typename T>\n    std::optional<std::vector<typename\
-    \ Graph<T>::edge_type>> get_cycle_directed(Graph<T> &g) {\n        using edge_type\
-    \ = typename Graph<T>::edge_type;\n        const int n = g.size();\n\n       \
-    \ std::vector<edge_type> res;\n\n        std::vector<edge_type> stk(n);\n    \
-    \    using iterator = typename std::vector<edge_type>::iterator;\n        iterator\
-    \ ptr = stk.begin();\n        std::vector<iterator> pos(n, stk.end());\n     \
-    \   std::vector<int8_t> vis(n);\n        auto dfs = [&](auto dfs, int u) -> bool\
-    \ {\n            pos[u] = ptr;\n            for (const auto &e : g[u]) {\n   \
-    \             const int v = e;\n                if (not std::exchange(vis[v],\
+    \        std::vector<int8_t> vis(n);\n        auto dfs = [&](auto &&dfs, int u,\
+    \ int p, const weight_type &w) -> bool {\n            int c = 0;\n           \
+    \ pos[u] = ptr;\n            for (const auto &e : g[u]) {\n                const\
+    \ int v = e;\n                weight_type we = g.get_weight(e);\n            \
+    \    if (v == p and we == w and ++c == 1) continue;\n                if (not std::exchange(vis[v],\
+    \ true)) {\n                    *ptr++ = e;\n                    if (dfs(dfs,\
+    \ v, u, we)) return true;\n                    --ptr;\n                } else\
+    \ if (pos[v] != stk.end()) {\n                    *ptr++ = e;\n              \
+    \      res.resize(ptr - pos[v]);\n                    std::move(pos[v], ptr, res.begin());\n\
+    \                    return true;\n                }\n            }\n        \
+    \    pos[u] = stk.end();\n            return false;\n        };\n        for (int\
+    \ i = 0; i < n; ++i) if (not std::exchange(vis[i], true)) {\n            if (dfs(dfs,\
+    \ i, -1, {})) return res;\n        }\n        return std::nullopt;\n    }\n\n\
+    \    template <typename T>\n    std::optional<std::vector<typename Graph<T>::edge_type>>\
+    \ get_cycle_directed(Graph<T> &g) {\n        using edge_type = typename Graph<T>::edge_type;\n\
+    \        const int n = g.size();\n\n        std::vector<edge_type> res;\n\n  \
+    \      std::vector<edge_type> stk(n);\n        using iterator = typename std::vector<edge_type>::iterator;\n\
+    \        iterator ptr = stk.begin();\n        std::vector<iterator> pos(n, stk.end());\n\
+    \        std::vector<int8_t> vis(n);\n        auto dfs = [&](auto &&dfs, int u)\
+    \ -> bool {\n            pos[u] = ptr;\n            for (const auto &e : g[u])\
+    \ {\n                const int v = e;\n                if (not std::exchange(vis[v],\
     \ true)) {\n                    *ptr++ = e;\n                    if (dfs(dfs,\
     \ v)) return true;\n                    --ptr;\n                } else if (pos[v]\
     \ != stk.end()) {\n                    *ptr++ = e;\n                    res.resize(ptr\
@@ -319,7 +319,7 @@ data:
   isVerificationFile: true
   path: test/src/graph/cycle_detection/dummy.test.cpp
   requiredBy: []
-  timestamp: '2022-10-30 21:38:10+09:00'
+  timestamp: '2026-06-01 16:32:36+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/graph/cycle_detection/dummy.test.cpp

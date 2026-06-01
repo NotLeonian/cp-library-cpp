@@ -17,14 +17,14 @@ data:
   bundledCode: "#line 1 \"test/src/datastructure/segment_tree/li_chao_segment_tree/segment_add_get_min.test.cpp\"\
     \n#define PROBLEM \"https://judge.yosupo.jp/problem/segment_add_get_min\"\n\n\
     #include <iostream>\n#include <tuple>\n\n#line 1 \"library/datastructure/segment_tree/li_chao_segment_tree.hpp\"\
-    \n\n\n\n#include <algorithm>\n#include <cassert>\n#include <optional>\n#include\
-    \ <vector>\n\nnamespace suisen {\n    template <typename T, bool is_min_query\
-    \ = true>\n    class LiChaoSegmentTree {\n        struct Line {\n            static\
-    \ constexpr Line e{ T(0), std::numeric_limits<T>::max() };\n            T a, b;\n\
-    \            bool operator==(const Line& other) const {\n                return\
-    \ a == other.a and b == other.b;\n            }\n            T operator()(T x)\
-    \ const {\n                return *this == e ? std::numeric_limits<T>::max() :\
-    \ a * x + b;\n            }\n            Line operator-() const { return Line{\
+    \n\n\n\n#include <algorithm>\n#include <cassert>\n#include <limits>\n#include\
+    \ <optional>\n#include <vector>\n\nnamespace suisen {\n    template <typename\
+    \ T, bool is_min_query = true>\n    class LiChaoSegmentTree {\n        struct\
+    \ Line {\n            static constexpr Line e{ T(0), std::numeric_limits<T>::max()\
+    \ };\n            T a, b;\n            bool operator==(const Line& other) const\
+    \ {\n                return a == other.a and b == other.b;\n            }\n  \
+    \          T operator()(T x) const {\n                return *this == e ? std::numeric_limits<T>::max()\
+    \ : a * x + b;\n            }\n            Line operator-() const { return Line{\
     \ -a, -b }; }\n        };\n\n    public:\n        LiChaoSegmentTree() : LiChaoSegmentTree(std::vector<T>{})\
     \ {}\n\n        // `query_coordinates` has to hold all coordinates x that will\
     \ be passed to `operator()` or `query`.\n        LiChaoSegmentTree(const std::vector<T>&\
@@ -118,7 +118,7 @@ data:
   isVerificationFile: true
   path: test/src/datastructure/segment_tree/li_chao_segment_tree/segment_add_get_min.test.cpp
   requiredBy: []
-  timestamp: '2022-01-17 22:14:37+09:00'
+  timestamp: '2026-06-01 16:32:36+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/datastructure/segment_tree/li_chao_segment_tree/segment_add_get_min.test.cpp

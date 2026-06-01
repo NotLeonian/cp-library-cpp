@@ -24,24 +24,25 @@ data:
     \n\n\n\n#line 1 \"library/datastructure/bbst/persistent_red_black_tree_base.hpp\"\
     \n\n\n\n#line 1 \"library/datastructure/bbst/red_black_tree_base.hpp\"\n\n\n\n\
     #include <cassert>\n#include <sstream>\n#include <string>\n#include <tuple>\n\
-    #line 1 \"library/util/object_pool.hpp\"\n\n\n\n#include <deque>\n#include <vector>\n\
-    \nnamespace suisen {\n    template <typename T, bool auto_extend = false>\n  \
-    \  struct ObjectPool {\n        using value_type = T;\n        using value_pointer_type\
-    \ = T*;\n\n        template <typename U>\n        using container_type = std::conditional_t<auto_extend,\
-    \ std::deque<U>, std::vector<U>>;\n\n        container_type<value_type> pool;\n\
-    \        container_type<value_pointer_type> stock;\n        decltype(stock.begin())\
-    \ it;\n\n        ObjectPool() : ObjectPool(0) {}\n        ObjectPool(int siz)\
-    \ : pool(siz), stock(siz) {\n            clear();\n        }\n\n        int capacity()\
-    \ const { return pool.size(); }\n        int size() const { return it - stock.begin();\
-    \ }\n\n        value_pointer_type alloc() {\n            if constexpr (auto_extend)\
-    \ ensure();\n            return *it++;\n        }\n\n        void free(value_pointer_type\
-    \ t) {\n            *--it = t;\n        }\n\n        void clear() {\n        \
-    \    int siz = pool.size();\n            it = stock.begin();\n            for\
-    \ (int i = 0; i < siz; i++) stock[i] = &pool[i];\n        }\n\n        void ensure()\
-    \ {\n            if (it != stock.end()) return;\n            int siz = stock.size();\n\
-    \            for (int i = siz; i <= siz * 2; ++i) {\n                stock.push_back(&pool.emplace_back());\n\
+    #include <utility>\n#line 1 \"library/util/object_pool.hpp\"\n\n\n\n#include <deque>\n\
+    #include <vector>\n\nnamespace suisen {\n    template <typename T, bool auto_extend\
+    \ = false>\n    struct ObjectPool {\n        using value_type = T;\n        using\
+    \ value_pointer_type = T*;\n\n        template <typename U>\n        using container_type\
+    \ = std::conditional_t<auto_extend, std::deque<U>, std::vector<U>>;\n\n      \
+    \  container_type<value_type> pool;\n        container_type<value_pointer_type>\
+    \ stock;\n        decltype(stock.begin()) it;\n\n        ObjectPool() : ObjectPool(0)\
+    \ {}\n        ObjectPool(int siz) : pool(siz), stock(siz) {\n            clear();\n\
+    \        }\n\n        int capacity() const { return pool.size(); }\n        int\
+    \ size() const { return it - stock.begin(); }\n\n        value_pointer_type alloc()\
+    \ {\n            if constexpr (auto_extend) ensure();\n            return *it++;\n\
+    \        }\n\n        void free(value_pointer_type t) {\n            *--it = t;\n\
+    \        }\n\n        void clear() {\n            int siz = pool.size();\n   \
+    \         it = stock.begin();\n            for (int i = 0; i < siz; i++) stock[i]\
+    \ = &pool[i];\n        }\n\n        void ensure() {\n            if (it != stock.end())\
+    \ return;\n            int siz = stock.size();\n            for (int i = siz;\
+    \ i <= siz * 2; ++i) {\n                stock.push_back(&pool.emplace_back());\n\
     \            }\n            it = stock.begin() + siz;\n        }\n    };\n} //\
-    \ namespace suisen\n\n\n#line 9 \"library/datastructure/bbst/red_black_tree_base.hpp\"\
+    \ namespace suisen\n\n\n#line 10 \"library/datastructure/bbst/red_black_tree_base.hpp\"\
     \n\nnamespace suisen::bbst::internal {\n    template <typename T, typename Derived>\n\
     \    struct RedBlackTreeNodeBase {\n        enum RedBlackTreeNodeColor { RED,\
     \ BLACK };\n\n        using base_type = void;\n        using size_type = int;\n\
@@ -224,7 +225,7 @@ data:
   isVerificationFile: false
   path: library/datastructure/bbst/persistent_red_black_segment_tree.hpp
   requiredBy: []
-  timestamp: '2023-01-08 02:32:10+09:00'
+  timestamp: '2026-06-01 16:32:36+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: library/datastructure/bbst/persistent_red_black_segment_tree.hpp

@@ -18,14 +18,14 @@ data:
   attributes:
     links: []
   bundledCode: "#line 1 \"library/tree/centroid_decomposition.hpp\"\n\n\n\n#include\
-    \ <deque>\n#include <limits>\n#include <queue>\n#include <tuple>\n#include <vector>\n\
-    #line 1 \"library/graph/csr_graph.hpp\"\n\n\n\n#include <algorithm>\n#include\
-    \ <cassert>\n#line 7 \"library/graph/csr_graph.hpp\"\n#include <optional>\n#include\
-    \ <type_traits>\n#line 10 \"library/graph/csr_graph.hpp\"\n#include <utility>\n\
-    #line 12 \"library/graph/csr_graph.hpp\"\n\nnamespace suisen {\n    namespace\
-    \ internal::csr_graph { struct graph_base_tag {}; }\n    struct directed_graph_tag\
-    \ : internal::csr_graph::graph_base_tag {};\n    struct undirected_graph_tag :\
-    \ internal::csr_graph::graph_base_tag {};\n    template <typename T>\n    struct\
+    \ <deque>\n#include <limits>\n#include <tuple>\n#include <vector>\n#line 1 \"\
+    library/graph/csr_graph.hpp\"\n\n\n\n#include <algorithm>\n#include <cassert>\n\
+    #include <cstdint>\n#include <iostream>\n#line 9 \"library/graph/csr_graph.hpp\"\
+    \n#include <optional>\n#include <type_traits>\n#line 12 \"library/graph/csr_graph.hpp\"\
+    \n#include <utility>\n#line 14 \"library/graph/csr_graph.hpp\"\n\nnamespace suisen\
+    \ {\n    namespace internal::csr_graph { struct graph_base_tag {}; }\n    struct\
+    \ directed_graph_tag : internal::csr_graph::graph_base_tag {};\n    struct undirected_graph_tag\
+    \ : internal::csr_graph::graph_base_tag {};\n    template <typename T>\n    struct\
     \ is_graph_tag { static constexpr bool value = std::is_base_of_v<internal::csr_graph::graph_base_tag,\
     \ T>; };\n    template <typename T>\n    constexpr bool is_graph_tag_v = is_graph_tag<T>::value;\n\
     \n    template <typename WeightType = void>\n    struct Graph {\n        template\
@@ -222,7 +222,7 @@ data:
     \    template <typename WeightType>\n    struct is_unweighted_graph<Graph<WeightType>>\
     \ { static constexpr bool value = not Graph<WeightType>::weighted; };\n    template\
     \ <typename T>\n    constexpr bool is_unweighted_graph_v = is_unweighted_graph<T>::value;\n\
-    } // namespace suisen\n\n\n#line 10 \"library/tree/centroid_decomposition.hpp\"\
+    } // namespace suisen\n\n\n#line 9 \"library/tree/centroid_decomposition.hpp\"\
     \n\nnamespace suisen {\n    namespace internal {\n        template <typename WeightType\
     \ = void>\n        struct CentroidDecomposition : Graph<WeightType> {\n      \
     \      friend struct CentroidDecompositionUnweighted;\n            template <typename\
@@ -298,38 +298,38 @@ data:
     \    using CentroidDecompositionWeighted = internal::CentroidDecompositionWeighted<WeightType>;\n\
     \n} // namespace suisen\n\n\n"
   code: "#ifndef SUISEN_CENTROID_DECOMPOSITION\n#define SUISEN_CENTROID_DECOMPOSITION\n\
-    \n#include <deque>\n#include <limits>\n#include <queue>\n#include <tuple>\n#include\
-    \ <vector>\n#include \"library/graph/csr_graph.hpp\"\n\nnamespace suisen {\n \
-    \   namespace internal {\n        template <typename WeightType = void>\n    \
-    \    struct CentroidDecomposition : Graph<WeightType> {\n            friend struct\
-    \ CentroidDecompositionUnweighted;\n            template <typename WeightType_,\
-    \ std::enable_if_t<not std::is_same_v<WeightType_, void>, std::nullptr_t>>\n \
-    \           friend struct CentroidDecompositionWeighted;\n\n            using\
-    \ graph_type = Graph<WeightType>;\n            using weight_type = WeightType;\n\
-    \n            CentroidDecomposition(const graph_type& g) : graph_type(g), n(this->size()),\
-    \ cpar(n, -1), cdep(n, std::numeric_limits<int>::max()), csiz(n) {\n         \
-    \       build();\n            }\n\n            int dct_parent(int i) const { return\
-    \ cpar[i]; }\n            int dct_depth(int i) const { return cdep[i]; }\n   \
-    \         int dct_size(int i) const { return csiz[i]; }\n\n        private:\n\
-    \            int n;\n            std::vector<int> cpar;\n            std::vector<int>\
-    \ cdep;\n            std::vector<int> csiz;\n\n            void build() {\n  \
-    \              std::vector<int> eid(n, 0);\n\n                cpar[0] = -1, csiz[0]\
-    \ = n;\n                std::deque<std::tuple<int, int>> dq{ { 0, 0 } };\n\n \
-    \               while (dq.size()) {\n                    const auto [r, dep] =\
-    \ dq.front();\n                    const int siz = csiz[r], prev_ctr = cpar[r];\n\
-    \                    dq.pop_front();\n\n                    int c = -1;\n    \
-    \                eid[r] = 0, csiz[r] = 1, cpar[r] = -1;\n                    for\
-    \ (int cur = r;;) {\n                        for (const int edge_num = int((*this)[cur].size());;)\
-    \ {\n                            if (eid[cur] == edge_num) {\n               \
-    \                 if (csiz[cur] * 2 > siz) {\n                               \
-    \     c = cur;\n                                } else {\n                   \
-    \                 const int nxt = cpar[cur];\n                               \
-    \     csiz[nxt] += csiz[cur];\n                                    cur = nxt;\n\
-    \                                }\n                                break;\n \
-    \                           }\n                            const int nxt = (*this)[cur][eid[cur]++];\n\
-    \                            if (cdep[nxt] >= dep and nxt != cpar[cur]) {\n  \
-    \                              eid[nxt] = 0, csiz[nxt] = 1, cpar[nxt] = cur;\n\
-    \                                cur = nxt;\n                                break;\n\
+    \n#include <deque>\n#include <limits>\n#include <tuple>\n#include <vector>\n#include\
+    \ \"library/graph/csr_graph.hpp\"\n\nnamespace suisen {\n    namespace internal\
+    \ {\n        template <typename WeightType = void>\n        struct CentroidDecomposition\
+    \ : Graph<WeightType> {\n            friend struct CentroidDecompositionUnweighted;\n\
+    \            template <typename WeightType_, std::enable_if_t<not std::is_same_v<WeightType_,\
+    \ void>, std::nullptr_t>>\n            friend struct CentroidDecompositionWeighted;\n\
+    \n            using graph_type = Graph<WeightType>;\n            using weight_type\
+    \ = WeightType;\n\n            CentroidDecomposition(const graph_type& g) : graph_type(g),\
+    \ n(this->size()), cpar(n, -1), cdep(n, std::numeric_limits<int>::max()), csiz(n)\
+    \ {\n                build();\n            }\n\n            int dct_parent(int\
+    \ i) const { return cpar[i]; }\n            int dct_depth(int i) const { return\
+    \ cdep[i]; }\n            int dct_size(int i) const { return csiz[i]; }\n\n  \
+    \      private:\n            int n;\n            std::vector<int> cpar;\n    \
+    \        std::vector<int> cdep;\n            std::vector<int> csiz;\n\n      \
+    \      void build() {\n                std::vector<int> eid(n, 0);\n\n       \
+    \         cpar[0] = -1, csiz[0] = n;\n                std::deque<std::tuple<int,\
+    \ int>> dq{ { 0, 0 } };\n\n                while (dq.size()) {\n             \
+    \       const auto [r, dep] = dq.front();\n                    const int siz =\
+    \ csiz[r], prev_ctr = cpar[r];\n                    dq.pop_front();\n\n      \
+    \              int c = -1;\n                    eid[r] = 0, csiz[r] = 1, cpar[r]\
+    \ = -1;\n                    for (int cur = r;;) {\n                        for\
+    \ (const int edge_num = int((*this)[cur].size());;) {\n                      \
+    \      if (eid[cur] == edge_num) {\n                                if (csiz[cur]\
+    \ * 2 > siz) {\n                                    c = cur;\n               \
+    \                 } else {\n                                    const int nxt\
+    \ = cpar[cur];\n                                    csiz[nxt] += csiz[cur];\n\
+    \                                    cur = nxt;\n                            \
+    \    }\n                                break;\n                            }\n\
+    \                            const int nxt = (*this)[cur][eid[cur]++];\n     \
+    \                       if (cdep[nxt] >= dep and nxt != cpar[cur]) {\n       \
+    \                         eid[nxt] = 0, csiz[nxt] = 1, cpar[nxt] = cur;\n    \
+    \                            cur = nxt;\n                                break;\n\
     \                            }\n                        }\n                  \
     \      if (c >= 0) break;\n                    }\n                    for (int\
     \ v : (*this)[c]) if (cdep[v] >= dep) {\n                        if (cpar[c] ==\
@@ -380,7 +380,7 @@ data:
   path: library/tree/centroid_decomposition.hpp
   requiredBy:
   - library/tree/frequency_table_of_tree_distance.hpp
-  timestamp: '2022-10-30 21:38:10+09:00'
+  timestamp: '2026-06-01 16:32:36+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/tree/frequency_table_of_tree_distance/frequency_table_of_tree_distance.test.cpp

@@ -36,14 +36,15 @@ data:
   attributes:
     links: []
   bundledCode: "#line 1 \"library/graph/csr_graph.hpp\"\n\n\n\n#include <algorithm>\n\
-    #include <cassert>\n#include <limits>\n#include <optional>\n#include <type_traits>\n\
-    #include <tuple>\n#include <utility>\n#include <vector>\n\nnamespace suisen {\n\
-    \    namespace internal::csr_graph { struct graph_base_tag {}; }\n    struct directed_graph_tag\
-    \ : internal::csr_graph::graph_base_tag {};\n    struct undirected_graph_tag :\
-    \ internal::csr_graph::graph_base_tag {};\n    template <typename T>\n    struct\
-    \ is_graph_tag { static constexpr bool value = std::is_base_of_v<internal::csr_graph::graph_base_tag,\
-    \ T>; };\n    template <typename T>\n    constexpr bool is_graph_tag_v = is_graph_tag<T>::value;\n\
-    \n    template <typename WeightType = void>\n    struct Graph {\n        template\
+    #include <cassert>\n#include <cstdint>\n#include <iostream>\n#include <limits>\n\
+    #include <optional>\n#include <type_traits>\n#include <tuple>\n#include <utility>\n\
+    #include <vector>\n\nnamespace suisen {\n    namespace internal::csr_graph { struct\
+    \ graph_base_tag {}; }\n    struct directed_graph_tag : internal::csr_graph::graph_base_tag\
+    \ {};\n    struct undirected_graph_tag : internal::csr_graph::graph_base_tag {};\n\
+    \    template <typename T>\n    struct is_graph_tag { static constexpr bool value\
+    \ = std::is_base_of_v<internal::csr_graph::graph_base_tag, T>; };\n    template\
+    \ <typename T>\n    constexpr bool is_graph_tag_v = is_graph_tag<T>::value;\n\n\
+    \    template <typename WeightType = void>\n    struct Graph {\n        template\
     \ <typename GraphTag, typename, std::enable_if_t<is_graph_tag_v<GraphTag>, std::nullptr_t>>\n\
     \        friend struct GraphBuilder;\n\n        using weight_type = WeightType;\n\
     \        static constexpr bool weighted = std::negation_v<std::is_same<weight_type,\
@@ -239,14 +240,15 @@ data:
     \ <typename T>\n    constexpr bool is_unweighted_graph_v = is_unweighted_graph<T>::value;\n\
     } // namespace suisen\n\n\n"
   code: "#ifndef SUISEN_CSR\n#define SUISEN_CSR\n\n#include <algorithm>\n#include\
-    \ <cassert>\n#include <limits>\n#include <optional>\n#include <type_traits>\n\
-    #include <tuple>\n#include <utility>\n#include <vector>\n\nnamespace suisen {\n\
-    \    namespace internal::csr_graph { struct graph_base_tag {}; }\n    struct directed_graph_tag\
-    \ : internal::csr_graph::graph_base_tag {};\n    struct undirected_graph_tag :\
-    \ internal::csr_graph::graph_base_tag {};\n    template <typename T>\n    struct\
-    \ is_graph_tag { static constexpr bool value = std::is_base_of_v<internal::csr_graph::graph_base_tag,\
-    \ T>; };\n    template <typename T>\n    constexpr bool is_graph_tag_v = is_graph_tag<T>::value;\n\
-    \n    template <typename WeightType = void>\n    struct Graph {\n        template\
+    \ <cassert>\n#include <cstdint>\n#include <iostream>\n#include <limits>\n#include\
+    \ <optional>\n#include <type_traits>\n#include <tuple>\n#include <utility>\n#include\
+    \ <vector>\n\nnamespace suisen {\n    namespace internal::csr_graph { struct graph_base_tag\
+    \ {}; }\n    struct directed_graph_tag : internal::csr_graph::graph_base_tag {};\n\
+    \    struct undirected_graph_tag : internal::csr_graph::graph_base_tag {};\n \
+    \   template <typename T>\n    struct is_graph_tag { static constexpr bool value\
+    \ = std::is_base_of_v<internal::csr_graph::graph_base_tag, T>; };\n    template\
+    \ <typename T>\n    constexpr bool is_graph_tag_v = is_graph_tag<T>::value;\n\n\
+    \    template <typename WeightType = void>\n    struct Graph {\n        template\
     \ <typename GraphTag, typename, std::enable_if_t<is_graph_tag_v<GraphTag>, std::nullptr_t>>\n\
     \        friend struct GraphBuilder;\n\n        using weight_type = WeightType;\n\
     \        static constexpr bool weighted = std::negation_v<std::is_same<weight_type,\
@@ -449,7 +451,7 @@ data:
   - library/graph/single_source_shortest_path_dag.hpp
   - library/tree/frequency_table_of_tree_distance.hpp
   - library/tree/centroid_decomposition.hpp
-  timestamp: '2022-10-30 21:38:10+09:00'
+  timestamp: '2026-06-01 16:32:36+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/graph/csr_graph/dummy.test.cpp
