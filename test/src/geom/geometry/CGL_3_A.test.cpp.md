@@ -18,9 +18,9 @@ data:
     \ \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_3_A\"\n\n#include\
     \ <cassert>\n#include <iostream>\n#include <iomanip>\n\n#line 1 \"library/geom/geometry.hpp\"\
     \n\n\n\n#include <algorithm>\n#line 6 \"library/geom/geometry.hpp\"\n#include\
-    \ <complex>\n#line 8 \"library/geom/geometry.hpp\"\n#include <optional>\n#include\
-    \ <tuple>\n#include <variant>\n#include <vector>\n\nnamespace suisen {\nnamespace\
-    \ geometry {\n    using coordinate_t = long double;\n    using Point = std::complex<coordinate_t>;\n\
+    \ <complex>\n#line 8 \"library/geom/geometry.hpp\"\n#include <tuple>\n#include\
+    \ <variant>\n#include <vector>\n\nnamespace suisen {\nnamespace geometry {\n \
+    \   using coordinate_t = long double;\n    using Point = std::complex<coordinate_t>;\n\
     \n    coordinate_t getx(const Point& p) { return p.real(); }\n    coordinate_t\
     \ gety(const Point& p) { return p.imag(); }\n\n    // operator\n\n    Point operator+(const\
     \ Point &p, coordinate_t real) { return Point(p) + Point(real, 0); }\n    Point\
@@ -35,23 +35,36 @@ data:
     \ operator>>(std::istream &in, Point &p) {\n        coordinate_t x, y;\n     \
     \   in >> x >> y;\n        p = Point(x, y);\n        return in;\n    }\n    std::ostream&\
     \ operator<<(std::ostream &out, const Point &p) {\n        return out << getx(p)\
-    \ << ' ' << gety(p);\n    }\n}\n\nnamespace geometry {\n    // relations between\
-    \ three points X, Y, Z.\n\n    struct ISP {\n        static constexpr int L_CURVE\
-    \ = +1; // +---------------+ Z is in 'a' => ISP = +1\n        static constexpr\
-    \ int R_CURVE = -1; // |aaaaaaaaaaaaaaa| Z is in 'b' => ISP = -1\n        static\
-    \ constexpr int FRONT   = +2; // |ddd X eee Y ccc| Z is in 'c' => ISP = +2\n \
-    \       static constexpr int BACK    = -2; // |bbbbbbbbbbbbbbb| Z is in 'd' =>\
-    \ ISP = -2\n        static constexpr int MIDDLE  =  0; // +---------------+ Z\
-    \ is in 'e' => ISP =  0\n    };\n\n    struct Sign {\n        static constexpr\
-    \ int NEGATIVE = -1;\n        static constexpr int ZERO = 0;\n        static constexpr\
-    \ int POSITIVE = +1;\n    };\n\n    enum class Containment {\n        OUT, ON,\
-    \ IN\n    };\n\n    constexpr Point ZERO = Point(0, 0);\n    constexpr Point ONE\
-    \  = Point(1, 0);\n    constexpr Point I    = Point(0, 1);\n    constexpr coordinate_t\
-    \ EPS = 1e-9;\n    constexpr coordinate_t PI  = 3.14159265358979323846264338327950288419716939937510L;\n\
-    \    constexpr coordinate_t E   = 2.71828182845904523536028747135266249775724709369995L;\n\
-    \n    constexpr auto XY_COMPARATOR = [](const Point &p, const Point &q) {\n  \
-    \      return getx(p) == getx(q) ? gety(p) < gety(q) : getx(p) < getx(q);\n  \
-    \  };\n    constexpr auto XY_COMPARATOR_GREATER = [](const Point &p, const Point\
+    \ << ' ' << gety(p);\n    }\n\n    struct Line;\n    struct Ray;\n    struct Segment;\n\
+    }\n}\n\nnamespace std {\n    template <> struct tuple_size<suisen::geometry::Segment>\
+    \ { static constexpr size_t value = 2; };\n    template <> struct tuple_element<0,\
+    \ suisen::geometry::Segment> { using type = suisen::geometry::Point; };\n    template\
+    \ <> struct tuple_element<1, suisen::geometry::Segment> { using type = suisen::geometry::Point;\
+    \ };\n    template <> struct tuple_size<suisen::geometry::Ray> { static constexpr\
+    \ size_t value = 2; };\n    template <> struct tuple_element<0, suisen::geometry::Ray>\
+    \ { using type = suisen::geometry::Point; };\n    template <> struct tuple_element<1,\
+    \ suisen::geometry::Ray> { using type = suisen::geometry::Point; };\n    template\
+    \ <> struct tuple_size<suisen::geometry::Line> { static constexpr size_t value\
+    \ = 2; };\n    template <> struct tuple_element<0, suisen::geometry::Line> { using\
+    \ type = suisen::geometry::Point; };\n    template <> struct tuple_element<1,\
+    \ suisen::geometry::Line> { using type = suisen::geometry::Point; };\n}\n\nnamespace\
+    \ suisen {\nnamespace geometry {\n    // relations between three points X, Y,\
+    \ Z.\n\n    struct ISP {\n        static constexpr int L_CURVE = +1; // +---------------+\
+    \ Z is in 'a' => ISP = +1\n        static constexpr int R_CURVE = -1; // |aaaaaaaaaaaaaaa|\
+    \ Z is in 'b' => ISP = -1\n        static constexpr int FRONT   = +2; // |ddd\
+    \ X eee Y ccc| Z is in 'c' => ISP = +2\n        static constexpr int BACK    =\
+    \ -2; // |bbbbbbbbbbbbbbb| Z is in 'd' => ISP = -2\n        static constexpr int\
+    \ MIDDLE  =  0; // +---------------+ Z is in 'e' => ISP =  0\n    };\n\n    struct\
+    \ Sign {\n        static constexpr int NEGATIVE = -1;\n        static constexpr\
+    \ int ZERO = 0;\n        static constexpr int POSITIVE = +1;\n    };\n\n    enum\
+    \ class Containment {\n        OUT, ON, IN\n    };\n\n    constexpr Point ZERO\
+    \ = Point(0, 0);\n    constexpr Point ONE  = Point(1, 0);\n    constexpr Point\
+    \ I    = Point(0, 1);\n    constexpr coordinate_t EPS = 1e-9;\n    constexpr coordinate_t\
+    \ PI  = 3.14159265358979323846264338327950288419716939937510L;\n    constexpr\
+    \ coordinate_t E   = 2.71828182845904523536028747135266249775724709369995L;\n\n\
+    \    constexpr auto XY_COMPARATOR = [](const Point &p, const Point &q) {\n   \
+    \     return getx(p) == getx(q) ? gety(p) < gety(q) : getx(p) < getx(q);\n   \
+    \ };\n    constexpr auto XY_COMPARATOR_GREATER = [](const Point &p, const Point\
     \ &q) {\n        return getx(p) == getx(q) ? gety(p) > gety(q) : getx(p) > getx(q);\n\
     \    };\n    constexpr auto YX_COMPARATOR = [](const Point &p, const Point &q)\
     \ {\n        return gety(p) == gety(q) ? getx(p) < getx(q) : gety(p) < gety(q);\n\
@@ -75,7 +88,7 @@ data:
     \ * gety(b) - gety(a) * getx(b);\n    }\n    bool equals(const Point &a, const\
     \ Point &b) {\n        return sgn(getx(a) - getx(b)) == Sign::ZERO and sgn(gety(a)\
     \ - gety(b)) == Sign::ZERO;\n    }\n    bool equals(coordinate_t a, coordinate_t\
-    \ b) {\n        return compare(a, b) == 0;\n    }\n    \n    // https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_1_C\n\
+    \ b) {\n        return compare(a, b) == 0;\n    }\n\n    // https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_1_C\n\
     \    int isp(const Point &a, const Point &b, const Point &c) {\n        Point\
     \ ab = b - a, ac = c - a;\n        int s = sgn(det(ab, ac));\n        if (s ==\
     \ Sign::POSITIVE) return ISP::L_CURVE;\n        if (s == Sign::NEGATIVE) return\
@@ -114,7 +127,7 @@ data:
     \ == 1) return b;\n        }\n    };\n    struct Circle {\n        Point center;\n\
     \        coordinate_t radius;\n        Circle() : Circle(ZERO, 0) {}\n       \
     \ Circle(const Point &c, const coordinate_t &r) : center(c), radius(r) {}\n  \
-    \  };\n\n    // Triangle\n    \n    coordinate_t signed_area(const Point &a, const\
+    \  };\n\n    // Triangle\n\n    coordinate_t signed_area(const Point &a, const\
     \ Point &b, const Point &c) {\n        return det(b - a, c - a) / 2;\n    }\n\
     \    coordinate_t area(const Point &a, const Point &b, const Point &c) {\n   \
     \     return std::abs(signed_area(a, b, c));\n    }\n    Point pG(const Point\
@@ -333,19 +346,7 @@ data:
     \ coordinate_t(0)));\n        coordinate_t a1 = r * r * std::acos(x / r);\n  \
     \      coordinate_t a2 = s * s * std::acos((d - x) / s);\n        coordinate_t\
     \ a12 = d * h;\n        return a1 + a2 - a12;\n    }\n}\n} // namespace suisen\n\
-    \nnamespace std {\n    template <> struct tuple_size<suisen::geometry::Segment>\
-    \ { static constexpr size_t value = 2; };\n    template <> struct tuple_element<0,\
-    \ suisen::geometry::Segment> { using type = suisen::geometry::Point; };\n    template\
-    \ <> struct tuple_element<1, suisen::geometry::Segment> { using type = suisen::geometry::Point;\
-    \ };\n    template <> struct tuple_size<suisen::geometry::Ray> { static constexpr\
-    \ size_t value = 2; };\n    template <> struct tuple_element<0, suisen::geometry::Ray>\
-    \ { using type = suisen::geometry::Point; };\n    template <> struct tuple_element<1,\
-    \ suisen::geometry::Ray> { using type = suisen::geometry::Point; };\n    template\
-    \ <> struct tuple_size<suisen::geometry::Line> { static constexpr size_t value\
-    \ = 2; };\n    template <> struct tuple_element<0, suisen::geometry::Line> { using\
-    \ type = suisen::geometry::Point; };\n    template <> struct tuple_element<1,\
-    \ suisen::geometry::Line> { using type = suisen::geometry::Point; };\n}\n\n\n\
-    #line 8 \"test/src/geom/geometry/CGL_3_A.test.cpp\"\n\nusing namespace suisen::geometry;\n\
+    \n\n#line 8 \"test/src/geom/geometry/CGL_3_A.test.cpp\"\n\nusing namespace suisen::geometry;\n\
     \nint main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
     \    std::cout << std::fixed << std::setprecision(1);\n\n    int n;\n    std::cin\
     \ >> n;\n\n    Polygon poly(n);\n    for (int i = 0; i < n; ++i) {\n        std::cin\
@@ -362,7 +363,7 @@ data:
   isVerificationFile: true
   path: test/src/geom/geometry/CGL_3_A.test.cpp
   requiredBy: []
-  timestamp: '2023-09-06 20:35:27+09:00'
+  timestamp: '2026-06-01 18:44:32+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/geom/geometry/CGL_3_A.test.cpp

@@ -24,40 +24,53 @@ data:
     \n#line 1 \"library/geom/closest_pair.hpp\"\n\n\n\n#line 5 \"library/geom/closest_pair.hpp\"\
     \n\n#line 1 \"library/geom/geometry.hpp\"\n\n\n\n#include <algorithm>\n#line 6\
     \ \"library/geom/geometry.hpp\"\n#include <complex>\n#line 8 \"library/geom/geometry.hpp\"\
-    \n#include <optional>\n#include <tuple>\n#include <variant>\n#include <vector>\n\
-    \nnamespace suisen {\nnamespace geometry {\n    using coordinate_t = long double;\n\
-    \    using Point = std::complex<coordinate_t>;\n\n    coordinate_t getx(const\
-    \ Point& p) { return p.real(); }\n    coordinate_t gety(const Point& p) { return\
-    \ p.imag(); }\n\n    // operator\n\n    Point operator+(const Point &p, coordinate_t\
-    \ real) { return Point(p) + Point(real, 0); }\n    Point operator-(const Point\
-    \ &p, coordinate_t real) { return Point(p) - Point(real, 0); }\n    Point operator*(const\
-    \ Point &p, coordinate_t real) { return Point(p) * Point(real, 0); }\n    Point\
-    \ operator/(const Point &p, coordinate_t real) { return Point(p) / Point(real,\
-    \ 0); }\n    Point operator+(coordinate_t real, const Point &p) { return Point(real,\
-    \ 0) + Point(p); }\n    Point operator-(coordinate_t real, const Point &p) { return\
-    \ Point(real, 0) - Point(p); }\n    Point operator*(coordinate_t real, const Point\
-    \ &p) { return Point(real, 0) * Point(p); }\n    Point operator/(coordinate_t\
-    \ real, const Point &p) { return Point(real, 0) / Point(p); }\n\n    std::istream&\
-    \ operator>>(std::istream &in, Point &p) {\n        coordinate_t x, y;\n     \
-    \   in >> x >> y;\n        p = Point(x, y);\n        return in;\n    }\n    std::ostream&\
-    \ operator<<(std::ostream &out, const Point &p) {\n        return out << getx(p)\
-    \ << ' ' << gety(p);\n    }\n}\n\nnamespace geometry {\n    // relations between\
-    \ three points X, Y, Z.\n\n    struct ISP {\n        static constexpr int L_CURVE\
-    \ = +1; // +---------------+ Z is in 'a' => ISP = +1\n        static constexpr\
-    \ int R_CURVE = -1; // |aaaaaaaaaaaaaaa| Z is in 'b' => ISP = -1\n        static\
-    \ constexpr int FRONT   = +2; // |ddd X eee Y ccc| Z is in 'c' => ISP = +2\n \
-    \       static constexpr int BACK    = -2; // |bbbbbbbbbbbbbbb| Z is in 'd' =>\
-    \ ISP = -2\n        static constexpr int MIDDLE  =  0; // +---------------+ Z\
-    \ is in 'e' => ISP =  0\n    };\n\n    struct Sign {\n        static constexpr\
-    \ int NEGATIVE = -1;\n        static constexpr int ZERO = 0;\n        static constexpr\
-    \ int POSITIVE = +1;\n    };\n\n    enum class Containment {\n        OUT, ON,\
-    \ IN\n    };\n\n    constexpr Point ZERO = Point(0, 0);\n    constexpr Point ONE\
-    \  = Point(1, 0);\n    constexpr Point I    = Point(0, 1);\n    constexpr coordinate_t\
-    \ EPS = 1e-9;\n    constexpr coordinate_t PI  = 3.14159265358979323846264338327950288419716939937510L;\n\
-    \    constexpr coordinate_t E   = 2.71828182845904523536028747135266249775724709369995L;\n\
-    \n    constexpr auto XY_COMPARATOR = [](const Point &p, const Point &q) {\n  \
-    \      return getx(p) == getx(q) ? gety(p) < gety(q) : getx(p) < getx(q);\n  \
-    \  };\n    constexpr auto XY_COMPARATOR_GREATER = [](const Point &p, const Point\
+    \n#include <tuple>\n#include <variant>\n#include <vector>\n\nnamespace suisen\
+    \ {\nnamespace geometry {\n    using coordinate_t = long double;\n    using Point\
+    \ = std::complex<coordinate_t>;\n\n    coordinate_t getx(const Point& p) { return\
+    \ p.real(); }\n    coordinate_t gety(const Point& p) { return p.imag(); }\n\n\
+    \    // operator\n\n    Point operator+(const Point &p, coordinate_t real) { return\
+    \ Point(p) + Point(real, 0); }\n    Point operator-(const Point &p, coordinate_t\
+    \ real) { return Point(p) - Point(real, 0); }\n    Point operator*(const Point\
+    \ &p, coordinate_t real) { return Point(p) * Point(real, 0); }\n    Point operator/(const\
+    \ Point &p, coordinate_t real) { return Point(p) / Point(real, 0); }\n    Point\
+    \ operator+(coordinate_t real, const Point &p) { return Point(real, 0) + Point(p);\
+    \ }\n    Point operator-(coordinate_t real, const Point &p) { return Point(real,\
+    \ 0) - Point(p); }\n    Point operator*(coordinate_t real, const Point &p) { return\
+    \ Point(real, 0) * Point(p); }\n    Point operator/(coordinate_t real, const Point\
+    \ &p) { return Point(real, 0) / Point(p); }\n\n    std::istream& operator>>(std::istream\
+    \ &in, Point &p) {\n        coordinate_t x, y;\n        in >> x >> y;\n      \
+    \  p = Point(x, y);\n        return in;\n    }\n    std::ostream& operator<<(std::ostream\
+    \ &out, const Point &p) {\n        return out << getx(p) << ' ' << gety(p);\n\
+    \    }\n\n    struct Line;\n    struct Ray;\n    struct Segment;\n}\n}\n\nnamespace\
+    \ std {\n    template <> struct tuple_size<suisen::geometry::Segment> { static\
+    \ constexpr size_t value = 2; };\n    template <> struct tuple_element<0, suisen::geometry::Segment>\
+    \ { using type = suisen::geometry::Point; };\n    template <> struct tuple_element<1,\
+    \ suisen::geometry::Segment> { using type = suisen::geometry::Point; };\n    template\
+    \ <> struct tuple_size<suisen::geometry::Ray> { static constexpr size_t value\
+    \ = 2; };\n    template <> struct tuple_element<0, suisen::geometry::Ray> { using\
+    \ type = suisen::geometry::Point; };\n    template <> struct tuple_element<1,\
+    \ suisen::geometry::Ray> { using type = suisen::geometry::Point; };\n    template\
+    \ <> struct tuple_size<suisen::geometry::Line> { static constexpr size_t value\
+    \ = 2; };\n    template <> struct tuple_element<0, suisen::geometry::Line> { using\
+    \ type = suisen::geometry::Point; };\n    template <> struct tuple_element<1,\
+    \ suisen::geometry::Line> { using type = suisen::geometry::Point; };\n}\n\nnamespace\
+    \ suisen {\nnamespace geometry {\n    // relations between three points X, Y,\
+    \ Z.\n\n    struct ISP {\n        static constexpr int L_CURVE = +1; // +---------------+\
+    \ Z is in 'a' => ISP = +1\n        static constexpr int R_CURVE = -1; // |aaaaaaaaaaaaaaa|\
+    \ Z is in 'b' => ISP = -1\n        static constexpr int FRONT   = +2; // |ddd\
+    \ X eee Y ccc| Z is in 'c' => ISP = +2\n        static constexpr int BACK    =\
+    \ -2; // |bbbbbbbbbbbbbbb| Z is in 'd' => ISP = -2\n        static constexpr int\
+    \ MIDDLE  =  0; // +---------------+ Z is in 'e' => ISP =  0\n    };\n\n    struct\
+    \ Sign {\n        static constexpr int NEGATIVE = -1;\n        static constexpr\
+    \ int ZERO = 0;\n        static constexpr int POSITIVE = +1;\n    };\n\n    enum\
+    \ class Containment {\n        OUT, ON, IN\n    };\n\n    constexpr Point ZERO\
+    \ = Point(0, 0);\n    constexpr Point ONE  = Point(1, 0);\n    constexpr Point\
+    \ I    = Point(0, 1);\n    constexpr coordinate_t EPS = 1e-9;\n    constexpr coordinate_t\
+    \ PI  = 3.14159265358979323846264338327950288419716939937510L;\n    constexpr\
+    \ coordinate_t E   = 2.71828182845904523536028747135266249775724709369995L;\n\n\
+    \    constexpr auto XY_COMPARATOR = [](const Point &p, const Point &q) {\n   \
+    \     return getx(p) == getx(q) ? gety(p) < gety(q) : getx(p) < getx(q);\n   \
+    \ };\n    constexpr auto XY_COMPARATOR_GREATER = [](const Point &p, const Point\
     \ &q) {\n        return getx(p) == getx(q) ? gety(p) > gety(q) : getx(p) > getx(q);\n\
     \    };\n    constexpr auto YX_COMPARATOR = [](const Point &p, const Point &q)\
     \ {\n        return gety(p) == gety(q) ? getx(p) < getx(q) : gety(p) < gety(q);\n\
@@ -81,7 +94,7 @@ data:
     \ * gety(b) - gety(a) * getx(b);\n    }\n    bool equals(const Point &a, const\
     \ Point &b) {\n        return sgn(getx(a) - getx(b)) == Sign::ZERO and sgn(gety(a)\
     \ - gety(b)) == Sign::ZERO;\n    }\n    bool equals(coordinate_t a, coordinate_t\
-    \ b) {\n        return compare(a, b) == 0;\n    }\n    \n    // https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_1_C\n\
+    \ b) {\n        return compare(a, b) == 0;\n    }\n\n    // https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_1_C\n\
     \    int isp(const Point &a, const Point &b, const Point &c) {\n        Point\
     \ ab = b - a, ac = c - a;\n        int s = sgn(det(ab, ac));\n        if (s ==\
     \ Sign::POSITIVE) return ISP::L_CURVE;\n        if (s == Sign::NEGATIVE) return\
@@ -120,7 +133,7 @@ data:
     \ == 1) return b;\n        }\n    };\n    struct Circle {\n        Point center;\n\
     \        coordinate_t radius;\n        Circle() : Circle(ZERO, 0) {}\n       \
     \ Circle(const Point &c, const coordinate_t &r) : center(c), radius(r) {}\n  \
-    \  };\n\n    // Triangle\n    \n    coordinate_t signed_area(const Point &a, const\
+    \  };\n\n    // Triangle\n\n    coordinate_t signed_area(const Point &a, const\
     \ Point &b, const Point &c) {\n        return det(b - a, c - a) / 2;\n    }\n\
     \    coordinate_t area(const Point &a, const Point &b, const Point &c) {\n   \
     \     return std::abs(signed_area(a, b, c));\n    }\n    Point pG(const Point\
@@ -339,40 +352,28 @@ data:
     \ coordinate_t(0)));\n        coordinate_t a1 = r * r * std::acos(x / r);\n  \
     \      coordinate_t a2 = s * s * std::acos((d - x) / s);\n        coordinate_t\
     \ a12 = d * h;\n        return a1 + a2 - a12;\n    }\n}\n} // namespace suisen\n\
-    \nnamespace std {\n    template <> struct tuple_size<suisen::geometry::Segment>\
-    \ { static constexpr size_t value = 2; };\n    template <> struct tuple_element<0,\
-    \ suisen::geometry::Segment> { using type = suisen::geometry::Point; };\n    template\
-    \ <> struct tuple_element<1, suisen::geometry::Segment> { using type = suisen::geometry::Point;\
-    \ };\n    template <> struct tuple_size<suisen::geometry::Ray> { static constexpr\
-    \ size_t value = 2; };\n    template <> struct tuple_element<0, suisen::geometry::Ray>\
-    \ { using type = suisen::geometry::Point; };\n    template <> struct tuple_element<1,\
-    \ suisen::geometry::Ray> { using type = suisen::geometry::Point; };\n    template\
-    \ <> struct tuple_size<suisen::geometry::Line> { static constexpr size_t value\
-    \ = 2; };\n    template <> struct tuple_element<0, suisen::geometry::Line> { using\
-    \ type = suisen::geometry::Point; };\n    template <> struct tuple_element<1,\
-    \ suisen::geometry::Line> { using type = suisen::geometry::Point; };\n}\n\n\n\
-    #line 7 \"library/geom/closest_pair.hpp\"\n\nnamespace suisen::geometry {\nstd::pair<Point,\
-    \ Point> closest_pair(std::vector<Point> points) {\n    const int n = points.size();\n\
-    \    assert(n > 0);\n    if (n == 1) return { points[0], points[0] };\n    std::sort(points.begin(),\
-    \ points.end(), XY_COMPARATOR);\n    coordinate_t min_dist = std::numeric_limits<coordinate_t>::max();\n\
-    \    std::pair<Point, Point> ans;\n    std::vector<coordinate_t> dmin(n, min_dist);\n\
-    \n    auto update_min = [&](int l, const Point &p, const Point &q) {\n       \
-    \ coordinate_t d = abs(p - q);\n        if (d >= dmin[l]) return;\n        dmin[l]\
-    \ = d;\n        if (d >= min_dist) return;\n        min_dist = d;\n        ans.first\
-    \ = p, ans.second = q;\n    };\n\n    static constexpr int MIN_BLOCK = 4;\n  \
-    \  std::vector<Point> y = points;\n    for (int l = 0; l < n;) {\n        int\
-    \ r = std::min(l + MIN_BLOCK, n);\n        for (int j = l; j < r; ++j) for (int\
-    \ i = l; i < j; ++i) {\n            update_min(l, points[i], points[j]);\n   \
-    \     }\n        std::sort(y.begin() + l, y.begin() + r, YX_COMPARATOR);\n   \
-    \     l = r;\n    }\n\n    for (int block = MIN_BLOCK; block <= n; block <<= 1)\
-    \ {\n        for (int l = 0; l + block < n;) {\n            int m = l + block,\
-    \ r = std::min(m + block, n);\n            std::inplace_merge(y.begin() + l, y.begin()\
-    \ + m, y.begin() + r, YX_COMPARATOR);\n            dmin[l] = std::min(dmin[l],\
-    \ dmin[m]);\n            std::vector<int> ids;\n            for (int i = l; i\
-    \ < r; ++i) {\n                if (compare(std::abs(y[i].real() - points[m].real()),\
-    \ dmin[l]) > 0) {\n                    continue;\n                }\n        \
-    \        for (auto it = ids.rbegin(); it != ids.rend(); ++it) {\n            \
-    \        const Point &p = y[*it];\n                    if (compare(y[i].imag()\
+    \n\n#line 7 \"library/geom/closest_pair.hpp\"\n\nnamespace suisen::geometry {\n\
+    std::pair<Point, Point> closest_pair(std::vector<Point> points) {\n    const int\
+    \ n = points.size();\n    assert(n > 0);\n    if (n == 1) return { points[0],\
+    \ points[0] };\n    std::sort(points.begin(), points.end(), XY_COMPARATOR);\n\
+    \    coordinate_t min_dist = std::numeric_limits<coordinate_t>::max();\n    std::pair<Point,\
+    \ Point> ans;\n    std::vector<coordinate_t> dmin(n, min_dist);\n\n    auto update_min\
+    \ = [&](int l, const Point &p, const Point &q) {\n        coordinate_t d = abs(p\
+    \ - q);\n        if (d >= dmin[l]) return;\n        dmin[l] = d;\n        if (d\
+    \ >= min_dist) return;\n        min_dist = d;\n        ans.first = p, ans.second\
+    \ = q;\n    };\n\n    static constexpr int MIN_BLOCK = 4;\n    std::vector<Point>\
+    \ y = points;\n    for (int l = 0; l < n;) {\n        int r = std::min(l + MIN_BLOCK,\
+    \ n);\n        for (int j = l; j < r; ++j) for (int i = l; i < j; ++i) {\n   \
+    \         update_min(l, points[i], points[j]);\n        }\n        std::sort(y.begin()\
+    \ + l, y.begin() + r, YX_COMPARATOR);\n        l = r;\n    }\n\n    for (int block\
+    \ = MIN_BLOCK; block <= n; block <<= 1) {\n        for (int l = 0; l + block <\
+    \ n;) {\n            int m = l + block, r = std::min(m + block, n);\n        \
+    \    std::inplace_merge(y.begin() + l, y.begin() + m, y.begin() + r, YX_COMPARATOR);\n\
+    \            dmin[l] = std::min(dmin[l], dmin[m]);\n            std::vector<int>\
+    \ ids;\n            for (int i = l; i < r; ++i) {\n                if (compare(std::abs(y[i].real()\
+    \ - points[m].real()), dmin[l]) > 0) {\n                    continue;\n      \
+    \          }\n                for (auto it = ids.rbegin(); it != ids.rend(); ++it)\
+    \ {\n                    const Point &p = y[*it];\n                    if (compare(y[i].imag()\
     \ - p.imag(), dmin[l]) > 0) {\n                        break;\n              \
     \      }\n                    update_min(l, y[i], p);\n                }\n   \
     \             ids.push_back(i);\n            }\n            l = r;\n        }\n\
@@ -397,7 +398,7 @@ data:
   isVerificationFile: true
   path: test/src/geom/closest_pair/CGL_5_A.test.cpp
   requiredBy: []
-  timestamp: '2023-09-06 20:35:27+09:00'
+  timestamp: '2026-06-01 18:44:32+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/geom/closest_pair/CGL_5_A.test.cpp
