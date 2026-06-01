@@ -12,9 +12,6 @@ data:
     path: library/integral_geom/geometry.hpp
     title: "\u5E7E\u4F55\u30C6\u30F3\u30D7\u30EC\u30FC\u30C8 (\u6574\u6570\u5EA7\u6A19\
       )"
-  - icon: ':heavy_check_mark:'
-    path: library/integral_geom/sort_points_by_argument.hpp
-    title: "\u504F\u89D2\u30BD\u30FC\u30C8 (\u6574\u6570\u5EA7\u6A19)"
   _extendedVerifiedWith:
   - icon: ':heavy_check_mark:'
     path: test/src/integral_geom/closest_pair/AOJ_0585.test.cpp
@@ -46,9 +43,6 @@ data:
   - icon: ':heavy_check_mark:'
     path: test/src/integral_geom/geometry/abc259_d.test.cpp
     title: test/src/integral_geom/geometry/abc259_d.test.cpp
-  - icon: ':heavy_check_mark:'
-    path: test/src/integral_geom/sort_points_by_argument/sort_points_by_argument.test.cpp
-    title: test/src/integral_geom/sort_points_by_argument/sort_points_by_argument.test.cpp
   _isVerificationFailed: false
   _pathExtension: hpp
   _verificationStatusIcon: ':heavy_check_mark:'
@@ -174,14 +168,12 @@ data:
   requiredBy:
   - library/integral_geom/farthest_pair.hpp
   - library/integral_geom/geometry.hpp
-  - library/integral_geom/sort_points_by_argument.hpp
   - library/integral_geom/closest_pair.hpp
   timestamp: '2022-07-10 19:58:11+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/integral_geom/closest_pair/AOJ_0585.test.cpp
   - test/src/integral_geom/count_lattice_point/yuki1999.test.cpp
-  - test/src/integral_geom/sort_points_by_argument/sort_points_by_argument.test.cpp
   - test/src/integral_geom/geometry/abc259_d.test.cpp
   - test/src/integral_geom/geometry/CGL_2_A.test.cpp
   - test/src/integral_geom/geometry/CGL_7_A.test.cpp
