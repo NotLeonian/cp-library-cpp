@@ -5,7 +5,6 @@
 #include <cassert>
 #include <complex>
 #include <iostream>
-#include <optional>
 #include <tuple>
 #include <variant>
 #include <vector>
@@ -38,8 +37,26 @@ namespace geometry {
     std::ostream& operator<<(std::ostream &out, const Point &p) {
         return out << getx(p) << ' ' << gety(p);
     }
+
+    struct Line;
+    struct Ray;
+    struct Segment;
+}
 }
 
+namespace std {
+    template <> struct tuple_size<suisen::geometry::Segment> { static constexpr size_t value = 2; };
+    template <> struct tuple_element<0, suisen::geometry::Segment> { using type = suisen::geometry::Point; };
+    template <> struct tuple_element<1, suisen::geometry::Segment> { using type = suisen::geometry::Point; };
+    template <> struct tuple_size<suisen::geometry::Ray> { static constexpr size_t value = 2; };
+    template <> struct tuple_element<0, suisen::geometry::Ray> { using type = suisen::geometry::Point; };
+    template <> struct tuple_element<1, suisen::geometry::Ray> { using type = suisen::geometry::Point; };
+    template <> struct tuple_size<suisen::geometry::Line> { static constexpr size_t value = 2; };
+    template <> struct tuple_element<0, suisen::geometry::Line> { using type = suisen::geometry::Point; };
+    template <> struct tuple_element<1, suisen::geometry::Line> { using type = suisen::geometry::Point; };
+}
+
+namespace suisen {
 namespace geometry {
     // relations between three points X, Y, Z.
 
@@ -124,7 +141,7 @@ namespace geometry {
     bool equals(coordinate_t a, coordinate_t b) {
         return compare(a, b) == 0;
     }
-    
+
     // https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=CGL_1_C
     int isp(const Point &a, const Point &b, const Point &c) {
         Point ab = b - a, ac = c - a;
@@ -203,7 +220,7 @@ namespace geometry {
     };
 
     // Triangle
-    
+
     coordinate_t signed_area(const Point &a, const Point &b, const Point &c) {
         return det(b - a, c - a) / 2;
     }
@@ -614,17 +631,5 @@ namespace geometry {
     }
 }
 } // namespace suisen
-
-namespace std {
-    template <> struct tuple_size<suisen::geometry::Segment> { static constexpr size_t value = 2; };
-    template <> struct tuple_element<0, suisen::geometry::Segment> { using type = suisen::geometry::Point; };
-    template <> struct tuple_element<1, suisen::geometry::Segment> { using type = suisen::geometry::Point; };
-    template <> struct tuple_size<suisen::geometry::Ray> { static constexpr size_t value = 2; };
-    template <> struct tuple_element<0, suisen::geometry::Ray> { using type = suisen::geometry::Point; };
-    template <> struct tuple_element<1, suisen::geometry::Ray> { using type = suisen::geometry::Point; };
-    template <> struct tuple_size<suisen::geometry::Line> { static constexpr size_t value = 2; };
-    template <> struct tuple_element<0, suisen::geometry::Line> { using type = suisen::geometry::Point; };
-    template <> struct tuple_element<1, suisen::geometry::Line> { using type = suisen::geometry::Point; };
-}
 
 #endif // SUISEN_GEOMETRY
