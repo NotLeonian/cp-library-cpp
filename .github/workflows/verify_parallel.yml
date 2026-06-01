@@ -36,9 +36,9 @@ jobs:
       with:
         python-version: '3.11'
 
-    # ! dependents on other library
-    - name: Update Submodules
-      run: git submodule update --remote
+    - name: Check ac-library pin
+      run: |
+        test "$(git -C ac-library rev-parse HEAD)" = "864245a00b00dd008d1abfdc239618fdb7d139da"
 
     - name: Install dependencies
       run: |
