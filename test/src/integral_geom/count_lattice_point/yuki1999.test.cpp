@@ -4,6 +4,7 @@
 
 #include "library/integral_geom/convex_hull.hpp"
 #include "library/integral_geom/count_lattice_point.hpp"
+#include "library/integral_geom/point.hpp"
 #include "library/integral_geom/sort_points_by_argument.hpp"
 
 using namespace suisen::integral_geometry;
