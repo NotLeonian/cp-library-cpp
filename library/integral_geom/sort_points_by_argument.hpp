@@ -4,8 +4,6 @@
 #include <algorithm>
 #include <vector>
 
-#include "library/integral_geom/point.hpp"
-
 namespace suisen::integral_geometry {
     /**
      * 1. (x < 0, y = 0) -> pi
@@ -18,8 +16,8 @@ namespace suisen::integral_geometry {
         const auto &[x2, y2] = q;
         if ((y1 < 0) xor (y2 < 0)) return y1 < y2;
         if ((x1 < 0) xor (x2 < 0)) return (y1 >= 0) xor (x1 < x2);
-        if (x1 == 0 and y1 == 0) return true;
         if (x2 == 0 and y2 == 0) return false;
+        if (x1 == 0 and y1 == 0) return true;
         return (MultipliedType(y1) * x2 < MultipliedType(y2) * x1);
     }
     template <typename PointType, typename MultipliedType = long long>
