@@ -89,7 +89,6 @@ namespace suisen {
             assert(n >= r);
             return fac_inv(n) * fac(n - r);
         }
-
     private:
         static value_type _binom_under_mod(long long n, long long r) {
             if (r < 0 or n < r) return 0;
