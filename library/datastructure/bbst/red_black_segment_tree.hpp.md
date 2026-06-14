@@ -210,8 +210,8 @@ data:
   isVerificationFile: false
   path: library/datastructure/bbst/red_black_segment_tree.hpp
   requiredBy:
-  - library/string/dynamic_rolling_hash.hpp
   - library/datastructure/bbst/persistent_red_black_segment_tree.hpp
+  - library/string/dynamic_rolling_hash.hpp
   timestamp: '2026-06-01 16:32:36+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:

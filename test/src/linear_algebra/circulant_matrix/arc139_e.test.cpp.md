@@ -63,14 +63,18 @@ data:
     \            res *= _fac_inv[n - sumd];\n            return res;\n        }\n\
     \        U perm(const int n, const int r) {\n            if (n < 0 or r < 0 or\
     \ n < r) return 0;\n            ensure(n);\n            return _fac[n] * _fac_inv[n\
-    \ - r];\n        }\n    private:\n        static std::vector<T> _fac;\n      \
-    \  static std::vector<U> _fac_inv;\n    };\n    template <typename T, typename\
-    \ U>\n    std::vector<T> factorial<T, U>::_fac{ 1 };\n    template <typename T,\
-    \ typename U>\n    std::vector<U> factorial<T, U>::_fac_inv{ 1 };\n} // namespace\
-    \ suisen\n\n\n#line 1 \"library/linear_algebra/circulant_matrix.hpp\"\n\n\n\n\
-    #line 7 \"library/linear_algebra/circulant_matrix.hpp\"\n\nnamespace suisen {\n\
-    \    template <typename T>\n    struct CirculantMatrix {\n        using value_type\
-    \ = T;\n        using convolution_t = std::vector<value_type>(*)(const std::vector<value_type>&,\
+    \ - r];\n        }\n        // perm(n, r) \u306E\u9006\u6570\n        // perm(n,\
+    \ r) = 0 \u306E\u5834\u5408\u306F assert \u9055\u53CD\u3068\u306A\u308B\n    \
+    \    U perm_inv(const int n, const int r) {\n            assert(r >= 0 and n >=\
+    \ r);\n            ensure(n);\n            return _fac_inv[n] * _fac[n - r];\n\
+    \        }\n    private:\n        static std::vector<T> _fac;\n        static\
+    \ std::vector<U> _fac_inv;\n    };\n    template <typename T, typename U>\n  \
+    \  std::vector<T> factorial<T, U>::_fac{ 1 };\n    template <typename T, typename\
+    \ U>\n    std::vector<U> factorial<T, U>::_fac_inv{ 1 };\n} // namespace suisen\n\
+    \n\n#line 1 \"library/linear_algebra/circulant_matrix.hpp\"\n\n\n\n#line 7 \"\
+    library/linear_algebra/circulant_matrix.hpp\"\n\nnamespace suisen {\n    template\
+    \ <typename T>\n    struct CirculantMatrix {\n        using value_type = T;\n\
+    \        using convolution_t = std::vector<value_type>(*)(const std::vector<value_type>&,\
     \ const std::vector<value_type>&);\n\n        // empty matrix\n        CirculantMatrix()\
     \ : CirculantMatrix(std::vector<value_type>{}) {}\n\n        /**\n         * +-\
     \                        -+\n         * | a[0] a[4] a[3] a[2] a[1] |\n       \
@@ -169,7 +173,7 @@ data:
   isVerificationFile: true
   path: test/src/linear_algebra/circulant_matrix/arc139_e.test.cpp
   requiredBy: []
-  timestamp: '2026-05-19 23:50:19+09:00'
+  timestamp: '2026-06-14 12:42:12+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/linear_algebra/circulant_matrix/arc139_e.test.cpp

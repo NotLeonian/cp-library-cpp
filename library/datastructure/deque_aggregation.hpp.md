@@ -239,11 +239,11 @@ data:
   timestamp: '2022-07-12 14:26:27+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test/src/datastructure/deque_aggregation/queue_operate_all_composite.test.cpp
-  - test/src/datastructure/deque_aggregation/staticrmq.test.cpp
   - test/src/datastructure/deque_aggregation/deque_operate_all_composite.test.cpp
-  - test/src/sequence/eulerian_number/yuki2005-2.test.cpp
+  - test/src/datastructure/deque_aggregation/staticrmq.test.cpp
+  - test/src/datastructure/deque_aggregation/queue_operate_all_composite.test.cpp
   - test/src/sequence/eulerian_number/yuki2005-2-2.test.cpp
+  - test/src/sequence/eulerian_number/yuki2005-2.test.cpp
   - test/src/sequence/eulerian_number/yuki2005.test.cpp
 documentation_of: library/datastructure/deque_aggregation.hpp
 layout: document

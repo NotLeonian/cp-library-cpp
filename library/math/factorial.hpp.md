@@ -200,11 +200,15 @@ data:
     \            res *= _fac_inv[n - sumd];\n            return res;\n        }\n\
     \        U perm(const int n, const int r) {\n            if (n < 0 or r < 0 or\
     \ n < r) return 0;\n            ensure(n);\n            return _fac[n] * _fac_inv[n\
-    \ - r];\n        }\n    private:\n        static std::vector<T> _fac;\n      \
-    \  static std::vector<U> _fac_inv;\n    };\n    template <typename T, typename\
-    \ U>\n    std::vector<T> factorial<T, U>::_fac{ 1 };\n    template <typename T,\
-    \ typename U>\n    std::vector<U> factorial<T, U>::_fac_inv{ 1 };\n} // namespace\
-    \ suisen\n\n\n"
+    \ - r];\n        }\n        // perm(n, r) \u306E\u9006\u6570\n        // perm(n,\
+    \ r) = 0 \u306E\u5834\u5408\u306F assert \u9055\u53CD\u3068\u306A\u308B\n    \
+    \    U perm_inv(const int n, const int r) {\n            assert(r >= 0 and n >=\
+    \ r);\n            ensure(n);\n            return _fac_inv[n] * _fac[n - r];\n\
+    \        }\n    private:\n        static std::vector<T> _fac;\n        static\
+    \ std::vector<U> _fac_inv;\n    };\n    template <typename T, typename U>\n  \
+    \  std::vector<T> factorial<T, U>::_fac{ 1 };\n    template <typename T, typename\
+    \ U>\n    std::vector<U> factorial<T, U>::_fac_inv{ 1 };\n} // namespace suisen\n\
+    \n\n"
   code: "#ifndef SUISEN_FACTORIAL\n#define SUISEN_FACTORIAL\n\n#include <cassert>\n\
     #include <vector>\n\nnamespace suisen {\n    template <typename T, typename U\
     \ = T>\n    struct factorial {\n        factorial() = default;\n        factorial(int\
@@ -247,68 +251,72 @@ data:
     \            res *= _fac_inv[n - sumd];\n            return res;\n        }\n\
     \        U perm(const int n, const int r) {\n            if (n < 0 or r < 0 or\
     \ n < r) return 0;\n            ensure(n);\n            return _fac[n] * _fac_inv[n\
-    \ - r];\n        }\n    private:\n        static std::vector<T> _fac;\n      \
-    \  static std::vector<U> _fac_inv;\n    };\n    template <typename T, typename\
-    \ U>\n    std::vector<T> factorial<T, U>::_fac{ 1 };\n    template <typename T,\
-    \ typename U>\n    std::vector<U> factorial<T, U>::_fac_inv{ 1 };\n} // namespace\
-    \ suisen\n\n#endif // SUISEN_FACTORIAL\n"
+    \ - r];\n        }\n        // perm(n, r) \u306E\u9006\u6570\n        // perm(n,\
+    \ r) = 0 \u306E\u5834\u5408\u306F assert \u9055\u53CD\u3068\u306A\u308B\n    \
+    \    U perm_inv(const int n, const int r) {\n            assert(r >= 0 and n >=\
+    \ r);\n            ensure(n);\n            return _fac_inv[n] * _fac[n - r];\n\
+    \        }\n    private:\n        static std::vector<T> _fac;\n        static\
+    \ std::vector<U> _fac_inv;\n    };\n    template <typename T, typename U>\n  \
+    \  std::vector<T> factorial<T, U>::_fac{ 1 };\n    template <typename T, typename\
+    \ U>\n    std::vector<U> factorial<T, U>::_fac_inv{ 1 };\n} // namespace suisen\n\
+    \n#endif // SUISEN_FACTORIAL\n"
   dependsOn: []
   isVerificationFile: false
   path: library/math/factorial.hpp
   requiredBy:
-  - library/math/binomial_coefficient_sum.hpp
-  - library/math/factorial_large.hpp
+  - test/src/math/factorial_large/yuki502.cpp
   - library/math/sum_i^d_r^i.hpp
+  - library/math/factorial_large.hpp
+  - library/math/binomial_coefficient_sum.hpp
   - library/math/util.hpp
-  - library/polynomial/polynomial_taylor_shift.hpp
+  - library/sequence/eulerian_number.hpp
+  - library/sequence/bell_number.hpp
+  - library/sequence/stirling_number1.hpp
+  - library/sequence/stirling_number2.hpp
+  - library/sequence/stirling_number2_small_prime_mod.hpp
+  - library/sequence/sum_of_powers.hpp
+  - library/sequence/binomial_coefficient_small_prime_mod.hpp
+  - library/sequence/bernoulli_number.hpp
+  - library/sequence/stirling_number1_small_prime_mod.hpp
   - library/polynomial/compose_exp.hpp
   - library/polynomial/shift_of_sampling_points.hpp
   - library/polynomial/rook_polynomial.hpp
-  - library/sequence/stirling_number1.hpp
-  - library/sequence/bernoulli_number.hpp
-  - library/sequence/sum_of_powers.hpp
-  - library/sequence/stirling_number2_small_prime_mod.hpp
-  - library/sequence/eulerian_number.hpp
-  - library/sequence/stirling_number1_small_prime_mod.hpp
-  - library/sequence/binomial_coefficient_small_prime_mod.hpp
-  - library/sequence/stirling_number2.hpp
-  - library/sequence/bell_number.hpp
-  - test/src/math/factorial_large/yuki502.cpp
-  timestamp: '2026-05-19 23:50:19+09:00'
+  - library/polynomial/polynomial_taylor_shift.hpp
+  timestamp: '2026-06-14 12:42:12+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test/src/math/factorial/binomial_coefficient_prime_mod.test.cpp
-  - test/src/math/factorial_large/many_factorials.test.cpp
-  - test/src/math/factorial_large/dummy.test.cpp
-  - test/src/math/factorial_large/factorial.test.cpp
+  - test/src/linear_algebra/circulant_matrix/arc139_e.test.cpp
   - test/src/math/binomial_coefficient_sum/yuki2512.test.cpp
-  - test/src/math/sum_i^d_r^i/sum_of_exponential_times_polynomial_limit.test.cpp
-  - test/src/math/sum_i^d_r^i/sum_of_exponential_times_polynomial.test.cpp
-  - test/src/math/util/abc240_g.test.cpp
   - test/src/math/set_power_series/abc253_h_2.test.cpp
   - test/src/math/set_power_series/abc253_h.test.cpp
+  - test/src/math/util/abc240_g.test.cpp
+  - test/src/math/factorial_large/dummy.test.cpp
+  - test/src/math/factorial_large/factorial.test.cpp
+  - test/src/math/factorial_large/many_factorials.test.cpp
+  - test/src/math/sum_i^d_r^i/sum_of_exponential_times_polynomial.test.cpp
+  - test/src/math/sum_i^d_r^i/sum_of_exponential_times_polynomial_limit.test.cpp
+  - test/src/math/factorial/binomial_coefficient_prime_mod.test.cpp
   - test/src/math/array_set_power_series/abc253_h_2.test.cpp
   - test/src/math/array_set_power_series/abc253_h.test.cpp
-  - test/src/polynomial/prod_f(r^k_x)/yuki2097.test.cpp
-  - test/src/polynomial/polynomial_taylor_shift/polynomial_taylor_shift_2.test.cpp
-  - test/src/polynomial/polynomial_taylor_shift/polynomial_taylor_shift.test.cpp
-  - test/src/polynomial/shift_of_sampling_points/shift_of_sampling_points_of_polynomial.test.cpp
-  - test/src/polynomial/compose_exp/arc154_f.test.cpp
-  - test/src/polynomial/rook_polynomial/abc272_h.test.cpp
-  - test/src/polynomial/rook_polynomial/dummy.test.cpp
-  - test/src/sequence/stirling_number2_small_prime_mod/stirling_number_of_the_second_kind_small_p_large_n.test.cpp
-  - test/src/sequence/bernoulli_number/bernoulli_number.test.cpp
-  - test/src/sequence/bernoulli_number/bernoulli_number_2.test.cpp
-  - test/src/sequence/stirling_number1/stirling_number1_2.test.cpp
-  - test/src/sequence/stirling_number1/stirling_number1.test.cpp
   - test/src/sequence/stirling_number1/abc247_h.test.cpp
+  - test/src/sequence/stirling_number1/stirling_number1.test.cpp
+  - test/src/sequence/stirling_number1/stirling_number1_2.test.cpp
+  - test/src/sequence/eulerian_number/yuki2005-2-2.test.cpp
+  - test/src/sequence/eulerian_number/yuki2005-2.test.cpp
+  - test/src/sequence/eulerian_number/yuki2005.test.cpp
+  - test/src/sequence/stirling_number2_small_prime_mod/stirling_number_of_the_second_kind_small_p_large_n.test.cpp
+  - test/src/sequence/bernoulli_number/bernoulli_number_2.test.cpp
+  - test/src/sequence/bernoulli_number/bernoulli_number.test.cpp
+  - test/src/sequence/stirling_number1_small_prime_mod/stirling_number_of_the_first_kind_small_p_large_n.test.cpp
   - test/src/sequence/stirling_number2/stirling_number2_2.test.cpp
   - test/src/sequence/stirling_number2/stirling_number2.test.cpp
-  - test/src/sequence/eulerian_number/yuki2005-2.test.cpp
-  - test/src/sequence/eulerian_number/yuki2005-2-2.test.cpp
-  - test/src/sequence/eulerian_number/yuki2005.test.cpp
-  - test/src/sequence/stirling_number1_small_prime_mod/stirling_number_of_the_first_kind_small_p_large_n.test.cpp
-  - test/src/linear_algebra/circulant_matrix/arc139_e.test.cpp
+  - test/src/polynomial/polynomial_taylor_shift/polynomial_taylor_shift_2.test.cpp
+  - test/src/polynomial/polynomial_taylor_shift/polynomial_taylor_shift.test.cpp
+  - test/src/polynomial/compose_exp/arc154_f.test.cpp
+  - test/src/polynomial/prod_f(r^k_x)/yuki2097.test.cpp
+  - test/src/polynomial/rook_polynomial/dummy.test.cpp
+  - test/src/polynomial/rook_polynomial/abc272_h.test.cpp
+  - test/src/polynomial/shift_of_sampling_points/shift_of_sampling_points_of_polynomial.test.cpp
 documentation_of: library/math/factorial.hpp
 layout: document
 title: "\u968E\u4E57\u30C6\u30FC\u30D6\u30EB"

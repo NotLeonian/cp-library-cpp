@@ -71,12 +71,16 @@ data:
     \            res *= _fac_inv[n - sumd];\n            return res;\n        }\n\
     \        U perm(const int n, const int r) {\n            if (n < 0 or r < 0 or\
     \ n < r) return 0;\n            ensure(n);\n            return _fac[n] * _fac_inv[n\
-    \ - r];\n        }\n    private:\n        static std::vector<T> _fac;\n      \
-    \  static std::vector<U> _fac_inv;\n    };\n    template <typename T, typename\
-    \ U>\n    std::vector<T> factorial<T, U>::_fac{ 1 };\n    template <typename T,\
-    \ typename U>\n    std::vector<U> factorial<T, U>::_fac_inv{ 1 };\n} // namespace\
-    \ suisen\n\n\n#line 8 \"library/polynomial/shift_of_sampling_points.hpp\"\n\n\
-    namespace suisen {\n    template <typename mint, typename Convolve,\n        std::enable_if_t<std::is_invocable_r_v<std::vector<mint>,\
+    \ - r];\n        }\n        // perm(n, r) \u306E\u9006\u6570\n        // perm(n,\
+    \ r) = 0 \u306E\u5834\u5408\u306F assert \u9055\u53CD\u3068\u306A\u308B\n    \
+    \    U perm_inv(const int n, const int r) {\n            assert(r >= 0 and n >=\
+    \ r);\n            ensure(n);\n            return _fac_inv[n] * _fac[n - r];\n\
+    \        }\n    private:\n        static std::vector<T> _fac;\n        static\
+    \ std::vector<U> _fac_inv;\n    };\n    template <typename T, typename U>\n  \
+    \  std::vector<T> factorial<T, U>::_fac{ 1 };\n    template <typename T, typename\
+    \ U>\n    std::vector<U> factorial<T, U>::_fac_inv{ 1 };\n} // namespace suisen\n\
+    \n\n#line 8 \"library/polynomial/shift_of_sampling_points.hpp\"\n\nnamespace suisen\
+    \ {\n    template <typename mint, typename Convolve,\n        std::enable_if_t<std::is_invocable_r_v<std::vector<mint>,\
     \ Convolve, std::vector<mint>, std::vector<mint>>, std::nullptr_t> = nullptr>\n\
     \    std::vector<mint> shift_of_sampling_points(const std::vector<mint>& ys, mint\
     \ t, int m, const Convolve &convolve) {\n        const int n = ys.size();\n  \
@@ -199,11 +203,17 @@ data:
     \ {\n                if (d < 0 or d > n) return 0;\n                sumd += d;\n\
     \                res *= fac_inv(d);\n            }\n            if (sumd > n)\
     \ return 0;\n            res *= fac_inv(n - sumd);\n            return res;\n\
-    \        }\n        static value_type perm(int n, int r) {\n            if (r\
-    \ < 0 or r > n) return 0;\n            return fac(n) * fac_inv(n - r);\n     \
-    \   }\n    private:\n        static value_type _binom_under_mod(long long n, long\
-    \ long r) {\n            if (r < 0 or n < r) return 0;\n            return fac(n)\
-    \ * fac_inv(r) * fac_inv(n - r);\n        }\n        static value_type _binom_inv_under_mod(long\
+    \        }\n        static value_type perm(long long n, long long r) {\n     \
+    \       if (r < 0 or r > n or r >= mint::mod()) return 0;\n            n %= mint::mod();\n\
+    \            if (r > n) return 0;\n            return fac(n) * fac_inv(n - r);\n\
+    \        }\n        // perm(n, r) \u306E\u9006\u6570\n        // perm(n, r) =\
+    \ 0 \u306E\u5834\u5408\u306F assert \u9055\u53CD\u3068\u306A\u308B\n        static\
+    \ value_type perm_inv(long long n, long long r) {\n            assert(r >= 0 and\
+    \ n >= r and r < mint::mod());\n            n %= mint::mod();\n            assert(n\
+    \ >= r);\n            return fac_inv(n) * fac(n - r);\n        }\n    private:\n\
+    \        static value_type _binom_under_mod(long long n, long long r) {\n    \
+    \        if (r < 0 or n < r) return 0;\n            return fac(n) * fac_inv(r)\
+    \ * fac_inv(n - r);\n        }\n        static value_type _binom_inv_under_mod(long\
     \ long n, long long r) {\n            assert(r >= 0 and n >= r);\n           \
     \ return fac_inv(n) * fac(r) * fac(n - r);\n        }\n        static value_type\
     \ _binom_lucas(long long n, long long r) {\n            if (n < 0 or r < 0 or\
@@ -267,7 +277,7 @@ data:
   isVerificationFile: false
   path: test/src/math/factorial_large/yuki502.cpp
   requiredBy: []
-  timestamp: '2026-05-19 23:50:19+09:00'
+  timestamp: '2026-06-14 12:42:12+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: test/src/math/factorial_large/yuki502.cpp

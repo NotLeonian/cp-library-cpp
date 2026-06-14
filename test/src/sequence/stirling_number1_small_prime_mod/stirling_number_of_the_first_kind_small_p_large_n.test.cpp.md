@@ -92,44 +92,48 @@ data:
     \            res *= _fac_inv[n - sumd];\n            return res;\n        }\n\
     \        U perm(const int n, const int r) {\n            if (n < 0 or r < 0 or\
     \ n < r) return 0;\n            ensure(n);\n            return _fac[n] * _fac_inv[n\
-    \ - r];\n        }\n    private:\n        static std::vector<T> _fac;\n      \
-    \  static std::vector<U> _fac_inv;\n    };\n    template <typename T, typename\
-    \ U>\n    std::vector<T> factorial<T, U>::_fac{ 1 };\n    template <typename T,\
-    \ typename U>\n    std::vector<U> factorial<T, U>::_fac_inv{ 1 };\n} // namespace\
-    \ suisen\n\n\n#line 7 \"library/sequence/stirling_number1.hpp\"\n\nnamespace suisen\
-    \ {\n    /**\n     * return:\n     *   vector<mint> v s.t. v[i] = S1[n,n-i] for\
-    \ i=0,...,k (unsigned)\n     * constraints:\n     *   0 <= n <= 10^6\n     */\n\
-    \    template <typename FPSType>\n    std::vector<typename FPSType::value_type>\
-    \ stirling_number1_reversed(int n) {\n        using mint = typename FPSType::value_type;\n\
-    \        factorial<mint> fac(n);\n        int l = 0;\n        while ((n >> l)\
-    \ != 0) ++l;\n        FPSType a{ 1 };\n        int m = 0;\n        while (l--\
-    \ > 0) {\n            FPSType f(m + 1), g(m + 1);\n            mint powm = 1;\n\
-    \            for (int i = 0; i <= m; ++i, powm *= m) {\n                f[i] =\
-    \ powm * fac.fac_inv(i);\n                g[i] = a[i] * fac.fac(m - i);\n    \
-    \        }\n            f *= g, f.cut(m + 1);\n            for (int i = 0; i <=\
-    \ m; ++i) f[i] *= fac.fac_inv(m - i);\n            a *= f, m *= 2, a.cut(m + 1);\n\
-    \            if ((n >> l) & 1) {\n                a.push_back(0);\n          \
-    \      for (int i = m; i > 0; --i) a[i] += m * a[i - 1];\n                ++m;\n\
-    \            }\n        }\n        return a;\n    }\n    template <typename FPSType>\n\
-    \    std::vector<typename FPSType::value_type> stirling_number1(int n) {\n   \
-    \     std::vector<typename FPSType::value_type> a(stirling_number1_reversed<FPSType>(n));\n\
-    \        std::reverse(a.begin(), a.end());\n        return a;\n    }\n    /**\n\
-    \     * return:\n     *   vector<mint> v s.t. v[i] = S1[n,n-i] for i=0,...,k,\
-    \ where S1 is the stirling number of the first kind (unsigned).\n     * constraints:\n\
-    \     * - 0 <= n <= 10^18\n     * - 0 <= k <= 5000\n     * - k < mod\n     */\n\
-    \    template <typename mint>\n    std::vector<mint> stirling_number1_reversed(const\
-    \ long long n, const int k) {\n        inv_mods<mint> invs(k + 1);\n        std::vector<mint>\
-    \ a(k + 1, 0);\n        a[0] = 1;\n        int l = 0;\n        while (n >> l)\
-    \ ++l;\n        mint m = 0;\n        while (l-- > 0) {\n            std::vector<mint>\
-    \ b(k + 1, 0);\n            for (int j = 0; j <= k; ++j) {\n                mint\
-    \ tmp = 1;\n                for (int i = j; i <= k; ++i) {\n                 \
-    \   b[i] += a[j] * tmp;\n                    tmp *= (m - i) * invs[i - j + 1]\
-    \ * m;\n                }\n            }\n            for (int i = k + 1; i--\
-    \ > 0;) {\n                mint sum = 0;\n                for (int j = 0; j <=\
-    \ i; ++j) sum += a[j] * b[i - j];\n                a[i] = sum;\n            }\n\
-    \            m *= 2;\n            if ((n >> l) & 1) {\n                for (int\
-    \ i = k; i > 0; --i) a[i] += m * a[i - 1];\n                ++m;\n           \
-    \ }\n        }\n        return a;\n    }\n    template <typename mint>\n    std::vector<std::vector<mint>>\
+    \ - r];\n        }\n        // perm(n, r) \u306E\u9006\u6570\n        // perm(n,\
+    \ r) = 0 \u306E\u5834\u5408\u306F assert \u9055\u53CD\u3068\u306A\u308B\n    \
+    \    U perm_inv(const int n, const int r) {\n            assert(r >= 0 and n >=\
+    \ r);\n            ensure(n);\n            return _fac_inv[n] * _fac[n - r];\n\
+    \        }\n    private:\n        static std::vector<T> _fac;\n        static\
+    \ std::vector<U> _fac_inv;\n    };\n    template <typename T, typename U>\n  \
+    \  std::vector<T> factorial<T, U>::_fac{ 1 };\n    template <typename T, typename\
+    \ U>\n    std::vector<U> factorial<T, U>::_fac_inv{ 1 };\n} // namespace suisen\n\
+    \n\n#line 7 \"library/sequence/stirling_number1.hpp\"\n\nnamespace suisen {\n\
+    \    /**\n     * return:\n     *   vector<mint> v s.t. v[i] = S1[n,n-i] for i=0,...,k\
+    \ (unsigned)\n     * constraints:\n     *   0 <= n <= 10^6\n     */\n    template\
+    \ <typename FPSType>\n    std::vector<typename FPSType::value_type> stirling_number1_reversed(int\
+    \ n) {\n        using mint = typename FPSType::value_type;\n        factorial<mint>\
+    \ fac(n);\n        int l = 0;\n        while ((n >> l) != 0) ++l;\n        FPSType\
+    \ a{ 1 };\n        int m = 0;\n        while (l-- > 0) {\n            FPSType\
+    \ f(m + 1), g(m + 1);\n            mint powm = 1;\n            for (int i = 0;\
+    \ i <= m; ++i, powm *= m) {\n                f[i] = powm * fac.fac_inv(i);\n \
+    \               g[i] = a[i] * fac.fac(m - i);\n            }\n            f *=\
+    \ g, f.cut(m + 1);\n            for (int i = 0; i <= m; ++i) f[i] *= fac.fac_inv(m\
+    \ - i);\n            a *= f, m *= 2, a.cut(m + 1);\n            if ((n >> l) &\
+    \ 1) {\n                a.push_back(0);\n                for (int i = m; i > 0;\
+    \ --i) a[i] += m * a[i - 1];\n                ++m;\n            }\n        }\n\
+    \        return a;\n    }\n    template <typename FPSType>\n    std::vector<typename\
+    \ FPSType::value_type> stirling_number1(int n) {\n        std::vector<typename\
+    \ FPSType::value_type> a(stirling_number1_reversed<FPSType>(n));\n        std::reverse(a.begin(),\
+    \ a.end());\n        return a;\n    }\n    /**\n     * return:\n     *   vector<mint>\
+    \ v s.t. v[i] = S1[n,n-i] for i=0,...,k, where S1 is the stirling number of the\
+    \ first kind (unsigned).\n     * constraints:\n     * - 0 <= n <= 10^18\n    \
+    \ * - 0 <= k <= 5000\n     * - k < mod\n     */\n    template <typename mint>\n\
+    \    std::vector<mint> stirling_number1_reversed(const long long n, const int\
+    \ k) {\n        inv_mods<mint> invs(k + 1);\n        std::vector<mint> a(k + 1,\
+    \ 0);\n        a[0] = 1;\n        int l = 0;\n        while (n >> l) ++l;\n  \
+    \      mint m = 0;\n        while (l-- > 0) {\n            std::vector<mint> b(k\
+    \ + 1, 0);\n            for (int j = 0; j <= k; ++j) {\n                mint tmp\
+    \ = 1;\n                for (int i = j; i <= k; ++i) {\n                    b[i]\
+    \ += a[j] * tmp;\n                    tmp *= (m - i) * invs[i - j + 1] * m;\n\
+    \                }\n            }\n            for (int i = k + 1; i-- > 0;) {\n\
+    \                mint sum = 0;\n                for (int j = 0; j <= i; ++j) sum\
+    \ += a[j] * b[i - j];\n                a[i] = sum;\n            }\n          \
+    \  m *= 2;\n            if ((n >> l) & 1) {\n                for (int i = k; i\
+    \ > 0; --i) a[i] += m * a[i - 1];\n                ++m;\n            }\n     \
+    \   }\n        return a;\n    }\n    template <typename mint>\n    std::vector<std::vector<mint>>\
     \ stirling_number1_table(int n) {\n        std::vector dp(n + 1, std::vector<mint>{});\n\
     \        for (int i = 0; i <= n; ++i) {\n            dp[i].resize(i + 1);\n  \
     \          dp[i][0] = 0, dp[i][i] = 1;\n            for (int j = 1; j < i; ++j)\
@@ -179,7 +183,7 @@ data:
   isVerificationFile: true
   path: test/src/sequence/stirling_number1_small_prime_mod/stirling_number_of_the_first_kind_small_p_large_n.test.cpp
   requiredBy: []
-  timestamp: '2026-05-19 23:50:19+09:00'
+  timestamp: '2026-06-14 12:42:12+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/sequence/stirling_number1_small_prime_mod/stirling_number_of_the_first_kind_small_p_large_n.test.cpp
