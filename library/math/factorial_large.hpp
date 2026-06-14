@@ -73,10 +73,23 @@ namespace suisen {
             res *= fac_inv(n - sumd);
             return res;
         }
-        static value_type perm(int n, int r) {
+        static value_type perm(long long n, long long r) {
             if (r < 0 or r > n) return 0;
+            n %= mint::mod();
+            r %= mint::mod();
+            if (r > n) return 0;
             return fac(n) * fac_inv(n - r);
         }
+        // perm(n, r) の逆数
+        // perm(n, r) = 0 の場合は assert 違反となる
+        static value_type perm_inv(long long n, long long r) {
+            assert(r >= 0 and n >= r);
+            n %= mint::mod();
+            r %= mint::mod();
+            assert(n >= r);
+            return fac_inv(n) * fac(n - r);
+        }
+
     private:
         static value_type _binom_under_mod(long long n, long long r) {
             if (r < 0 or n < r) return 0;
