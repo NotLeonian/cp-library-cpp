@@ -78,6 +78,13 @@ namespace suisen {
             ensure(n);
             return _fac[n] * _fac_inv[n - r];
         }
+        // perm(n, r) の逆数
+        // perm(n, r) = 0 の場合は assert 違反となる
+        U perm_inv(const int n, const int r) {
+            assert(r >= 0 and n >= r);
+            ensure(n);
+            return _fac_inv[n] * _fac[n - r];
+        }
     private:
         static std::vector<T> _fac;
         static std::vector<U> _fac_inv;
