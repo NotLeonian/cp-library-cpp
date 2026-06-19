@@ -54,19 +54,19 @@ namespace suisen {
 
             std::vector<value_type> dat(_n);
 
-            auto rec = [&](auto rec, int r, int siz) -> int {
+            auto rec = [&](auto rec, int r, int size) -> int {
                 int c = -1;
                 auto get_centroid = [&](auto get_centroid, int u, int p) -> void {
                     sub_size[u] = 1;
                     for (int v : _nodes[u].adj) if (v != p) {
                         get_centroid(get_centroid, v, u);
                         if (v == c) {
-                            sub_size[u] = siz - sub_size[c];
+                            sub_size[u] = size - sub_size[c];
                             break;
                         }
                         sub_size[u] += sub_size[v];
                     }
-                    if (c < 0 and sub_size[u] * 2 > siz) c = u;
+                    if (c < 0 and sub_size[u] * 2 > size) c = u;
                 };
                 get_centroid(get_centroid, r, -1);
 

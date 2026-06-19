@@ -26,8 +26,8 @@ namespace suisen::bbst::internal {
             return tm;
         }
         static tree_type replace(tree_type from, tree_type to, int l, int r) {
-            const int siz = base_type::size(from);
-            auto [res, replaced] = swap(to, l, r, from, 0, siz);
+            const int size = base_type::size(from);
+            auto [res, replaced] = swap(to, l, r, from, 0, size);
             return res;
         }
         static tree_type replace(tree_type from, tree_type to, int pos) {

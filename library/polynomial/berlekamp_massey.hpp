@@ -8,7 +8,7 @@ namespace suisen {
     /**
      * @brief Find linear recurrence in O(|s|^2) time
      * @tparam F Arbitrary field (operator +, -, *, /, +=, -=, *=, /= must be defined)
-     * @param s Prefix of a linearly reccurent sequence
+     * @param s Prefix of a linearly recurrent sequence
      * @return The vector of length L+1 c s.t. c_0=1 and s_i=Sum[j=1,L]c_i*s_{i-j} for all i>=L, where L is the minimum integer s.t. there exists such c of length L+1.
      */
     template <typename F>

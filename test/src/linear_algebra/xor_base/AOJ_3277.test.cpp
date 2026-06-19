@@ -12,8 +12,8 @@ int main() {
     int k;
     std::cin >> k;
 
-    std::vector<int> siz(k);
-    for (auto& e : siz) std::cin >> e;
+    std::vector<int> size(k);
+    for (auto& e : size) std::cin >> e;
 
     std::vector<suisen::XorBase<uint64_t>> dp(1 << k);
     for (int i = 0; i < 60; ++i) {
@@ -21,7 +21,7 @@ int main() {
     }
     for (int i = 0; i < k; ++i) {
         suisen::XorBase<uint64_t> b;
-        for (int j = 0; j < siz[i]; ++j) {
+        for (int j = 0; j < size[i]; ++j) {
             uint64_t v;
             std::cin >> v;
             b += v;

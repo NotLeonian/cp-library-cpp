@@ -15,7 +15,7 @@ namespace suisen {
     template <typename T, T(*op)(T, T) = default_operator_noref::add<T>, T(*e)() = default_operator_noref::zero<T>, T(*neg)(T) = default_operator_noref::neg<T>>
         struct WeightedUnionFind {
             WeightedUnionFind() = default;
-            explicit WeightedUnionFind(int n) : n(n), par(n), siz(n, 1), value(n, e()) {
+            explicit WeightedUnionFind(int n) : n(n), par(n), component_size(n, 1), value(n, e()) {
                 std::iota(par.begin(), par.end(), 0);
             }
             // Get the root of `x`. equivalent to `operator[](x)`
@@ -27,7 +27,7 @@ namespace suisen {
                 }
                 return x;
             }
-            // Get the root of `x`. euivalent to `root(x)`
+            // Get the root of `x`. equivalent to `root(x)`
             int operator[](int x) {
                 return root(x);
             }
@@ -44,11 +44,11 @@ namespace suisen {
                 T rd = op(op(weight(x), d), neg(weight(y)));
                 x = root(x), y = root(y);
                 if (x == y) return false;
-                if (siz[x] < siz[y]) {
+                if (component_size[x] < component_size[y]) {
                     std::swap(x, y);
                     rd = neg(std::move(rd));
                 }
-                siz[x] += siz[y], par[y] = x;
+                component_size[x] += component_size[y], par[y] = x;
                 value[y] = std::move(rd);
                 return true;
             }
@@ -61,9 +61,9 @@ namespace suisen {
             bool same(int x, int y) {
                 return root(x) == root(y);
             }
-            // Get the size of connected componet to which `x` belongs.
+            // Get the size of connected component to which `x` belongs.
             int size(int x) {
-                return siz[root(x)];
+                return component_size[root(x)];
             }
             // Get all of connected components.
             std::vector<std::vector<int>> groups() {
@@ -74,7 +74,7 @@ namespace suisen {
             }
         private:
             int n;
-            std::vector<int> par, siz;
+            std::vector<int> par, component_size;
             std::vector<T> value;
 
             T weight(int x) {

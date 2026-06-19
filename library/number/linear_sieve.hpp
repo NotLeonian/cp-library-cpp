@@ -6,7 +6,7 @@
 #include <vector>
 
 namespace suisen {
-// referece: https://37zigen.com/linear-sieve/
+// reference: https://37zigen.com/linear-sieve/
 class LinearSieve {
     public:
         LinearSieve(const int n) : _n(n), min_prime_factor(std::vector<int>(n + 1)) {

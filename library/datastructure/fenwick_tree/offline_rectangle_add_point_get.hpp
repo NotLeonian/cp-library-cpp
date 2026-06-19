@@ -83,11 +83,11 @@ namespace suisen {
                 int num_y = 0;
                 {
                     std::vector<Key> mixed_asc_y(es_asc_y.begin() + 2 * l, es_asc_y.begin() + 2 * r);
-                    const int mid_siz = mixed_asc_y.size(), siz = mid_siz + point_num;
-                    mixed_asc_y.reserve(siz);
+                    const int mid_size = mixed_asc_y.size(), size = mid_size + point_num;
+                    mixed_asc_y.reserve(size);
                     for (const auto& [y, pid] : ps_asc_y[r - 1]) mixed_asc_y.emplace_back(y, ~pid);
-                    std::inplace_merge(mixed_asc_y.begin(), mixed_asc_y.begin() + mid_siz, mixed_asc_y.end(), comp_key);
-                    for (int t = 0; t < siz; ++t) {
+                    std::inplace_merge(mixed_asc_y.begin(), mixed_asc_y.begin() + mid_size, mixed_asc_y.end(), comp_key);
+                    for (int t = 0; t < size; ++t) {
                         const Key pkey = t ? mixed_asc_y[t - 1] : Key{ 0, 0 }, key = mixed_asc_y[t];
                         num_y += t and comp_key(pkey, key) and (pkey.second < 0) and (key.second >= 0);
                         const int i = key.second;

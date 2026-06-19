@@ -51,8 +51,8 @@ namespace suisen {
 
                 st.push_back(vs[i + 1]);
             }
-            const int siz = st.size();
-            for (int i = 0; i < siz - 1; ++i) {
+            const int size = st.size();
+            for (int i = 0; i < size - 1; ++i) {
                 _aux[st[i]].push_back(st[i + 1]);
                 _aux[st[i + 1]].push_back(st[i]);
             }

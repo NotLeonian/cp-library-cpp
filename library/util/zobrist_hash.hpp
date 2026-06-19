@@ -27,7 +27,7 @@ namespace suisen {
         hash_type empty_set() const {
             return 0;
         }
-        hash_type sigleton_set(const value_type& val) {
+        hash_type singleton_set(const value_type& val) {
             return (*this)(val);
         }
         hash_type flip(hash_type old_hash, const value_type& val) {

@@ -18,12 +18,12 @@ namespace suisen {
         // O(nlog n)
         template <typename mint>
         Polynomial<mint> inv(Polynomial<mint> f, int n) {
-            const int siz_f = f.size();
+            const int size_f = f.size();
 
             Polynomial<mint> f_fft, g_fft;
             Polynomial<mint> g{ f[0].inv() };
             for (int k = 1; k < n; k *= 2) {
-                f_fft = Polynomial<mint>(f.begin(), f.begin() + std::min(siz_f, 2 * k));
+                f_fft = Polynomial<mint>(f.begin(), f.begin() + std::min(size_f, 2 * k));
                 g_fft = g;
                 f_fft.resize(2 * k);
                 g_fft.resize(2 * k);
@@ -43,7 +43,7 @@ namespace suisen {
                     fg[i] *= g_fft[i];
                 }
                 atcoder::internal::butterfly_inv(fg);
-                const mint iz = mint(2 * k).inv(), c = -iz * iz;
+                const mint inv_scale = mint(2 * k).inv(), c = -inv_scale * inv_scale;
                 g.resize(2 * k);
                 for (int i = 0; i < k; ++i) {
                     g[k + i] = fg[i] * c;
@@ -233,11 +233,11 @@ namespace suisen {
                     r -= 1 << bit;
                 }
             }
-            const int siz = xs.size();
+            const int size = xs.size();
 
             // O(min(Q*bit^2, Q(logQ)^2 + bit 2^bit))
             std::vector<mint> ys = multipoint_evaluation<mint>(S1[bit], xs);
-            for (int i = 0; i < siz; ++i) {
+            for (int i = 0; i < size; ++i) {
                 ans[ids[i]] *= ys[i];
             }
         }

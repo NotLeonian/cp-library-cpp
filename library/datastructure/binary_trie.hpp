@@ -12,9 +12,9 @@ template <typename T, int bit_length = std::numeric_limits<std::make_unsigned_t<
 class BinaryTrie {
     using U = std::make_unsigned_t<T>;
     struct Node {
-        int siz;
+        int size_;
         Node *ch[2] {nullptr, nullptr};
-        Node() : siz(0) {}
+        Node() : size_(0) {}
         ~Node() {
             delete ch[0];
             delete ch[1];
@@ -26,13 +26,13 @@ class BinaryTrie {
         inline Node* operator[](bool b) const noexcept { return ch[b]; }
         inline bool is_absent (bool b) const noexcept { return ch[b] == nullptr; }
         inline bool is_present(bool b) const noexcept { return ch[b] != nullptr; }
-        static inline int size(const Node *const node) noexcept { return node == nullptr ? 0 : node->siz; }
-        inline void update_size() noexcept { siz = size(ch[0]) + size(ch[1]); }
+        static inline int size(const Node *const node) noexcept { return node == nullptr ? 0 : node->size_; }
+        inline void update_size() noexcept { size_ = size(ch[0]) + size(ch[1]); }
 
         std::string to_string(const int k = bit_length - 1, const U val = 0, const std::string &prefix = "") const {
             static const std::string zo[2] {"+-[0]- ", "+-[1]- "};
             static const std::string branch = '|' + std::string(zo[0].size() - 1, ' ');
-            auto res = std::to_string(siz) + ' ';
+            auto res = std::to_string(size_) + ' ';
             if (is_absent(0) and is_absent(1)) {
                 return res + "(" + std::to_string(val) + ")\n";
             }
@@ -59,12 +59,12 @@ class BinaryTrie {
         int insert(const U val, const int num = 1) noexcept {
             if (num == 0) return 0;
             Node *cur = root;
-            cur->siz += num;
+            cur->size_ += num;
             for (int i = bit_length; i --> 0;) {
                 cur = cur->get_or_create(bit(val, i));
-                cur->siz += num;
+                cur->size_ += num;
             }
-            return cur->siz;
+            return cur->size_;
         }
         int erase(const U val, const int num = 1) noexcept {
             if (num == 0) return 0;
@@ -149,8 +149,8 @@ class BinaryTrie {
         }
         int erase(Node *cur, const int k, const U val, const int num) {
             if (k == -1) {
-                int removed = std::min(cur->siz, num);
-                cur->siz -= removed;
+                int removed = std::min(cur->size_, num);
+                cur->size_ -= removed;
                 return removed;
             }
             bool b = bit(val, k);

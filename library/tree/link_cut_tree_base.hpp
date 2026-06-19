@@ -25,7 +25,7 @@ namespace suisen::internal::link_cut_tree {
         node_pointer_type _p = nullptr;
         node_pointer_type _ch[2]{ nullptr, nullptr };
 
-        int _siz = 1;
+        int _size = 1;
         value_type _val;
 
         bool _rev = false;
@@ -40,7 +40,7 @@ namespace suisen::internal::link_cut_tree {
             return node->_ch[ch_idx];
         }
         static int size(node_pointer_type node) {
-            return node ? node->_siz : 0;
+            return node ? node->_size : 0;
         }
         static const value_type& value(node_pointer_type node) {
             return node->_val;
@@ -49,7 +49,7 @@ namespace suisen::internal::link_cut_tree {
             node->_val = new_val;
         }
         static void update(node_pointer_type node) {
-            node->_siz = 1 + node_type::size(node->_ch[0]) + node_type::size(node->_ch[1]);
+            node->_size = 1 + node_type::size(node->_ch[0]) + node_type::size(node->_ch[1]);
         }
 
         static void reverse_all(node_pointer_type node) {

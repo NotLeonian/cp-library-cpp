@@ -56,7 +56,7 @@ namespace suisen {
         } tabs{};
 
     public:
-        RMQpm1WithIndex(std::vector<int>&& x) : n(x.size()), m((n + SIZE - 1) >> LOG), a(std::move(x)), b(m, 0), tabl(build()) {}
+        RMQpm1WithIndex(std::vector<int>&& x) : n(x.size()), m((n + SIZE - 1) >> LOG), a(std::move(x)), b(m, 0), table(build()) {}
         RMQpm1WithIndex(const std::vector<int>& x) : RMQpm1WithIndex(std::vector<int>(x)) {}
 
         std::pair<int, int> operator()(int l, int r) const {
@@ -69,14 +69,14 @@ namespace suisen {
             };
             if (l >> LOG == (r - 1) >> LOG) return f(l, r);
             int spl = (l + SIZE - 1) >> LOG, spr = r >> LOG;
-            return op(op(f(l, spl << LOG), f(spr << LOG, r)), tabl(spl, spr));
+            return op(op(f(l, spl << LOG), f(spr << LOG, r)), table(spl, spr));
         }
 
     private:
         int n, m;
         std::vector<int> a;
         std::vector<std::uint16_t> b;
-        SparseTable<std::pair<int, int>, op, e> tabl;
+        SparseTable<std::pair<int, int>, op, e> table;
 
         std::vector<std::pair<int, int>> build() {
             std::vector<std::pair<int, int>> c(m, e());

@@ -316,13 +316,13 @@ namespace suisen {
         static convolution_t<mint> mult;
 
         static FPS div_fps_sparse(const FPS& f, const std::vector<std::pair<int, value_type>>& g, int n) {
-            const int siz = g.size();
-            assert(siz and g[0].first == 0);
+            const int size = g.size();
+            assert(size and g[0].first == 0);
             const value_type inv_g0 = g[0].second.inv();
             FPS h(n);
             for (int i = 0; i < n; ++i) {
                 value_type v = f.safe_get(i);
-                for (int idx = 1; idx < siz; ++idx) {
+                for (int idx = 1; idx < size; ++idx) {
                     const auto& [j, gj] = g[idx];
                     if (j > i) break;
                     v -= gj * h[i - j];
@@ -335,8 +335,8 @@ namespace suisen {
             return div_fps_sparse(FPS{ 1 }, g, n);
         }
         static FPS exp_sparse(const std::vector<std::pair<int, value_type>>& f, const int n) {
-            const int siz = f.size();
-            assert(not siz or f[0].first != 0);
+            const int size = f.size();
+            assert(not size or f[0].first != 0);
             FPS g(n);
             g[0] = 1;
             inv_mods<value_type> invs(n);
@@ -352,10 +352,10 @@ namespace suisen {
             return g;
         }
         static FPS log_sparse(const std::vector<std::pair<int, value_type>>& f, const int n) {
-            const int siz = f.size();
-            assert(siz and f[0].first == 0 and f[0].second == 1);
+            const int size = f.size();
+            assert(size and f[0].first == 0 and f[0].second == 1);
             FPS g(n);
-            for (int idx = 1; idx < siz; ++idx) {
+            for (int idx = 1; idx < size; ++idx) {
                 const auto& [j, fj] = f[idx];
                 if (j >= n) break;
                 g[j] = j * fj;
@@ -363,7 +363,7 @@ namespace suisen {
             inv_mods<value_type> invs(n);
             for (int i = 1; i < n; ++i) {
                 value_type v = g[i];
-                for (int idx = 1; idx < siz; ++idx) {
+                for (int idx = 1; idx < size; ++idx) {
                     const auto& [j, fj] = f[idx];
                     if (j > i) break;
                     v -= fj * g[i - j] * (i - j);
@@ -379,8 +379,8 @@ namespace suisen {
                 res[0] = 1;
                 return res;
             }
-            const int siz = f.size();
-            if (not siz) return FPS(n, 0);
+            const int size = f.size();
+            if (not size) return FPS(n, 0);
             const int p = f[0].first;
             if (p > (n - 1) / k) return FPS(n, 0);
             const value_type inv_f0 = f[0].second.inv();
@@ -390,7 +390,7 @@ namespace suisen {
             inv_mods<value_type> invs(n);
             for (int i = 1; lz + i < n; ++i) {
                 value_type v = 0;
-                for (int idx = 1; idx < siz; ++idx) {
+                for (int idx = 1; idx < size; ++idx) {
                     auto [j, fj] = f[idx];
                     j -= p;
                     if (j > i) break;
@@ -402,8 +402,8 @@ namespace suisen {
             return g;
         }
         static std::optional<FPS> safe_sqrt_sparse(const std::vector<std::pair<int, value_type>>& f, const int n) {
-            const int siz = f.size();
-            if (not siz) return FPS(n, 0);
+            const int size = f.size();
+            if (not size) return FPS(n, 0);
             const int p = f[0].first;
             if (p % 2 == 1) return std::nullopt;
             if (p / 2 >= n) return FPS(n, 0);
@@ -417,7 +417,7 @@ namespace suisen {
             inv_mods<value_type> invs(n);
             for (int i = 1; lz + i < n; ++i) {
                 value_type v = 0;
-                for (int idx = 1; idx < siz; ++idx) {
+                for (int idx = 1; idx < size; ++idx) {
                     auto [j, fj] = f[idx];
                     j -= p;
                     if (j > i) break;

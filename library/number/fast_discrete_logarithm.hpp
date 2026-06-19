@@ -110,16 +110,16 @@ namespace suisen::fast_discrete_logarithm {
                     if (ti > tj) std::swap(ti, tj), std::swap(ri, rj), std::swap(bi, bj);
                     return;
                 }
-                const int siz = ri.size();
-                assert(int(rj.size()) == siz);
+                const int size = ri.size();
+                assert(int(rj.size()) == size);
 
                 const auto T = euclid(ri[ti].val(), rj[tj].val());
-                for (int col = ti; col < siz; ++col) {
+                for (int col = ti; col < size; ++col) {
                     apply_euclid(T, ri[col], rj[col]);
                 }
                 apply_euclid(T, bi, bj);
 
-                while (tj < siz and rj[tj] == 0) ++tj;
+                while (tj < size and rj[tj] == 0) ++tj;
             }
         };
     }

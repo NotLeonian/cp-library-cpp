@@ -93,9 +93,9 @@ namespace suisen {
         void push_back(const value_type& val) { _st_r.emplace_back(val, append(prod(_st_r), val)); }
         void pop_front() {
             if (_st_l.size()) return _st_l.pop_back();
-            const int siz = _st_r.size();
-            assert(siz);
-            for (int i = siz - 1; i > 0; --i) {
+            const int size = _st_r.size();
+            assert(size);
+            for (int i = size - 1; i > 0; --i) {
                 value_type v = std::move(_st_r[i].first);
                 _st_l.emplace_back(v, append(prod(_st_l), v));
             }

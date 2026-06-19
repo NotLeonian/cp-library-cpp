@@ -12,8 +12,8 @@ namespace suisen {
 template <unsigned int N>
 class SimpleSieve {
     private:
-        static constexpr unsigned int siz = N / internal::sieve::PROD + 1;
-        static std::uint8_t flag[siz];
+        static constexpr unsigned int size = N / internal::sieve::PROD + 1;
+        static std::uint8_t flag[size];
     public:
         SimpleSieve() {
             using namespace internal::sieve;
@@ -23,7 +23,7 @@ class SimpleSieve {
                 for (std::uint8_t bits = ~flag[kp]; bits; bits &= bits - 1) {
                     const std::uint8_t mp = mask_to_index(bits & -bits), m = RM[mp];
                     unsigned int kr = kp * (PROD * kp + 2 * m) + m * m / PROD;
-                    for (std::uint8_t mq = mp; kr < siz; kr += kp * DR[mq] + DF[mp][mq], ++mq &= 7) {
+                    for (std::uint8_t mq = mp; kr < size; kr += kp * DR[mq] + DF[mp][mq], ++mq &= 7) {
                         flag[kr] |= MASK[mp][mq];
                     }
                 }
@@ -33,7 +33,7 @@ class SimpleSieve {
             using namespace internal::sieve;
             std::vector<int> res { 2, 3, 5 };
             res.reserve(max_val / 25);
-            for (unsigned int i = 0, offset = 0; i < siz and offset < max_val; ++i, offset += PROD) {
+            for (unsigned int i = 0, offset = 0; i < size and offset < max_val; ++i, offset += PROD) {
                 for (uint8_t f = ~flag[i]; f;) {
                     uint8_t g = f & -f;
                     res.push_back(offset + RM[mask_to_index(g)]);
@@ -63,7 +63,7 @@ class SimpleSieve {
         }
 };
 template <unsigned int N>
-std::uint8_t SimpleSieve<N>::flag[SimpleSieve<N>::siz];
+std::uint8_t SimpleSieve<N>::flag[SimpleSieve<N>::size];
 
 template <unsigned int N>
 class Sieve {

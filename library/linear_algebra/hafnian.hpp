@@ -34,8 +34,8 @@ namespace suisen {
         }
         SetPowerSeries<T> f = h.mobius_inplace(), g = P[1][0].mobius_inplace();
         T res = 0;
-        for (int i = 0, siz = h.size(); i < siz; ++i) {
-            res += f[i] * g[siz - i - 1];
+        for (int i = 0, size = h.size(); i < size; ++i) {
+            res += f[i] * g[size - i - 1];
         }
         return res;
     }

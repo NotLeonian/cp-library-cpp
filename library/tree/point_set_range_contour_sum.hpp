@@ -34,8 +34,8 @@ namespace suisen {
             segtree_type _seq;
 
             Node() = default;
-            Node(const std::vector<std::vector<int>>& g, const std::vector<int8_t>& removed, const std::vector<int> &roots, const bool child_index, std::vector<std::vector<AuxData>>& info, const std::vector<T> &dat, int siz) {
-                std::vector<T> reordered_dat(siz);
+            Node(const std::vector<std::vector<int>>& g, const std::vector<int8_t>& removed, const std::vector<int> &roots, const bool child_index, std::vector<std::vector<AuxData>>& info, const std::vector<T> &dat, int size) {
+                std::vector<T> reordered_dat(size);
                 _sep.push_back(0);
                 std::deque<std::tuple<int, int, int>> dq;
                 for (int r : roots) dq.emplace_back(r, -1, 0);
@@ -81,7 +81,7 @@ namespace suisen {
                 return std::move(r);
             };
 
-            auto rec = [&](auto rec, int r, int siz) -> int {
+            auto rec = [&](auto rec, int r, int size) -> int {
                 int c = -1;
                 auto get_centroid = [&](auto get_centroid, int u, int p) -> void {
                     sub_size[u] = 1;
@@ -89,12 +89,12 @@ namespace suisen {
                         if (v == p or _removed[v]) continue;
                         get_centroid(get_centroid, v, u);
                         if (v == c) {
-                            sub_size[u] = siz - sub_size[c];
+                            sub_size[u] = size - sub_size[c];
                             break;
                         }
                         sub_size[u] += sub_size[v];
                     }
-                    if (c < 0 and sub_size[u] * 2 > siz) c = u;
+                    if (c < 0 and sub_size[u] * 2 > size) c = u;
                 };
                 get_centroid(get_centroid, r, -1);
 

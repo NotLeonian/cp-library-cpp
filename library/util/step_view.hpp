@@ -37,13 +37,13 @@ namespace suisen {
         int _step;
     };
 
-    template <typename RandomAccesibleContainer>
+    template <typename RandomAccessibleContainer>
     struct StepView {
-        using iterator   = typename RandomAccesibleContainer::iterator;
-        using value_type = typename RandomAccesibleContainer::value_type;
-        using reference  = typename RandomAccesibleContainer::reference;
+        using iterator   = typename RandomAccessibleContainer::iterator;
+        using value_type = typename RandomAccessibleContainer::value_type;
+        using reference  = typename RandomAccessibleContainer::reference;
         
-        StepView(RandomAccesibleContainer& dat, int start, int step, int size) : _start(dat.begin() + start, step), _size(size) {}
+        StepView(RandomAccessibleContainer& dat, int start, int step, int size) : _start(dat.begin() + start, step), _size(size) {}
         std::size_t size() const { return _size; }
         reference operator[](std::size_t k) const { return _start[k]; }
     private:

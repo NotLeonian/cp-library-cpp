@@ -88,8 +88,8 @@ namespace suisen {
         explicit PersistentFenwickTree(int n) : PersistentFenwickTree(std::vector<value_type>(n, T{})) {}
         PersistentFenwickTree(const std::vector<value_type>& dat) : _p(floor_pow2(dat.size())), _root(node_type::build(dat, _p)) {}
 
-        static void init_pool(int siz) {
-            node_type::_pool = ObjectPool<node_type>(siz);
+        static void init_pool(int size) {
+            node_type::_pool = ObjectPool<node_type>(size);
         }
         static void clear_pool() {
             node_type::_pool.clear();

@@ -64,18 +64,18 @@ namespace suisen {
 
         // for debug
         void check_heap_property() const {
-            const int siz = size();
-            for (int i = 0; i < siz; ++i) {
+            const int current_size = size();
+            for (int i = 0; i < current_size; ++i) {
                 if (i % 2 == 0) {
                     int lch = min_heap_child_l(i), rch = min_heap_child_r(i);
-                    if (lch < siz) assert(not _comp(_dat[lch], _dat[i]));
-                    if (rch < siz) assert(not _comp(_dat[rch], _dat[i]));
-                    if (i + 1 < siz) assert(not _comp(_dat[i + 1], _dat[i]));
+                    if (lch < current_size) assert(not _comp(_dat[lch], _dat[i]));
+                    if (rch < current_size) assert(not _comp(_dat[rch], _dat[i]));
+                    if (i + 1 < current_size) assert(not _comp(_dat[i + 1], _dat[i]));
                 } else {
                     int lch = max_heap_child_l(i), rch = max_heap_child_r(i);
-                    lch -= lch >= siz, rch -= rch >= siz;
-                    if (lch < siz) assert(not _comp(_dat[i], _dat[lch]));
-                    if (rch < siz) assert(not _comp(_dat[i], _dat[rch]));
+                    lch -= lch >= current_size, rch -= rch >= current_size;
+                    if (lch < current_size) assert(not _comp(_dat[i], _dat[lch]));
+                    if (rch < current_size) assert(not _comp(_dat[i], _dat[rch]));
                 }
             }
         }
@@ -108,28 +108,28 @@ namespace suisen {
             }
         }
         void fix_min_heap_down(int idx) {
-            const int siz = _dat.size();
+            const int size = _dat.size();
             while (true) {
                 int lch = min_heap_child_l(idx), rch = min_heap_child_r(idx);
-                if (lch >= siz) {
+                if (lch >= size) {
                     fix_up(idx);
                     break;
                 }
-                int ch = rch < siz and _comp(_dat[rch], _dat[lch]) ? rch : lch;
+                int ch = rch < size and _comp(_dat[rch], _dat[lch]) ? rch : lch;
                 if (_comp(_dat[ch], _dat[idx])) std::swap(_dat[std::exchange(idx, ch)], _dat[ch]);
                 else break;
             }
         }
         void fix_max_heap_down(int idx) {
-            const int siz = _dat.size();
+            const int size = _dat.size();
             while (true) {
                 int lch = max_heap_child_l(idx), rch = max_heap_child_r(idx);
-                lch -= lch >= siz, rch -= rch >= siz;
-                if (lch >= siz) {
+                lch -= lch >= size, rch -= rch >= size;
+                if (lch >= size) {
                     fix_up(idx);
                     break;
                 }
-                int ch = rch < siz and _comp(_dat[lch], _dat[rch]) ? rch : lch;
+                int ch = rch < size and _comp(_dat[lch], _dat[rch]) ? rch : lch;
                 if (_comp(_dat[idx], _dat[ch])) std::swap(_dat[std::exchange(idx, ch)], _dat[ch]);
                 else break;
             }

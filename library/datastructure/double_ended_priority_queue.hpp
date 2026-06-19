@@ -91,14 +91,14 @@ namespace suisen {
         value_type pivot;
 
         void ensure_min_heap_nonempty() {
-            const int siz = size();
-            assert(siz);
+            const int current_size = size();
+            assert(current_size);
             if (not _min_heap.empty()) return;
-            if (siz == 1) {
+            if (current_size == 1) {
                 std::swap(_min_heap, _max_heap);
                 pivot = _min_heap.front();
             } else {
-                const int mid = (siz + 1) >> 1;
+                const int mid = (current_size + 1) >> 1;
                 std::nth_element(_max_heap.begin(), _max_heap.begin() + mid - 1, _max_heap.end(), _comp);
                 pivot = _max_heap[mid - 1];
                 _min_heap.reserve(mid);
@@ -109,16 +109,16 @@ namespace suisen {
             }
         }
         void ensure_max_heap_nonempty() {
-            const int siz = size();
-            assert(siz);
+            const int current_size = size();
+            assert(current_size);
             if (not _max_heap.empty()) return;
-            if (siz == 1) {
+            if (current_size == 1) {
                 std::swap(_min_heap, _max_heap);
             } else {
-                const int mid = siz >> 1;
+                const int mid = current_size >> 1;
                 std::nth_element(_min_heap.begin(), _min_heap.begin() + mid - 1, _min_heap.end(), _comp);
                 pivot = _min_heap[mid - 1];
-                _max_heap.reserve(siz - mid);
+                _max_heap.reserve(current_size - mid);
                 std::move(_min_heap.begin() + mid, _min_heap.end(), std::back_inserter(_max_heap));
                 _min_heap.erase(_min_heap.begin() + mid, _min_heap.end());
                 std::make_heap(_max_heap.begin(), _max_heap.end(), _comp);

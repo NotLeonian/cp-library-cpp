@@ -13,14 +13,14 @@
 namespace suisen {
     template <typename T>
     struct StaticRangeInversionNumberQuery {
-        StaticRangeInversionNumberQuery(std::vector<T> a) : _block_siz(std::max(1, int(::sqrt(a.size())))), _block_num(ceil_div(a.size(),_block_siz)) {
-            a.resize(_block_siz * _block_num, std::numeric_limits<T>::max());
+        StaticRangeInversionNumberQuery(std::vector<T> a) : _block_size(std::max(1, int(::sqrt(a.size())))), _block_num(ceil_div(a.size(),_block_size)) {
+            a.resize(_block_size * _block_num, std::numeric_limits<T>::max());
 
             _sorted.resize(_block_num);
             for (int block_id = 0; block_id < _block_num; ++block_id) {
-                const int offset = block_id * _block_siz;
-                _sorted[block_id].resize(_block_siz);
-                for (int i = 0; i < _block_siz; ++i) _sorted[block_id][i] = { a[offset + i], offset + i };
+                const int offset = block_id * _block_size;
+                _sorted[block_id].resize(_block_size);
+                for (int i = 0; i < _block_size; ++i) _sorted[block_id][i] = { a[offset + i], offset + i };
                 std::sort(_sorted[block_id].begin(), _sorted[block_id].end());
             }
 
@@ -31,13 +31,13 @@ namespace suisen {
         }
 
         /**
-         * @brief Calcuates the inversion number of the subarray (a_l, ..., a_{r-1}).
+         * @brief Calculates the inversion number of the subarray (a_l, ..., a_{r-1}).
          * @param l left (closed)
          * @param r right (open)
          * @return Inversion number of (a_l, ..., a_{r-1})
          */
         long long operator()(int l, int r) const {
-            const int bl = l / _block_siz, br = ceil_div(r, _block_siz);
+            const int bl = l / _block_size, br = ceil_div(r, _block_size);
             // [bl][bl+1,...,br-2][br-1]
             if (br - bl == 1) {
                 /**
@@ -47,8 +47,8 @@ namespace suisen {
                  *
                  * Inv(B)=Inv(AB)+Inv(BC)-Inv(ABC)+Inv(A,C)
                  */
-                long long res = _pinv[bl][r - bl * _block_siz] + _sinv[bl + 1][(bl + 1) * _block_siz - l] - _pinv[bl][_block_siz];
-                for (int k = _block_siz - 1, cnt = 0; k >= 0; --k) {
+                long long res = _pinv[bl][r - bl * _block_size] + _sinv[bl + 1][(bl + 1) * _block_size - l] - _pinv[bl][_block_size];
+                for (int k = _block_size - 1, cnt = 0; k >= 0; --k) {
                     cnt += _sorted[bl][k].second < l;
                     if (_sorted[bl][k].second >= r) {
                         res += cnt;
@@ -63,9 +63,9 @@ namespace suisen {
                  *
                  * Inv(ABC)=Inv(AB)+Inv(BC)-Inv(B)+Inv(A,C)
                  */
-                const int ml = (bl + 1) * _block_siz, mr = (br - 1) * _block_siz;
+                const int ml = (bl + 1) * _block_size, mr = (br - 1) * _block_size;
                 long long res = _pinv[bl + 1][r - ml] + _sinv[br - 1][mr - l] - _pinv[bl + 1][mr - ml];
-                for (int k = _block_siz - 1, j = _block_siz, cnt = 0; k >= 0; --k) {
+                for (int k = _block_size - 1, j = _block_size, cnt = 0; k >= 0; --k) {
                     if (_sorted[br - 1][k].second >= r) continue;
                     while (j > 0 and _sorted[bl][j - 1].first > _sorted[br - 1][k].first) {
                         cnt += _sorted[bl][--j].second >= l;
@@ -77,13 +77,13 @@ namespace suisen {
         }
 
     private:
-        int _block_siz, _block_num;
+        int _block_size, _block_num;
 
-        // _pinv[i][j] := inversion number of the subarray (a_{i * _block_siz}, ..., a_{i * _block_siz + j - 1})
-        // _sinv[i][j] := inversion number of the subarray (a_{i * _block_siz - j}, ..., a_{i * _block_siz - 1})
+        // _pinv[i][j] := inversion number of the subarray (a_{i * _block_size}, ..., a_{i * _block_size + j - 1})
+        // _sinv[i][j] := inversion number of the subarray (a_{i * _block_size - j}, ..., a_{i * _block_size - 1})
         std::vector<std::vector<long long>> _pinv, _sinv;
 
-        // _sorted[i] := sorted array of { (a_{i * _block_siz + j}, i * _block_siz + j) | 0 <= j < _block_siz }
+        // _sorted[i] := sorted array of { (a_{i * _block_size + j}, i * _block_size + j) | 0 <= j < _block_size }
         std::vector<std::vector<std::pair<T, int>>> _sorted;
 
         template <typename Compare>
@@ -96,10 +96,10 @@ namespace suisen {
             // invariant: suf is the sorted array of { (a_i, i) | i is in the k-th block s.t. k > block_id }
             std::vector<std::pair<T, int>> suf;
             for (int block_id = _block_num - 1; block_id >= 0; --block_id) {
-                const int offset = block_id * _block_siz;
-                pinv[block_id].resize(_block_siz * (_block_num - block_id) + 1);
-                std::vector<std::pair<T, int>> pre(_block_siz);
-                for (int i = 0; i < _block_siz; ++i) {
+                const int offset = block_id * _block_size;
+                pinv[block_id].resize(_block_size * (_block_num - block_id) + 1);
+                std::vector<std::pair<T, int>> pre(_block_size);
+                for (int i = 0; i < _block_size; ++i) {
                     pre[i] = { a[offset + i], offset + i };
                     pinv[block_id][i + 1] = pinv[block_id][i];
                     for (int j = 0; j < i; ++j) pinv[block_id][i + 1] += cmp(a[offset + i], a[offset + j]);
@@ -111,18 +111,18 @@ namespace suisen {
                  * Inv(ABx)=Inv(AB)+Inv(Bx)-Inv(B)+Inv(A,x)
                  */
 
-                 // calculates Inv(A,a_i) for all i >= _block_siz * block_id
-                for (int i = _block_siz * (_block_num - 1 - block_id) - 1, j = _block_siz; i >= 0; --i) {
+                 // calculates Inv(A,a_i) for all i >= _block_size * block_id
+                for (int i = _block_size * (_block_num - 1 - block_id) - 1, j = _block_size; i >= 0; --i) {
                     while (j > 0 and cmp(suf[i].first, pre[j - 1].first)) --j;
-                    pinv[block_id][suf[i].second - offset + 1] += _block_siz - j;
+                    pinv[block_id][suf[i].second - offset + 1] += _block_size - j;
                 }
 
-                for (int i = _block_siz; i < _block_siz * (_block_num - block_id); ++i) {
-                    pinv[block_id][i + 1] += pinv[block_id][i] + pinv[block_id + 1][i + 1 - _block_siz] - pinv[block_id + 1][i - _block_siz];
+                for (int i = _block_size; i < _block_size * (_block_num - block_id); ++i) {
+                    pinv[block_id][i + 1] += pinv[block_id][i] + pinv[block_id + 1][i + 1 - _block_size] - pinv[block_id + 1][i - _block_size];
                 }
 
                 std::copy(pre.begin(), pre.end(), std::back_inserter(suf));
-                std::inplace_merge(suf.begin(), suf.end() - _block_siz, suf.end(), cmp_pair);
+                std::inplace_merge(suf.begin(), suf.end() - _block_size, suf.end(), cmp_pair);
             }
             return pinv;
         }

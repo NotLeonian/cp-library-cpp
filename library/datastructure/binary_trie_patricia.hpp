@@ -38,16 +38,16 @@ namespace suisen {
         struct Node {
             unsigned_value_type val;
             uint32_t len;
-            internal_size_type siz;
+            internal_size_type size_;
             node_pointer_type ch[ary]{};
 
-            Node(const unsigned_value_type& val, uint32_t len, internal_size_type siz) : val(val), len(len), siz(siz) {}
+            Node(const unsigned_value_type& val, uint32_t len, internal_size_type size) : val(val), len(len), size_(size) {}
             ~Node() {
                 for (uint32_t i = 0; i < ary; ++i) delete ch[i];
             }
 
-            static node_pointer_type new_node(const unsigned_value_type& val, uint32_t len, internal_size_type siz) {
-                return new node_type(val, len, siz);
+            static node_pointer_type new_node(const unsigned_value_type& val, uint32_t len, internal_size_type size) {
+                return new node_type(val, len, size);
             }
         };
 
@@ -58,11 +58,11 @@ namespace suisen {
 
         // number of elements in the set
         int size() const {
-            return _root->siz;
+            return _root->size_;
         }
         // true iff size() == 0
         bool empty() const {
-            return _root->siz == 0;
+            return _root->size_ == 0;
         }
         void clear() { delete _root; _root = node_type::new_node(0, 0, 0); }
 
@@ -94,7 +94,7 @@ namespace suisen {
                 l += nxt->len;
                 cur = nxt;
             }
-            return cur->siz;
+            return cur->size_;
         }
         bool contains(unsigned_value_type val) const { return count(val) != 0; }
 
@@ -118,8 +118,8 @@ namespace suisen {
                 node_pointer_type nxt = nullptr;
                 for (int x : _ord) {
                     if (nxt = cur->ch[ch_idx ^ x]; nxt) {
-                        if (nxt->siz > k) break;
-                        k -= nxt->siz;
+                        if (nxt->size_ > k) break;
+                        k -= nxt->size_;
                     }
                 }
                 res |= nxt->val << l;
@@ -132,13 +132,13 @@ namespace suisen {
         }
         // k-th largest of { x ^ v | v in S } (0-indexed)
         value_type xor_kth_max(unsigned_value_type x, internal_size_type k) const {
-            return xor_kth_min(x, _root->siz - k - 1);
+            return xor_kth_min(x, _root->size_ - k - 1);
         }
 
         // #{ v in S | x ^ v < upper }
         __attribute__((target("bmi")))
         size_type xor_count_lt (unsigned_value_type x, unsigned_value_type upper) const {
-            if (upper >> bit_num) return _root->siz;
+            if (upper >> bit_num) return _root->size_;
             bit_reverse(x);
             bit_reverse(upper);
             internal_size_type res = 0;
@@ -150,14 +150,14 @@ namespace suisen {
                 for (uint32_t x : _ord) {
                     nxt = cur->ch[ch_idx ^ x];
                     if (x == ch_idx_r) break;
-                    if (nxt) res += nxt->siz;
+                    if (nxt) res += nxt->size_;
                 }
                 if (not nxt) break;
                 const uint32_t len = nxt->len;
                 unsigned_value_type vlo = cut_lower(x, len) ^ nxt->val, ulo = cut_lower(upper, len);
                 if (vlo != ulo) {
                     uint32_t tz = len <= 32 ? _tzcnt_u32(vlo ^ ulo) : _tzcnt_u64(vlo ^ ulo);
-                    return (ulo >> tz) & 1 ? res + nxt->siz : res;
+                    return (ulo >> tz) & 1 ? res + nxt->size_ : res;
                 }
                 x >>= len;
                 upper >>= len;
@@ -168,16 +168,16 @@ namespace suisen {
         }
         // #{ v in S | x ^ v <= upper }
         size_type xor_count_leq(unsigned_value_type x, unsigned_value_type upper) const {
-            if (upper == std::numeric_limits<unsigned_value_type>::max()) return _root->siz;
+            if (upper == std::numeric_limits<unsigned_value_type>::max()) return _root->size_;
             return xor_count_lt(x, upper + 1);
         }
         // #{ v in S | x ^ v >= lower }
         size_type xor_count_geq(unsigned_value_type x, unsigned_value_type lower) const {
-            return _root->siz - xor_count_lt(x, lower);
+            return _root->size_ - xor_count_lt(x, lower);
         }
         // #{ v in S | x ^ v > lower }
         size_type xor_count_gt (unsigned_value_type x, unsigned_value_type lower) const {
-            return _root->siz - xor_count_leq(x, lower);
+            return _root->size_ - xor_count_leq(x, lower);
         }
 
         // max{ x ^ v | x ^ v < upper } or std::nullopt
@@ -195,13 +195,13 @@ namespace suisen {
         // min{ x ^ v | x ^ v >= lower } or std::nullopt
         std::optional<value_type> safe_xor_min_geq(unsigned_value_type x, unsigned_value_type lower) const {
             internal_size_type cnt = xor_count_lt(x, lower);
-            if (cnt == _root->siz) return std::nullopt;
+            if (cnt == _root->size_) return std::nullopt;
             return xor_kth_min(x, cnt);
         }
         // min{ x ^ v | x ^ v > lower } or std::nullopt
         std::optional<value_type> safe_xor_min_gt (unsigned_value_type x, unsigned_value_type lower) const {
             internal_size_type cnt = xor_count_leq(x, lower);
-            if (cnt == _root->siz) return std::nullopt;
+            if (cnt == _root->size_) return std::nullopt;
             return xor_kth_min(x, cnt);
         }
 
@@ -285,7 +285,7 @@ namespace suisen {
             node_pointer_type nxt = cur->ch[idx];
             if (not nxt) {
                 cur->ch[idx] = node_type::new_node(val, bit_num - l, 1);
-                ++cur->siz;
+                ++cur->size_;
                 return true;
             }
             unsigned_value_type x = val ^ nxt->val;
@@ -293,23 +293,23 @@ namespace suisen {
             tz -= tz & (log_ary - 1);
             if (tz >= len) {
                 bool inserted = _insert_if_absent(nxt, l + len, val >> len);
-                cur->siz += inserted;
+                cur->size_ += inserted;
                 return inserted;
             }
-            node_pointer_type br = node_type::new_node(cut_lower(nxt->val, tz), tz, nxt->siz + 1);
+            node_pointer_type br = node_type::new_node(cut_lower(nxt->val, tz), tz, nxt->size_ + 1);
             cur->ch[idx] = br;
             nxt->val >>= tz;
             nxt->len -= tz;
             val >>= tz;
             br->ch[nxt->val & (ary - 1)] = nxt;
             br->ch[val & (ary - 1)] = node_type::new_node(val, bit_num - l - tz, 1);
-            ++cur->siz;
+            ++cur->size_;
             return true;
         }
 
         __attribute__((target("bmi")))
         void _insert(node_pointer_type cur, uint32_t l, unsigned_value_type val, internal_size_type num) {
-            cur->siz += num;
+            cur->size_ += num;
             if (l == bit_num) return;
             const uint32_t idx = val & (ary - 1);
             node_pointer_type nxt = cur->ch[idx];
@@ -321,7 +321,7 @@ namespace suisen {
             uint32_t len = nxt->len, tz = len <= 32 ? _tzcnt_u32(x) : _tzcnt_u64(x);
             tz -= tz & (log_ary - 1);
             if (tz >= len) return _insert(nxt, l + len, val >> len, num);
-            node_pointer_type br = node_type::new_node(cut_lower(nxt->val, tz), tz, nxt->siz + num);
+            node_pointer_type br = node_type::new_node(cut_lower(nxt->val, tz), tz, nxt->size_ + num);
             cur->ch[idx] = br;
             nxt->val >>= tz;
             nxt->len -= tz;
@@ -332,7 +332,7 @@ namespace suisen {
 
         bool _erase(node_pointer_type cur, internal_size_type &num, uint32_t l, unsigned_value_type val) {
             if (l == bit_num) {
-                if (cur->siz -= num = std::min(num, cur->siz); cur->siz) return false;
+                if (cur->size_ -= num = std::min(num, cur->size_); cur->size_) return false;
                 delete cur;
                 return true;
             }
@@ -340,11 +340,11 @@ namespace suisen {
             node_pointer_type nxt = cur->ch[idx];
             if (not nxt or cut_lower(val ^ nxt->val, nxt->len)) return num = 0, false;
             bool deleted = _erase(nxt, num, l + nxt->len, val >> nxt->len);
-            cur->siz -= num;
+            cur->size_ -= num;
             if (not deleted) return false;
             cur->ch[idx] = nullptr;
             if (cur == _root) return false;
-            if (cur->siz == 0) {
+            if (cur->size_ == 0) {
                 delete cur;
                 return true;
             }

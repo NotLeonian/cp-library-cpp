@@ -30,11 +30,11 @@ int main() {
             std::vector<int8_t> in(n);
             std::vector<int> idx(n);
             for (const auto &cmp : ccmps) {
-                const int siz = cmp.size();
-                for (int i = 0; i < siz; ++i) {
+                const int size = cmp.size();
+                for (int i = 0; i < size; ++i) {
                     idx[cmp[i]] = i;
                 }
-                std::vector<std::vector<int>> h(siz);
+                std::vector<std::vector<int>> h(size);
                 for (int v : cmp) in[v] = true;
                 for (int u : cmp) for (int v : g[u]) if (in[v]) {
                     h[idx[u]].push_back(idx[v]);
@@ -55,9 +55,9 @@ int main() {
             std::vector<int> pd{ 0 };
             std::vector<int> idx(n);
             for (const auto &cmp : cmps) {
-                const int siz = cmp.size();
-                for (int i = 0; i < siz; ++i) idx[cmp[i]] = i;
-                std::vector<std::vector<int>> h(siz);
+                const int size = cmp.size();
+                for (int i = 0; i < size; ++i) idx[cmp[i]] = i;
+                std::vector<std::vector<int>> h(size);
                 for (int u : cmp) for (int v : g[u]) {
                     h[idx[u]].push_back(idx[v]);
                 }

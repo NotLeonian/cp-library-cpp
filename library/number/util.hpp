@@ -33,13 +33,13 @@ namespace suisen {
     std::vector<std::pair<T, int>> factorize(T n) {
         static constexpr std::array primes{ 2, 3, 5, 7, 11, 13 };
         static constexpr int next_prime = 17;
-        static constexpr int siz = std::array{ 1, 2, 8, 48, 480, 5760, 92160 } [primes.size() - 1] ;
+        static constexpr int size = std::array{ 1, 2, 8, 48, 480, 5760, 92160 } [primes.size() - 1] ;
         static constexpr int period = [] {
             int res = 1;
             for (auto e : primes) res *= e;
             return res;
             }();
-        static constexpr struct S : public std::array<int, siz> {
+        static constexpr struct S : public std::array<int, size> {
             constexpr S() {
                 for (int i = next_prime, j = 0; i < period + next_prime; i += 2) {
                     bool ok = true;

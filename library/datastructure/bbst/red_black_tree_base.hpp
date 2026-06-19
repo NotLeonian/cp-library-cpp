@@ -27,12 +27,12 @@ namespace suisen::bbst::internal {
 
         static inline ObjectPool<node_type> pool{};
 
-        static void init_pool(int siz) { pool = ObjectPool<node_type>(siz); }
+        static void init_pool(int size) { pool = ObjectPool<node_type>(size); }
         static int node_num() { return pool.size(); }
 
         static tree_type empty_tree() { return nullptr; }
 
-        static size_type size(tree_type node) { return node ? node->_siz : 0; }
+        static size_type size(tree_type node) { return node ? node->_size : 0; }
         static bool empty(tree_type node) { return not node; }
 
         template <bool force_black_root = true>
@@ -169,11 +169,11 @@ namespace suisen::bbst::internal {
             std::vector<value_type> dat;
             node_type::dump(node, std::back_inserter(dat));
             std::ostringstream res;
-            int siz = dat.size();
+            int size = dat.size();
             res << '[';
-            for (int i = 0; i < siz; ++i) {
+            for (int i = 0; i < size; ++i) {
                 res << f(dat[i]);
-                if (i != siz - 1) res << ", ";
+                if (i != size - 1) res << ", ";
             }
             res << ']';
             return res.str();
@@ -202,10 +202,10 @@ namespace suisen::bbst::internal {
         color_type _col;
         tree_type _ch[2]{ nullptr, nullptr };
         value_type _val;
-        size_type _siz, _lev;
+        size_type _size, _lev;
 
-        RedBlackTreeNodeBase(const value_type& val) : _col(BLACK), _val(val), _siz(1), _lev(0) {}
-        RedBlackTreeNodeBase(tree_type l, tree_type r) : _col(RED), _ch{ l, r }, _siz(l->_siz + r->_siz), _lev(l->_lev + (l->_col == BLACK)) {}
+        RedBlackTreeNodeBase(const value_type& val) : _col(BLACK), _val(val), _size(1), _lev(0) {}
+        RedBlackTreeNodeBase(tree_type l, tree_type r) : _col(RED), _ch{ l, r }, _size(l->_size + r->_size), _lev(l->_lev + (l->_col == BLACK)) {}
 
         static void clear_pool() { pool.clear(); }
         static int pool_capacity() { return pool.capacity(); }
@@ -219,7 +219,7 @@ namespace suisen::bbst::internal {
             return node;
         }
         static tree_type update(tree_type node) {
-            node->_siz = node->is_leaf() ? 1 : size(node->_ch[0]) + size(node->_ch[1]);
+            node->_size = node->is_leaf() ? 1 : size(node->_ch[0]) + size(node->_ch[1]);
             node->_lev = node->_ch[0] ? height(node->_ch[0]) + (node->_ch[0]->_col == BLACK) : 0;
             return node;
         }

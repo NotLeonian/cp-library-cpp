@@ -56,10 +56,10 @@ namespace suisen {
                 return res;
             }
 
-            static operator_type get(node_pointer_type node, int siz, int i) {
+            static operator_type get(node_pointer_type node, int size, int i) {
                 operator_type f = id();
                 node_pointer_type cur = node;
-                for (int l = 0, r = siz; r - l > 1;) {
+                for (int l = 0, r = size; r - l > 1;) {
                     f = composition(f, cur->_laz);
                     int m = (l + r) >> 1;
                     if (i < m) {
@@ -77,8 +77,8 @@ namespace suisen {
         PersistentCommutativeDualSegmentTree() : _n(0), _root(nullptr) {}
         explicit PersistentCommutativeDualSegmentTree(int n) : _n(n), _root(node_type::build(n)) {}
 
-        static void init_pool(int siz) {
-            node_type::_pool = ObjectPool<node_type>(siz);
+        static void init_pool(int size) {
+            node_type::_pool = ObjectPool<node_type>(size);
         }
         static void clear_pool() {
             node_type::_pool.clear();

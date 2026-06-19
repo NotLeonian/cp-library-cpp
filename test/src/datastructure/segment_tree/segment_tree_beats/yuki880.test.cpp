@@ -16,11 +16,11 @@ struct S {
     long long sum_v;
     int max_v;
     int lcm_v;
-    int siz;
+    int size;
     bool fail = false;
 
-    S(long long sum_v, int max_v, int lcm_v, int siz) : sum_v(sum_v), max_v(max_v), lcm_v(lcm_v), siz(siz) {}
-    S(int v) : sum_v(v), max_v(v), lcm_v(v), siz(1) {}
+    S(long long sum_v, int max_v, int lcm_v, int size) : sum_v(sum_v), max_v(max_v), lcm_v(lcm_v), size(size) {}
+    S(int v) : sum_v(v), max_v(v), lcm_v(v), size(1) {}
     S() = default;
 };
 
@@ -39,7 +39,7 @@ struct F {
 };
 
 S op(S x, S y) {
-    return S { x.sum_v + y.sum_v, std::max(x.max_v, y.max_v), sat_lcm(x.lcm_v, y.lcm_v), x.siz + y.siz };
+    return S { x.sum_v + y.sum_v, std::max(x.max_v, y.max_v), sat_lcm(x.lcm_v, y.lcm_v), x.size + y.size };
 }
 S e() {
     return S { 0LL, 0, 1, 0 };
@@ -47,12 +47,12 @@ S e() {
 
 S mapping(F f, S x) {
     if (x.fail) return x;
-    if (x.sum_v == 1LL * x.max_v * x.siz and f.gcd_v) {
+    if (x.sum_v == 1LL * x.max_v * x.size and f.gcd_v) {
         f = F::upd_query(std::gcd(x.max_v, f.gcd_v));
     }
-    if (f.upd_v) return S { (long long) f.upd_v * x.siz, f.upd_v, f.upd_v, x.siz };
+    if (f.upd_v) return S { (long long) f.upd_v * x.size, f.upd_v, f.upd_v, x.size };
     if (f.gcd_v) {
-        if (x.siz == 1) {
+        if (x.size == 1) {
             return S { std::gcd(x.max_v, f.gcd_v) };
         } else if (x.lcm_v == inf or f.gcd_v % x.lcm_v) {
             x.fail = true;

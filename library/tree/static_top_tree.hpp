@@ -57,12 +57,12 @@ namespace suisen {
                 _par[u] = p;
                 int max_sub = -1;
                 _sub[u] = 1;
-                for (int i = 0, siz = _g[u].size(); i < siz; ++i) {
+                for (int i = 0, size = _g[u].size(); i < size; ++i) {
                     const int v = _g[u][i];
                     if (v == p) {
                         std::swap(_g[u][i], _g[u].back());
                         _g[u].pop_back();
-                        --i, --siz;
+                        --i, --size;
                     } else {
                         dfs(dfs, v, u);
                         _sub[u] += _sub[v];

@@ -196,8 +196,8 @@ namespace suisen {
             }
             if (k) assert(st.size());
             const int root = st.empty() ? 0 : st.front();
-            const int siz = st.size();
-            for (int i = 0; i < siz - 1; ++i) {
+            const int size = st.size();
+            for (int i = 0; i < size - 1; ++i) {
                 g[st[i]].push_back(st[i + 1]);
                 g[st[i + 1]].push_back(st[i]);
             }

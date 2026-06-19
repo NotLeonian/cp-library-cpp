@@ -42,8 +42,8 @@ namespace suisen {
         SparseLazySegmentTree() : SparseLazySegmentTree(0) {}
         explicit SparseLazySegmentTree(IndexType n) : n(n), root(new_node(init(0, n))) {}
 
-        static void reserve(int siz) {
-            pool.reserve(siz);
+        static void reserve(int size) {
+            pool.reserve(size);
         }
 
         value_type get(index_type i) const {

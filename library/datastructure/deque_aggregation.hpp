@@ -119,9 +119,9 @@ namespace suisen {
         void push_front(const value_type &val) { _st_l.emplace_back(val, op(val, prod(_st_l))); }
         void pop_back() {
             if (_st_r.size()) return _st_r.pop_back();
-            const int siz = _st_l.size();
-            const int l = siz >> 1, r = siz - l;
-            assert(r); // <=> siz > 0
+            const int size = _st_l.size();
+            const int l = size >> 1, r = size - l;
+            assert(r); // <=> size > 0
             for (int i = r - 1; i > 0; --i) push_back(std::move(_st_l[i].first));
             _st_l.erase(_st_l.begin(), _st_l.begin() + r);
             if (l == 0) return;
@@ -130,9 +130,9 @@ namespace suisen {
         }
         void pop_front() {
             if (_st_l.size()) return _st_l.pop_back();
-            const int siz = _st_r.size();
-            const int r = siz >> 1, l = siz - r;
-            assert(l); // <=> siz > 0
+            const int size = _st_r.size();
+            const int r = size >> 1, l = size - r;
+            assert(l); // <=> size > 0
             for (int i = l - 1; i > 0; --i) push_front(std::move(_st_r[i].first));
             _st_r.erase(_st_r.begin(), _st_r.begin() + l);
             if (r == 0) return;

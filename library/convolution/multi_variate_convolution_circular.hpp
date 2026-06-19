@@ -69,8 +69,8 @@ namespace suisen {
                     block = nblock;
                 }
                 if (inverse) {
-                    mint iz = mint(f.size()).inv();
-                    for (auto& e : f) e *= iz;
+                    mint inv_size = mint(f.size()).inv();
+                    for (auto& e : f) e *= inv_size;
                 }
             }
         };

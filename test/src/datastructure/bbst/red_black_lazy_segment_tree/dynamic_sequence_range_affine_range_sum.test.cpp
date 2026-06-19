@@ -52,29 +52,29 @@ int main() {
     while (q-- > 0) {
         int query_type;
         std::cin >> query_type;
-        int siz = Node::size(t);
+        int size = Node::size(t);
         if (query_type == INSERT) {
             int i, x;
             std::cin >> i >> x;
             t = Node::insert(t, i, x);
-            rt = Node::insert(rt, siz - i, x);
+            rt = Node::insert(rt, size - i, x);
         } else if (query_type == ERASE) {
             int i;
             std::cin >> i;
             t = Node::erase(t, i).first;
-            rt = Node::erase(rt, siz - i - 1).first;
+            rt = Node::erase(rt, size - i - 1).first;
         } else if (query_type == REVERSE) {
             int l, r;
             std::cin >> l >> r;
             auto [tl, tm, tr] = Node::split_range(t, l, r);
-            auto [rl, rm, rr] = Node::split_range(rt, siz - r, siz - l);
+            auto [rl, rm, rr] = Node::split_range(rt, size - r, size - l);
             t = Node::merge(Node::merge(tl, rm), tr);
             rt = Node::merge(Node::merge(rl, tm), rr);
         } else if (query_type == APPLY) {
             int l, r, a, b;
             std::cin >> l >> r >> a >> b;
             t = Node::apply(t, l, r, { a, b });
-            rt = Node::apply(rt, siz - r, siz - l, { a, b });
+            rt = Node::apply(rt, size - r, size - l, { a, b });
         } else if (query_type == PROD) {
             int l, r;
             std::cin >> l >> r;

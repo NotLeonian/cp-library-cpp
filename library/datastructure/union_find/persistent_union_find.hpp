@@ -27,7 +27,7 @@ namespace suisen {
             while (buf.size()) _dat.mut_set(buf.back(), x), buf.pop_back();
             return x;
         }
-        // Get the root of `x`. euivalent to `root(x)`
+        // Get the root of `x`. equivalent to `root(x)`
         int operator[](int x) {
             return root(x);
         }
@@ -46,7 +46,7 @@ namespace suisen {
         bool same(int x, int y) {
             return root(x) == root(y);
         }
-        // Get the size of connected componet to which `x` belongs.
+        // Get the size of connected component to which `x` belongs.
         int size(int x) {
             return -_dat.get(root(x));
         }

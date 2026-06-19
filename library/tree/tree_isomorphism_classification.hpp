@@ -36,7 +36,7 @@ namespace suisen {
         IDHandlerNaive() = default;
 
         int get_id(key_type ch_ids) {
-            if (const int siz = ch_ids.size(); siz == 1) {
+            if (const int size = ch_ids.size(); size == 1) {
                 int ch = ch_ids[0];
                 ensure_mp1(ch);
                 return mp1[ch] != None ? mp1[ch] : (mp1[ch] = next_id++);

@@ -2,16 +2,17 @@
 #define SUISEN_ENUMERATE_CLIQUES
 
 #include <algorithm>
+#include <numeric>
 #include <vector>
 
 namespace suisen {
     /**
      * Type Parameters
-     * - CliqueComsumer : type of consumer function std::vector<int> -> void
+     * - CliqueConsumer : type of consumer function std::vector<int> -> void
      * 
      * Parameters
      * - std::vector<std::vector<int>> g : simple undirected graph
-     * - CliqueComsumer fun
+     * - CliqueConsumer fun
      * 
      * Requirements
      * - v in g[u] <=> u in g[v]
@@ -20,8 +21,8 @@ namespace suisen {
      * - time : O(2^sqrt(2M) * N + (sum of size of cliques)) = O(2^sqrt(2M) * N * sqrt(2M)) ?
      * - space : O(N + M)
      */
-    template <typename CliqueComsumer>
-    void enumerate_cliques(std::vector<std::vector<int>> g, CliqueComsumer &&fun) {
+    template <typename CliqueConsumer>
+    void enumerate_cliques(std::vector<std::vector<int>> g, CliqueConsumer &&fun) {
         const int n = g.size();
         // sort by degree
         std::vector<int> ord(n), idx(n);

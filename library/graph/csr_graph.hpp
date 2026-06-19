@@ -52,26 +52,26 @@ namespace suisen {
 
             AdjacentList() = default;
 
-            int size() const { return _siz; }
-            bool empty() const { return _siz == 0; }
+            int size() const { return _size; }
+            bool empty() const { return _size == 0; }
             int capacity() const { return _cap; }
 
             value_type& operator[](int i) { return *(begin() + i); }
             const value_type& operator[](int i) const { return *(cbegin() + i); }
-            value_type& at(uint32_t i) { assert(i < _siz); return *(begin() + i); }
-            const value_type& at(uint32_t i) const { assert(i < _siz); return *(cbegin() + i); }
+            value_type& at(uint32_t i) { assert(i < _size); return *(begin() + i); }
+            const value_type& at(uint32_t i) const { assert(i < _size); return *(cbegin() + i); }
 
             value_type* data() { return _g->_edges.data() + _offset; }
             const value_type* data() const { return _g->_edges.data() + _offset; }
 
             iterator begin() const { return _g->_edges.begin() + _offset; }
-            iterator end() const { return begin() + _siz; }
+            iterator end() const { return begin() + _size; }
             const_iterator cbegin() const { return _g->_edges.cbegin() + _offset; }
-            const_iterator cend() const { return cbegin() + _siz; }
-            reverse_iterator rbegin() const { return _g->_edges.rbegin() + (_g->_edges.size() - (_offset + _siz)); }
-            reverse_iterator rend() const { return rbegin() + _siz; }
-            const_reverse_iterator crbegin() const { return _g->_edges.crbegin() + (_g->_edges.size() - (_offset + _siz)); }
-            const_reverse_iterator crend() const { return crbegin() + _siz; }
+            const_iterator cend() const { return cbegin() + _size; }
+            reverse_iterator rbegin() const { return _g->_edges.rbegin() + (_g->_edges.size() - (_offset + _size)); }
+            reverse_iterator rend() const { return rbegin() + _size; }
+            const_reverse_iterator crbegin() const { return _g->_edges.crbegin() + (_g->_edges.size() - (_offset + _size)); }
+            const_reverse_iterator crend() const { return crbegin() + _size; }
 
             void erase(const_iterator pos) {
                 erase(pos, std::next(pos));
@@ -80,15 +80,15 @@ namespace suisen {
                 const int num = last - first, k = first - cbegin();
                 assert(num >= 0);
                 if (num == 0) return;
-                assert(0 <= k and k <= _siz - num);
+                assert(0 <= k and k <= _size - num);
                 std::move(begin() + k + num, end(), begin() + k);
-                _siz -= num;
+                _size -= num;
             }
             void pop_back() {
-                assert(_siz);
-                --_siz;
+                assert(_size);
+                --_size;
             }
-            void clear() { _siz = 0; }
+            void clear() { _size = 0; }
 
             const value_type& back() const { return *--cend(); }
             value_type& back() { return *--end(); }
@@ -96,14 +96,14 @@ namespace suisen {
             value_type& front() { return *begin(); }
 
             void push_back(const value_type& x) {
-                ++_siz;
-                assert(_siz <= _cap);
+                ++_size;
+                assert(_size <= _cap);
                 back() = x;
             }
             template <typename ...Args>
             void emplace_back(Args &&...args) {
-                ++_siz;
-                assert(_siz <= _cap);
+                ++_size;
+                assert(_size <= _cap);
                 back() = value_type(std::forward<Args>(args)...);
             }
 
@@ -112,13 +112,13 @@ namespace suisen {
             }
             void insert(const_iterator pos, int num, const value_type& x) {
                 const int k = pos - cbegin();
-                assert(0 <= k and k <= _siz);
+                assert(0 <= k and k <= _size);
                 std::fill(begin() + k, shift_back(begin() + k, num), x);
             }
             template <class RandomAccessIterator>
             auto insert(const_iterator pos, RandomAccessIterator first, RandomAccessIterator last) -> decltype(*first++, last - first, void()) {
                 const int num = last - first, k = pos - cbegin();
-                assert(0 <= k and k <= _siz);
+                assert(0 <= k and k <= _size);
                 shift_back(begin() + k, num);
                 std::copy(first, last, begin() + k);
             }
@@ -126,18 +126,18 @@ namespace suisen {
             template <typename ...Args>
             void emplace(const_iterator pos, Args &&...args) {
                 const int k = pos - cbegin();
-                assert(0 <= k and k <= _siz);
+                assert(0 <= k and k <= _size);
                 *--shift_back(begin() + k) = value_type(std::forward<Args>(args)...);
             }
         private:
             mutable Graph* _g;
             int _cap;
             int _offset;
-            int _siz;
+            int _size;
 
             iterator shift_back(iterator pos, int num = 1) {
-                _siz += num;
-                assert(_siz <= _cap);
+                _size += num;
+                assert(_size <= _cap);
                 return std::move_backward(pos, end() - num, end());
             }
         };
@@ -152,19 +152,19 @@ namespace suisen {
 
             for (const auto& e : edges) {
                 const int u = std::get<0>(e);
-                ++_adj[u]._siz;
+                ++_adj[u]._size;
                 if constexpr (undirected) {
                     const int v = std::get<1>(e);
-                    ++_adj[v]._siz;
+                    ++_adj[v]._size;
                 }
             }
             if (cap.empty()) cap.resize(_n, std::numeric_limits<int>::max());
             int edge_num = 0;
             for (int i = 0; i < _n; ++i) {
                 _adj[i]._g = this;
-                _adj[i]._cap = std::min(_adj[i]._siz, cap[i]);
+                _adj[i]._cap = std::min(_adj[i]._size, cap[i]);
                 _adj[i]._offset = edge_num;
-                edge_num += _adj[i]._siz;
+                edge_num += _adj[i]._size;
             }
             _edges.resize(edge_num);
             std::vector<typename std::vector<edge_type>::iterator> ptr(_n);
@@ -214,7 +214,7 @@ namespace suisen {
                 int nl = it - new_edges.begin();
                 it = std::move(_adj[i].begin(), _adj[i].end(), it);
                 _adj[i]._offset = nl;
-                _adj[i]._cap = _adj[i]._siz;
+                _adj[i]._cap = _adj[i]._size;
             }
             _edges.swap(new_edges);
         }

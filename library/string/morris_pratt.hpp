@@ -48,7 +48,7 @@ namespace suisen {
         struct MatcherMP {
             MatcherMP() = default;
             MatcherMP(const RandomAccessibleContainer &s) : s(s), mp(morris_pratt(s)) {}
-            vector<int> operator()(const RandomAccessibleContainer &t) const {
+            std::vector<int> operator()(const RandomAccessibleContainer &t) const {
                 const int n = s.size(), m = t.size();
                 std::vector<int> res;
                 for (int i = 0, j = 0; i < m; ++i) {
@@ -57,8 +57,11 @@ namespace suisen {
                 }
                 return res;
             }
-            vector<int> enumerate_occurences(const RandomAccessibleContainer &t) const {
+            std::vector<int> enumerate_occurrences(const RandomAccessibleContainer &t) const {
                 return (*this)(t);
+            }
+            std::vector<int> enumerate_occurences(const RandomAccessibleContainer &t) const {
+                return enumerate_occurrences(t);
             }
         private:
             RandomAccessibleContainer s;

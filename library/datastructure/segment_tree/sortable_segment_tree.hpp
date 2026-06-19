@@ -39,7 +39,7 @@ namespace suisen {
         struct InnerNode {
             priority_type _priority;
 
-            size_type _siz;
+            size_type _size;
             key_type _key;
             key_type _kmin, _kmax;
 
@@ -48,9 +48,9 @@ namespace suisen {
 
             inner_node_pointer _ch[2]{ nullptr, nullptr };
 
-            InnerNode(const key_type& key, const value_type& val) : _priority(random_priority()), _siz(1), _key(key), _kmin(key), _kmax(key), _val(val), _sum(val) {}
+            InnerNode(const key_type& key, const value_type& val) : _priority(random_priority()), _size(1), _key(key), _kmin(key), _kmax(key), _val(val), _sum(val) {}
 
-            static size_type& size(inner_node_pointer t) { return t->_siz; }
+            static size_type& size(inner_node_pointer t) { return t->_size; }
             static size_type safe_size(inner_node_pointer t) { return t ? size(t) : 0; }
 
             static const key_type& const_key(inner_node_pointer t) { return t->_key; }
@@ -106,12 +106,12 @@ namespace suisen {
             static value_type get_at(inner_node_pointer t, size_type k) {
                 assert(0 <= k and k < safe_size(t));
                 while (true) {
-                    if (const size_type lsiz = safe_size(child0(t)); k <= lsiz) {
-                        if (k == lsiz) return value(t);
+                    if (const size_type left_size = safe_size(child0(t)); k <= left_size) {
+                        if (k == left_size) return value(t);
                         t = child0(t);
                     } else {
                         t = child1(t);
-                        k -= lsiz + 1;
+                        k -= left_size + 1;
                     }
                 }
             }
@@ -120,8 +120,8 @@ namespace suisen {
                 static std::vector<inner_node_pointer> stack{};
                 while (true) {
                     stack.push_back(t);
-                    if (const size_type lsiz = safe_size(child0(t)); k <= lsiz) {
-                        if (k == lsiz) {
+                    if (const size_type left_size = safe_size(child0(t)); k <= left_size) {
+                        if (k == left_size) {
                             value_type old_val = value(t);
                             value(t) = val;
                             while (stack.size()) update(stack.back()), stack.pop_back();
@@ -130,18 +130,18 @@ namespace suisen {
                         t = child0(t);
                     } else {
                         t = child1(t);
-                        k -= lsiz + 1;
+                        k -= left_size + 1;
                     }
                 }
             }
             static value_type prod_at_range(inner_node_pointer t, size_type l, size_type r) {
                 if (not t) return e();
                 if (l <= 0 and r >= size(t)) return sum(t);
-                size_type lsiz = safe_size(child0(t));
-                if (r <= lsiz) return prod_at_range(child0(t), l, r);
-                if (l > lsiz) return prod_at_range(child1(t), l - (lsiz + 1), r - (lsiz + 1));
+                size_type left_size = safe_size(child0(t));
+                if (r <= left_size) return prod_at_range(child0(t), l, r);
+                if (l > left_size) return prod_at_range(child1(t), l - (left_size + 1), r - (left_size + 1));
                 value_type sum_l = prod_at_range(child0(t), l, r);
-                value_type sum_r = prod_at_range(child1(t), l - (lsiz + 1), r - (lsiz + 1));
+                value_type sum_r = prod_at_range(child1(t), l - (left_size + 1), r - (left_size + 1));
                 return op(op(sum_l, value(t)), sum_r);
             }
 
@@ -152,10 +152,10 @@ namespace suisen {
                 static std::vector<inner_node_pointer> lp{}, rp{};
 
                 while (true) {
-                    if (const size_type lsiz = safe_size(child0(t)); k <= lsiz) {
+                    if (const size_type left_size = safe_size(child0(t)); k <= left_size) {
                         if (rp.size()) set_child0(rp.back(), t);
                         rp.push_back(t);
-                        if (k == lsiz) {
+                        if (k == left_size) {
                             if (lp.size()) set_child1(lp.back(), child0(t));
 
                             inner_node_pointer lt = set_child0(t, nullptr), rt = nullptr;
@@ -170,7 +170,7 @@ namespace suisen {
                         if (lp.size()) set_child1(lp.back(), t);
                         lp.push_back(t);
                         t = child1(t);
-                        k -= lsiz + 1;
+                        k -= left_size + 1;
                     }
                 }
             }
@@ -294,7 +294,7 @@ namespace suisen {
         struct OuterNode {
             priority_type _priority;
 
-            size_type _siz;
+            size_type _size;
             value_type _sum;
 
             bool _rev;
@@ -302,11 +302,11 @@ namespace suisen {
 
             outer_node_pointer _ch[2]{ nullptr, nullptr };
 
-            OuterNode(inner_node_pointer inner_node, bool rev = false) : _priority(random_priority()), _siz(inner_node::size(inner_node)), _sum(inner_node::sum(inner_node)), _rev(rev), _inner_node(inner_node) {
+            OuterNode(inner_node_pointer inner_node, bool rev = false) : _priority(random_priority()), _size(inner_node::size(inner_node)), _sum(inner_node::sum(inner_node)), _rev(rev), _inner_node(inner_node) {
                 if (rev) _sum = toggle(std::move(_sum));
             }
 
-            static size_type& size(outer_node_pointer t) { return t->_siz; }
+            static size_type& size(outer_node_pointer t) { return t->_size; }
             static size_type safe_size(outer_node_pointer t) { return t ? size(t) : 0; }
             static size_type inner_size(outer_node_pointer t) { return inner_node::size(inner(t)); }
 
@@ -400,15 +400,15 @@ namespace suisen {
             static value_type get_at(outer_node_pointer t, size_type k) {
                 assert(0 <= k and k < safe_size(t));
                 while (true) {
-                    if (const size_type lsiz = safe_size(child0(t)), msiz = inner_node::safe_size(inner(t)); k < lsiz + msiz) {
-                        if (k >= lsiz) {
-                            size_type k_inner = k - lsiz;
+                    if (const size_type left_size = safe_size(child0(t)), middle_size = inner_node::safe_size(inner(t)); k < left_size + middle_size) {
+                        if (k >= left_size) {
+                            size_type k_inner = k - left_size;
                             return inner_node::get_at(inner(t), reversed(t) ? inner_node::safe_size(inner(t)) - k_inner - 1 : k_inner);
                         }
                         t = child0(t);
                     } else {
                         t = child1(t);
-                        k -= lsiz + msiz;
+                        k -= left_size + middle_size;
                     }
                 }
             }
@@ -417,9 +417,9 @@ namespace suisen {
                 static std::vector<outer_node_pointer> stack{};
                 while (true) {
                     stack.push_back(t);
-                    if (const size_type lsiz = safe_size(child0(t)), msiz = inner_node::safe_size(inner(t)); k < lsiz + msiz) {
-                        if (k >= lsiz) {
-                            size_type k_inner = k - lsiz;
+                    if (const size_type left_size = safe_size(child0(t)), middle_size = inner_node::safe_size(inner(t)); k < left_size + middle_size) {
+                        if (k >= left_size) {
+                            size_type k_inner = k - left_size;
                             value_type old_val = inner_node::set_at(inner(t), reversed(t) ? inner_node::safe_size(inner(t)) - k_inner - 1 : k_inner, val);
                             while (stack.size()) update(stack.back()), stack.pop_back();
                             return old_val;
@@ -427,24 +427,24 @@ namespace suisen {
                         t = child0(t);
                     } else {
                         t = child1(t);
-                        k -= lsiz + msiz;
+                        k -= left_size + middle_size;
                     }
                 }
             }
             static value_type prod(outer_node_pointer t, size_type l, size_type r) {
                 if (not t) return e();
                 if (l <= 0 and r >= size(t)) return sum(t);
-                size_type lsiz = safe_size(child0(t));
-                if (r <= lsiz) return prod(child0(t), l, r);
-                size_type msiz = inner_size(t);
-                if (l >= lsiz + msiz) return prod(child1(t), l - (lsiz + msiz), r - (lsiz + msiz));
+                size_type left_size = safe_size(child0(t));
+                if (r <= left_size) return prod(child0(t), l, r);
+                size_type middle_size = inner_size(t);
+                if (l >= left_size + middle_size) return prod(child1(t), l - (left_size + middle_size), r - (left_size + middle_size));
                 value_type sum_l = prod(child0(t), l, r);
-                value_type sum_r = prod(child1(t), l - (lsiz + msiz), r - (lsiz + msiz));
+                value_type sum_r = prod(child1(t), l - (left_size + middle_size), r - (left_size + middle_size));
                 if (reversed(t)) {
-                    value_type sum_m = inner_node::prod_at_range(inner(t), msiz - (r - lsiz), msiz - (l - lsiz));
+                    value_type sum_m = inner_node::prod_at_range(inner(t), middle_size - (r - left_size), middle_size - (l - left_size));
                     return op(op(sum_l, toggle(sum_m)), sum_r);
                 } else {
-                    value_type sum_m = inner_node::prod_at_range(inner(t), l - lsiz, r - lsiz);
+                    value_type sum_m = inner_node::prod_at_range(inner(t), l - left_size, r - left_size);
                     return op(op(sum_l, sum_m), sum_r);
                 }
             }
@@ -456,16 +456,16 @@ namespace suisen {
                 static std::vector<outer_node_pointer> lp{}, rp{};
 
                 while (true) {
-                    if (const size_type lsiz = safe_size(child0(t)), msiz = inner_node::safe_size(inner(t)); k < lsiz + msiz) {
-                        if (k >= lsiz) {
+                    if (const size_type left_size = safe_size(child0(t)), middle_size = inner_node::safe_size(inner(t)); k < left_size + middle_size) {
+                        if (k >= left_size) {
                             outer_node_pointer tl, tr;
                             if (reversed(t)) {
-                                size_type k_inner = inner_node::safe_size(inner(t)) - (k - lsiz);
+                                size_type k_inner = inner_node::safe_size(inner(t)) - (k - left_size);
                                 auto [inner_tr, inner_tl] = inner_node::split_at(inner(t), k_inner);
                                 tl = outer_node::alloc_node(inner_tl, true);
                                 tr = outer_node::alloc_node(inner_tr, true);
                             } else {
-                                size_type k_inner = k - lsiz;
+                                size_type k_inner = k - left_size;
                                 auto [inner_tl, inner_tr] = inner_node::split_at(inner(t), k_inner);
                                 tl = outer_node::alloc_node(inner_tl, false);
                                 tr = outer_node::alloc_node(inner_tr, false);
@@ -494,7 +494,7 @@ namespace suisen {
                         if (lp.size()) set_child1(lp.back(), t);
                         lp.push_back(t);
                         t = child1(t);
-                        k -= lsiz + msiz;
+                        k -= left_size + middle_size;
                     }
                 }
             }

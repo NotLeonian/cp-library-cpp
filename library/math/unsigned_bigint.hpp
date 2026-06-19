@@ -28,8 +28,8 @@ namespace suisen {
             }
         }
         unsigned_bigint(const std::string& s) : vector() {
-            int siz = s.size();
-            for (int i = siz; i > 0; i -= LogD) {
+            int size = s.size();
+            for (int i = size; i > 0; i -= LogD) {
                 int l = std::max(0, i - LogD);
                 int r = i;
                 int& v = this->emplace_back();

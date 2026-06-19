@@ -1,5 +1,5 @@
-#ifndef SUISEN_PRODUCT_OF_DIFFERNCES
-#define SUISEN_PRODUCT_OF_DIFFERNCES
+#ifndef SUISEN_PRODUCT_OF_DIFFERENCES
+#define SUISEN_PRODUCT_OF_DIFFERENCES
 
 #include <deque>
 #include "library/polynomial/multi_point_eval.hpp"
@@ -31,4 +31,4 @@ namespace suisen {
 } // namespace suisen
 
 
-#endif // SUISEN_PRODUCT_OF_DIFFERNCES
+#endif // SUISEN_PRODUCT_OF_DIFFERENCES

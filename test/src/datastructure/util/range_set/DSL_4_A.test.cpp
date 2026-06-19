@@ -35,8 +35,8 @@ int main() {
     }
     long long ans = 0;
     for (int i = 0; i < m - 1; ++i) {
-        long long hight = comp_y.decomp(i + 1) -comp_y.decomp(i);
-        ans += hight * sets[i].size();
+        long long height = comp_y.decomp(i + 1) -comp_y.decomp(i);
+        ans += height * sets[i].size();
     }
     std::cout << ans << std::endl;
     return 0;

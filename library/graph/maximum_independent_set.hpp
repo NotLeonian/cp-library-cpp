@@ -16,7 +16,7 @@ namespace suisen {
         const int argmax_deg = std::max_element(g.begin(), g.end(), [](const auto& adj1, const auto& adj2) { return adj1.size() < adj2.size(); }) - g.begin();
 
         if (g[argmax_deg].size() <= 2) {
-            std::vector<int> mis;
+            std::vector<int> independent_set;
             std::vector<int> color(n, -1);
             for (int i = 0; i < n; ++i) if (color[i] < 0) {
                 std::vector<int> updated;
@@ -40,13 +40,13 @@ namespace suisen {
                 }
                 int majority = cnt[1] >= cnt[0];
                 for (int u : updated) if (color[u] == majority and u != p) {
-                    mis.push_back(u);
+                    independent_set.push_back(u);
                 }
             }
-            return mis;
+            return independent_set;
         }
 
-        std::vector<int> mis;
+        std::vector<int> independent_set;
         for (const auto& remove_vertices : { std::vector<int>{}, g[argmax_deg] }) {
             std::vector<int8_t> rem_flg(n, false);
             rem_flg[argmax_deg] = true;
@@ -79,11 +79,11 @@ namespace suisen {
             if (remove_vertices.size()) {
                 vs.push_back(argmax_deg);
             }
-            if (vs.size() > mis.size()) {
-                mis = std::move(vs);
+            if (vs.size() > independent_set.size()) {
+                independent_set = std::move(vs);
             }
         }
-        return mis;
+        return independent_set;
     }
 } // namespace suisen
 
