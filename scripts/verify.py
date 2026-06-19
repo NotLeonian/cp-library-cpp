@@ -36,6 +36,7 @@ TLE = float(os.environ.get("VERIFY_TLE", "60"))
 OJ_TEST_JOBS = int(os.environ.get("OJ_TEST_JOBS", "1"))
 DOCS_JOBS = int(os.environ.get("VERIFY_DOCS_JOBS", os.environ.get("VERIFY_JOBS", "1")))
 DEFAULT_BRANCH = os.environ.get("VERIFY_DEFAULT_BRANCH", "main")
+TIMESTAMP_JSON_INDENT = 4
 
 _download_lock = threading.Lock()
 
@@ -299,14 +300,27 @@ def is_truthy(value: str | None) -> bool:
 def load_json(path: Path) -> Dict[str, str]:
     if not path.exists():
         return {}
-    with path.open() as fh:
+    with path.open(encoding="utf-8") as fh:
         return json.load(fh)
 
 
 def dump_json(path: Path, data: Dict[str, str]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w") as fh:
-        json.dump(data, fh, indent=4, sort_keys=True)
+    path.write_text(
+        json.dumps(
+            data,
+            indent=TIMESTAMP_JSON_INDENT,
+            sort_keys=True,
+            ensure_ascii=False,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+
+def normalize_timestamp_file(path: Path = TIMESTAMP_FILE) -> None:
+    if path.exists():
+        dump_json(path, load_json(path))
 
 
 def setup_verify_helper_config() -> None:
@@ -536,9 +550,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "command",
         nargs="?",
-        choices=("run", "docs"),
+        choices=("run", "docs", "normalize-timestamps"),
         default="run",
-        help="run verification in parallel or generate/deploy documentation",
+        help="run verification, generate/deploy documentation, or normalize timestamp JSON",
     )
     parser.add_argument(
         "--full",
@@ -555,6 +569,8 @@ def main() -> None:
         run_verification(full_verify=args.full)
     elif args.command == "docs":
         deploy_docs()
+    elif args.command == "normalize-timestamps":
+        normalize_timestamp_file()
 
 
 if __name__ == "__main__":

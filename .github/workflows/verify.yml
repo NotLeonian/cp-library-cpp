@@ -158,6 +158,9 @@ jobs:
         YUKICODER_TOKEN: ${{ secrets.YUKICODER_TOKEN }}
       run: oj-verify run --timeout 6000
 
+    - name: Normalize verification timestamp
+      run: python scripts/verify.py normalize-timestamps
+
     - name: Generate GitHub App token
       if: success() && github.ref == 'refs/heads/main'
       id: app-token
