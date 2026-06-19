@@ -89,7 +89,7 @@ data:
     \ T{0}, ys, t);\n    }\n} // namespace suisen\n\n\n\n#line 1 \"library/sequence/powers.hpp\"\
     \n\n\n\n#include <cstdint>\n#line 1 \"library/number/linear_sieve.hpp\"\n\n\n\n\
     #include <cassert>\n#include <numeric>\n#line 7 \"library/number/linear_sieve.hpp\"\
-    \n\nnamespace suisen {\n// referece: https://37zigen.com/linear-sieve/\nclass\
+    \n\nnamespace suisen {\n// reference: https://37zigen.com/linear-sieve/\nclass\
     \ LinearSieve {\n    public:\n        LinearSieve(const int n) : _n(n), min_prime_factor(std::vector<int>(n\
     \ + 1)) {\n            std::iota(min_prime_factor.begin(), min_prime_factor.end(),\
     \ 0);\n            prime_list.reserve(_n / 20);\n            for (int d = 2; d\
@@ -141,7 +141,7 @@ data:
   isVerificationFile: true
   path: test/src/polynomial/lagrange_interpolation/cumulative_sum.test.cpp
   requiredBy: []
-  timestamp: '2023-05-11 13:37:15+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/polynomial/lagrange_interpolation/cumulative_sum.test.cpp

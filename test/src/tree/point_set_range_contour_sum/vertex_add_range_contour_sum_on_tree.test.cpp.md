@@ -32,8 +32,8 @@ data:
     \ _seq;\n\n            Node() = default;\n            Node(const std::vector<std::vector<int>>&\
     \ g, const std::vector<int8_t>& removed, const std::vector<int> &roots, const\
     \ bool child_index, std::vector<std::vector<AuxData>>& info, const std::vector<T>\
-    \ &dat, int siz) {\n                std::vector<T> reordered_dat(siz);\n     \
-    \           _sep.push_back(0);\n                std::deque<std::tuple<int, int,\
+    \ &dat, int size) {\n                std::vector<T> reordered_dat(size);\n   \
+    \             _sep.push_back(0);\n                std::deque<std::tuple<int, int,\
     \ int>> dq;\n                for (int r : roots) dq.emplace_back(r, -1, 0);\n\
     \                int pre_dist = 0, cnt = 0;\n                while (dq.size())\
     \ {\n                    const auto [u, pu, du] = dq.front();\n              \
@@ -56,17 +56,17 @@ data:
     \ std::vector<int>&& {\n                if (l.size() > r.size()) std::swap(l,\
     \ r);\n                for (int v : l) r.push_back(v);\n                return\
     \ std::move(r);\n            };\n\n            auto rec = [&](auto rec, int r,\
-    \ int siz) -> int {\n                int c = -1;\n                auto get_centroid\
+    \ int size) -> int {\n                int c = -1;\n                auto get_centroid\
     \ = [&](auto get_centroid, int u, int p) -> void {\n                    sub_size[u]\
     \ = 1;\n                    for (int v : _g[u]) {\n                        if\
     \ (v == p or _removed[v]) continue;\n                        get_centroid(get_centroid,\
     \ v, u);\n                        if (v == c) {\n                            sub_size[u]\
-    \ = siz - sub_size[c];\n                            break;\n                 \
-    \       }\n                        sub_size[u] += sub_size[v];\n             \
-    \       }\n                    if (c < 0 and sub_size[u] * 2 > siz) c = u;\n \
-    \               };\n                get_centroid(get_centroid, r, -1);\n\n   \
-    \             _removed[c] = true;\n                for (int v : _g[c]) {\n   \
-    \                 if (_removed[v]) continue;\n                    const int comp_size\
+    \ = size - sub_size[c];\n                            break;\n                \
+    \        }\n                        sub_size[u] += sub_size[v];\n            \
+    \        }\n                    if (c < 0 and sub_size[u] * 2 > size) c = u;\n\
+    \                };\n                get_centroid(get_centroid, r, -1);\n\n  \
+    \              _removed[c] = true;\n                for (int v : _g[c]) {\n  \
+    \                  if (_removed[v]) continue;\n                    const int comp_size\
     \ = sub_size[v];\n                    ctr[v] = rec(rec, v, comp_size);\n     \
     \               sub_size[v] = comp_size;\n                }\n\n              \
     \  auto comp = [&](int i, int j) { return sub_size[i] > sub_size[j]; };\n    \
@@ -141,7 +141,7 @@ data:
   isVerificationFile: true
   path: test/src/tree/point_set_range_contour_sum/vertex_add_range_contour_sum_on_tree.test.cpp
   requiredBy: []
-  timestamp: '2023-07-09 04:04:16+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/tree/point_set_range_contour_sum/vertex_add_range_contour_sum_on_tree.test.cpp

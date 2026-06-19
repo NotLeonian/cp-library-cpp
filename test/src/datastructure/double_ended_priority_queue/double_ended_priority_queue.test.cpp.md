@@ -61,28 +61,28 @@ data:
     \ value_type& x, const value_type& y) { return (*comp)(y, x); }\n        } _rev_comp{\
     \ &_comp };\n\n        std::vector<value_type> _max_heap, _min_heap;\n       \
     \ value_type pivot;\n\n        void ensure_min_heap_nonempty() {\n           \
-    \ const int siz = size();\n            assert(siz);\n            if (not _min_heap.empty())\
-    \ return;\n            if (siz == 1) {\n                std::swap(_min_heap, _max_heap);\n\
-    \                pivot = _min_heap.front();\n            } else {\n          \
-    \      const int mid = (siz + 1) >> 1;\n                std::nth_element(_max_heap.begin(),\
-    \ _max_heap.begin() + mid - 1, _max_heap.end(), _comp);\n                pivot\
-    \ = _max_heap[mid - 1];\n                _min_heap.reserve(mid);\n           \
-    \     std::move(_max_heap.begin(), _max_heap.begin() + mid, std::back_inserter(_min_heap));\n\
-    \                _max_heap.erase(_max_heap.begin(), _max_heap.begin() + mid);\n\
+    \ const int current_size = size();\n            assert(current_size);\n      \
+    \      if (not _min_heap.empty()) return;\n            if (current_size == 1)\
+    \ {\n                std::swap(_min_heap, _max_heap);\n                pivot =\
+    \ _min_heap.front();\n            } else {\n                const int mid = (current_size\
+    \ + 1) >> 1;\n                std::nth_element(_max_heap.begin(), _max_heap.begin()\
+    \ + mid - 1, _max_heap.end(), _comp);\n                pivot = _max_heap[mid -\
+    \ 1];\n                _min_heap.reserve(mid);\n                std::move(_max_heap.begin(),\
+    \ _max_heap.begin() + mid, std::back_inserter(_min_heap));\n                _max_heap.erase(_max_heap.begin(),\
+    \ _max_heap.begin() + mid);\n                std::make_heap(_max_heap.begin(),\
+    \ _max_heap.end(), _comp);\n                std::make_heap(_min_heap.begin(),\
+    \ _min_heap.end(), _rev_comp);\n            }\n        }\n        void ensure_max_heap_nonempty()\
+    \ {\n            const int current_size = size();\n            assert(current_size);\n\
+    \            if (not _max_heap.empty()) return;\n            if (current_size\
+    \ == 1) {\n                std::swap(_min_heap, _max_heap);\n            } else\
+    \ {\n                const int mid = current_size >> 1;\n                std::nth_element(_min_heap.begin(),\
+    \ _min_heap.begin() + mid - 1, _min_heap.end(), _comp);\n                pivot\
+    \ = _min_heap[mid - 1];\n                _max_heap.reserve(current_size - mid);\n\
+    \                std::move(_min_heap.begin() + mid, _min_heap.end(), std::back_inserter(_max_heap));\n\
+    \                _min_heap.erase(_min_heap.begin() + mid, _min_heap.end());\n\
     \                std::make_heap(_max_heap.begin(), _max_heap.end(), _comp);\n\
     \                std::make_heap(_min_heap.begin(), _min_heap.end(), _rev_comp);\n\
-    \            }\n        }\n        void ensure_max_heap_nonempty() {\n       \
-    \     const int siz = size();\n            assert(siz);\n            if (not _max_heap.empty())\
-    \ return;\n            if (siz == 1) {\n                std::swap(_min_heap, _max_heap);\n\
-    \            } else {\n                const int mid = siz >> 1;\n           \
-    \     std::nth_element(_min_heap.begin(), _min_heap.begin() + mid - 1, _min_heap.end(),\
-    \ _comp);\n                pivot = _min_heap[mid - 1];\n                _max_heap.reserve(siz\
-    \ - mid);\n                std::move(_min_heap.begin() + mid, _min_heap.end(),\
-    \ std::back_inserter(_max_heap));\n                _min_heap.erase(_min_heap.begin()\
-    \ + mid, _min_heap.end());\n                std::make_heap(_max_heap.begin(),\
-    \ _max_heap.end(), _comp);\n                std::make_heap(_min_heap.begin(),\
-    \ _min_heap.end(), _rev_comp);\n            }\n        }\n    };\n} // namespace\
-    \ suisen\n\n\n\n#line 6 \"test/src/datastructure/double_ended_priority_queue/double_ended_priority_queue.test.cpp\"\
+    \            }\n        }\n    };\n} // namespace suisen\n\n\n\n#line 6 \"test/src/datastructure/double_ended_priority_queue/double_ended_priority_queue.test.cpp\"\
     \n\nint main() {\n    std::ios::sync_with_stdio(false);\n    std::cin.tie(nullptr);\n\
     \n    int n, q;\n    std::cin >> n >> q;\n\n    std::vector<int> init(n);\n  \
     \  for (auto &e : init) std::cin >> e;\n    suisen::DoubleEndedPriorityQueue<int>\
@@ -108,7 +108,7 @@ data:
   isVerificationFile: true
   path: test/src/datastructure/double_ended_priority_queue/double_ended_priority_queue.test.cpp
   requiredBy: []
-  timestamp: '2022-10-13 20:07:57+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/datastructure/double_ended_priority_queue/double_ended_priority_queue.test.cpp

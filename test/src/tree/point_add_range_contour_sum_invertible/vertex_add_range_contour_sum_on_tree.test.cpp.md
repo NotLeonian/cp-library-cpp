@@ -83,16 +83,16 @@ data:
     \ 0);\n            std::vector<int> ctr(2 * _n, -1);\n\n            std::vector<int>\
     \ head(2 * _n), tail(2 * _n), link(2 * _n);\n            for (int i = 0; i < _n;\
     \ ++i) head[i] = tail[i] = i;\n\n            std::vector<value_type> dat(_n);\n\
-    \n            auto rec = [&](auto rec, int r, int siz) -> int {\n            \
-    \    int c = -1;\n                auto get_centroid = [&](auto get_centroid, int\
-    \ u, int p) -> void {\n                    sub_size[u] = 1;\n                \
-    \    for (int v : _nodes[u].adj) if (v != p) {\n                        get_centroid(get_centroid,\
+    \n            auto rec = [&](auto rec, int r, int size) -> int {\n           \
+    \     int c = -1;\n                auto get_centroid = [&](auto get_centroid,\
+    \ int u, int p) -> void {\n                    sub_size[u] = 1;\n            \
+    \        for (int v : _nodes[u].adj) if (v != p) {\n                        get_centroid(get_centroid,\
     \ v, u);\n                        if (v == c) {\n                            sub_size[u]\
-    \ = siz - sub_size[c];\n                            break;\n                 \
-    \       }\n                        sub_size[u] += sub_size[v];\n             \
-    \       }\n                    if (c < 0 and sub_size[u] * 2 > siz) c = u;\n \
-    \               };\n                get_centroid(get_centroid, r, -1);\n\n   \
-    \             for (int v : _nodes[c].adj) {\n                    const int comp_size\
+    \ = size - sub_size[c];\n                            break;\n                \
+    \        }\n                        sub_size[u] += sub_size[v];\n            \
+    \        }\n                    if (c < 0 and sub_size[u] * 2 > size) c = u;\n\
+    \                };\n                get_centroid(get_centroid, r, -1);\n\n  \
+    \              for (int v : _nodes[c].adj) {\n                    const int comp_size\
     \ = sub_size[v];\n                    _nodes[v].adj.erase(std::find(_nodes[v].adj.begin(),\
     \ _nodes[v].adj.end(), c));\n                    ctr[v] = rec(rec, v, comp_size);\n\
     \                    sub_size[v] = comp_size;\n                }\n\n         \
@@ -191,7 +191,7 @@ data:
   isVerificationFile: true
   path: test/src/tree/point_add_range_contour_sum_invertible/vertex_add_range_contour_sum_on_tree.test.cpp
   requiredBy: []
-  timestamp: '2022-08-21 18:22:49+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/tree/point_add_range_contour_sum_invertible/vertex_add_range_contour_sum_on_tree.test.cpp

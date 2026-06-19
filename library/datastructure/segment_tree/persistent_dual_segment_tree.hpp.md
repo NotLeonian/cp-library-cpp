@@ -22,17 +22,17 @@ data:
     \        using container_type = std::conditional_t<auto_extend, std::deque<U>,\
     \ std::vector<U>>;\n\n        container_type<value_type> pool;\n        container_type<value_pointer_type>\
     \ stock;\n        decltype(stock.begin()) it;\n\n        ObjectPool() : ObjectPool(0)\
-    \ {}\n        ObjectPool(int siz) : pool(siz), stock(siz) {\n            clear();\n\
+    \ {}\n        ObjectPool(int size) : pool(size), stock(size) {\n            clear();\n\
     \        }\n\n        int capacity() const { return pool.size(); }\n        int\
     \ size() const { return it - stock.begin(); }\n\n        value_pointer_type alloc()\
     \ {\n            if constexpr (auto_extend) ensure();\n            return *it++;\n\
     \        }\n\n        void free(value_pointer_type t) {\n            *--it = t;\n\
-    \        }\n\n        void clear() {\n            int siz = pool.size();\n   \
-    \         it = stock.begin();\n            for (int i = 0; i < siz; i++) stock[i]\
+    \        }\n\n        void clear() {\n            int size = pool.size();\n  \
+    \          it = stock.begin();\n            for (int i = 0; i < size; i++) stock[i]\
     \ = &pool[i];\n        }\n\n        void ensure() {\n            if (it != stock.end())\
-    \ return;\n            int siz = stock.size();\n            for (int i = siz;\
-    \ i <= siz * 2; ++i) {\n                stock.push_back(&pool.emplace_back());\n\
-    \            }\n            it = stock.begin() + siz;\n        }\n    };\n} //\
+    \ return;\n            int size = stock.size();\n            for (int i = size;\
+    \ i <= size * 2; ++i) {\n                stock.push_back(&pool.emplace_back());\n\
+    \            }\n            it = stock.begin() + size;\n        }\n    };\n} //\
     \ namespace suisen\n\n\n#line 7 \"library/datastructure/segment_tree/persistent_dual_segment_tree.hpp\"\
     \n\nnamespace suisen {\n    template <typename F, F(*composition)(F, F), F(*id)()>\n\
     \    struct PersistentDualSegmentTree {\n        struct Node;\n\n        using\
@@ -68,19 +68,19 @@ data:
     \ = push(node);\n                int tm = (tl + tr) >> 1;\n                res->_ch[0]\
     \ = apply(res->_ch[0], tl, tm, ql, qr, f);\n                res->_ch[1] = apply(res->_ch[1],\
     \ tm, tr, ql, qr, f);\n                return res;\n            }\n\n        \
-    \    static operator_type get(node_pointer_type node, int siz, int i) {\n    \
-    \            operator_type f = id();\n                node_pointer_type cur =\
-    \ node;\n                for (int l = 0, r = siz; r - l > 1;) {\n            \
-    \        f = composition(f, cur->_laz);\n                    int m = (l + r) >>\
-    \ 1;\n                    if (i < m) {\n                        cur = cur->_ch[0];\n\
+    \    static operator_type get(node_pointer_type node, int size, int i) {\n   \
+    \             operator_type f = id();\n                node_pointer_type cur =\
+    \ node;\n                for (int l = 0, r = size; r - l > 1;) {\n           \
+    \         f = composition(f, cur->_laz);\n                    int m = (l + r)\
+    \ >> 1;\n                    if (i < m) {\n                        cur = cur->_ch[0];\n\
     \                        r = m;\n                    } else {\n              \
     \          cur = cur->_ch[1];\n                        l = m;\n              \
     \      }\n                }\n                return composition(f, cur->_laz);\n\
     \            }\n        };\n\n        PersistentDualSegmentTree() : _n(0), _root(nullptr)\
     \ {}\n        explicit PersistentDualSegmentTree(int n) : _n(n), _root(node_type::build(n))\
-    \ {}\n\n        static void init_pool(int siz) {\n            node_type::_pool\
-    \ = ObjectPool<node_type>(siz);\n        }\n        static void clear_pool() {\n\
-    \            node_type::_pool.clear();\n        }\n\n        PersistentDualSegmentTree\
+    \ {}\n\n        static void init_pool(int size) {\n            node_type::_pool\
+    \ = ObjectPool<node_type>(size);\n        }\n        static void clear_pool()\
+    \ {\n            node_type::_pool.clear();\n        }\n\n        PersistentDualSegmentTree\
     \ apply_all(const operator_type& f) {\n            return PersistentDualSegmentTree(_n,\
     \ node_type::apply_all(_root, f));\n        }\n        PersistentDualSegmentTree\
     \ apply(int l, int r, const operator_type& f) {\n            return PersistentDualSegmentTree(_n,\
@@ -126,19 +126,19 @@ data:
     \               int tm = (tl + tr) >> 1;\n                res->_ch[0] = apply(res->_ch[0],\
     \ tl, tm, ql, qr, f);\n                res->_ch[1] = apply(res->_ch[1], tm, tr,\
     \ ql, qr, f);\n                return res;\n            }\n\n            static\
-    \ operator_type get(node_pointer_type node, int siz, int i) {\n              \
-    \  operator_type f = id();\n                node_pointer_type cur = node;\n  \
-    \              for (int l = 0, r = siz; r - l > 1;) {\n                    f =\
-    \ composition(f, cur->_laz);\n                    int m = (l + r) >> 1;\n    \
-    \                if (i < m) {\n                        cur = cur->_ch[0];\n  \
-    \                      r = m;\n                    } else {\n                \
-    \        cur = cur->_ch[1];\n                        l = m;\n                \
-    \    }\n                }\n                return composition(f, cur->_laz);\n\
+    \ operator_type get(node_pointer_type node, int size, int i) {\n             \
+    \   operator_type f = id();\n                node_pointer_type cur = node;\n \
+    \               for (int l = 0, r = size; r - l > 1;) {\n                    f\
+    \ = composition(f, cur->_laz);\n                    int m = (l + r) >> 1;\n  \
+    \                  if (i < m) {\n                        cur = cur->_ch[0];\n\
+    \                        r = m;\n                    } else {\n              \
+    \          cur = cur->_ch[1];\n                        l = m;\n              \
+    \      }\n                }\n                return composition(f, cur->_laz);\n\
     \            }\n        };\n\n        PersistentDualSegmentTree() : _n(0), _root(nullptr)\
     \ {}\n        explicit PersistentDualSegmentTree(int n) : _n(n), _root(node_type::build(n))\
-    \ {}\n\n        static void init_pool(int siz) {\n            node_type::_pool\
-    \ = ObjectPool<node_type>(siz);\n        }\n        static void clear_pool() {\n\
-    \            node_type::_pool.clear();\n        }\n\n        PersistentDualSegmentTree\
+    \ {}\n\n        static void init_pool(int size) {\n            node_type::_pool\
+    \ = ObjectPool<node_type>(size);\n        }\n        static void clear_pool()\
+    \ {\n            node_type::_pool.clear();\n        }\n\n        PersistentDualSegmentTree\
     \ apply_all(const operator_type& f) {\n            return PersistentDualSegmentTree(_n,\
     \ node_type::apply_all(_root, f));\n        }\n        PersistentDualSegmentTree\
     \ apply(int l, int r, const operator_type& f) {\n            return PersistentDualSegmentTree(_n,\
@@ -153,7 +153,7 @@ data:
   isVerificationFile: false
   path: library/datastructure/segment_tree/persistent_dual_segment_tree.hpp
   requiredBy: []
-  timestamp: '2022-05-29 02:47:47+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/datastructure/segment_tree/persistent_dual_segment_tree/abc253.test.cpp

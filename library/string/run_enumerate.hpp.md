@@ -37,8 +37,8 @@ data:
     \ std::begin(s) + m, std::back_inserter(rl));\n            std::vector<int> z_rl\
     \ = atcoder::z_algorithm(rl);\n\n            std::reverse(std::begin(rl), std::end(rl));\n\
     \            std::vector<int> z_rl_rev = atcoder::z_algorithm(rl);\n\n       \
-    \     const int siz = rl.size();\n\n            std::vector<Run> result;\n\n \
-    \           auto add_ans = [&](Run&& run) { (run.l == l or run.r == r ? result\
+    \     const int size = rl.size();\n\n            std::vector<Run> result;\n\n\
+    \            auto add_ans = [&](Run&& run) { (run.l == l or run.r == r ? result\
     \ : glob_result).emplace_back(std::move(run)); };\n\n            const int len_l\
     \ = m - l, len_r = r - m;\n            std::vector<Run> run_m(len_r / 2 + 1);\n\
     \            for (auto& run : run_r) {\n                if (run.l != m) {\n  \
@@ -47,37 +47,37 @@ data:
     \       }\n            for (auto& run : run_l) {\n                if (run.r !=\
     \ m) {\n                    add_ans(std::move(run));\n                    continue;\n\
     \                }\n                const int period = run.period;\n         \
-    \       if (z_rl[siz - period] == period) {\n                    if (run_m[period].period)\
+    \       if (z_rl[size - period] == period) {\n                    if (run_m[period].period)\
     \ {\n                        run.r = run_m[period].r;\n                      \
     \  run_m[period] = Run{};\n                        add_ans(std::move(run));\n\
     \                    } else {\n                        run.r = m + period + z_rl[period];\n\
     \                        add_ans(std::move(run));\n                    }\n   \
-    \             } else {\n                    run.r = m + z_rl[siz - period];\n\
+    \             } else {\n                    run.r = m + z_rl[size - period];\n\
     \                    add_ans(std::move(run));\n                }\n           \
     \ }\n            for (auto& run : run_m) if (run.period) {\n                const\
-    \ int period = run.period;\n                if (z_rl[siz - period] == period)\
-    \ {\n                    if (2 * period <= len_l and z_rl[siz - 2 * period] >=\
+    \ int period = run.period;\n                if (z_rl[size - period] == period)\
+    \ {\n                    if (2 * period <= len_l and z_rl[size - 2 * period] >=\
     \ period) continue;\n                    run.l = m - period - z_rl_rev[period];\n\
     \                    add_ans(std::move(run));\n                } else {\n    \
-    \                run.l = m - z_rl_rev[siz - period];\n                    add_ans(std::move(run));\n\
+    \                run.l = m - z_rl_rev[size - period];\n                    add_ans(std::move(run));\n\
     \                }\n            }\n\n            for (int period = 1; period <=\
     \ len_l; ++period) {\n                bool skip_r = 2 * period <= len_r and z_rl[period]\
-    \ >= period;\n                bool skip_l = 2 * period <= len_l and z_rl[siz -\
-    \ 2 * period] >= period;\n                if (z_rl[siz - period] == period) {\n\
-    \                    if (skip_l or skip_r) continue;\n\n                    const\
-    \ int beg_pos = m - period - z_rl_rev[period];\n                    const int\
-    \ end_pos = m + period + z_rl[period];\n                    add_ans(Run{ period,\
+    \ >= period;\n                bool skip_l = 2 * period <= len_l and z_rl[size\
+    \ - 2 * period] >= period;\n                if (z_rl[size - period] == period)\
+    \ {\n                    if (skip_l or skip_r) continue;\n\n                 \
+    \   const int beg_pos = m - period - z_rl_rev[period];\n                    const\
+    \ int end_pos = m + period + z_rl[period];\n                    add_ans(Run{ period,\
     \ beg_pos, end_pos });\n                } else {\n                    if (not\
-    \ skip_r) {\n                        const int beg_pos = m - z_rl_rev[siz - period];\n\
+    \ skip_r) {\n                        const int beg_pos = m - z_rl_rev[size - period];\n\
     \                        const int end_pos = m + period + z_rl[period];\n    \
     \                    if (end_pos - beg_pos >= 2 * period) {\n                \
     \            add_ans(Run{ period, beg_pos, end_pos });\n                     \
     \   }\n                    }\n                    if (not skip_l) {\n        \
     \                const int beg_pos = m - period - z_rl_rev[period];\n        \
-    \                const int end_pos = m + z_rl[siz - period];\n               \
-    \         if (end_pos - beg_pos >= 2 * period) {\n                           \
-    \ add_ans(Run{ period, beg_pos, end_pos });\n                        }\n     \
-    \               }\n                }\n            }\n            return result;\n\
+    \                const int end_pos = m + z_rl[size - period];\n              \
+    \          if (end_pos - beg_pos >= 2 * period) {\n                          \
+    \  add_ans(Run{ period, beg_pos, end_pos });\n                        }\n    \
+    \                }\n                }\n            }\n            return result;\n\
     \        };\n        const int n = s.size();\n        std::vector<std::tuple<int,\
     \ int, int>> runs;\n        for (Run& run : div_conq(div_conq, 0, n)) {\n    \
     \        runs.emplace_back(run.l, run.r, run.period);\n        }\n        for\
@@ -115,8 +115,8 @@ data:
     \ std::begin(s) + m, std::back_inserter(rl));\n            std::vector<int> z_rl\
     \ = atcoder::z_algorithm(rl);\n\n            std::reverse(std::begin(rl), std::end(rl));\n\
     \            std::vector<int> z_rl_rev = atcoder::z_algorithm(rl);\n\n       \
-    \     const int siz = rl.size();\n\n            std::vector<Run> result;\n\n \
-    \           auto add_ans = [&](Run&& run) { (run.l == l or run.r == r ? result\
+    \     const int size = rl.size();\n\n            std::vector<Run> result;\n\n\
+    \            auto add_ans = [&](Run&& run) { (run.l == l or run.r == r ? result\
     \ : glob_result).emplace_back(std::move(run)); };\n\n            const int len_l\
     \ = m - l, len_r = r - m;\n            std::vector<Run> run_m(len_r / 2 + 1);\n\
     \            for (auto& run : run_r) {\n                if (run.l != m) {\n  \
@@ -125,37 +125,37 @@ data:
     \       }\n            for (auto& run : run_l) {\n                if (run.r !=\
     \ m) {\n                    add_ans(std::move(run));\n                    continue;\n\
     \                }\n                const int period = run.period;\n         \
-    \       if (z_rl[siz - period] == period) {\n                    if (run_m[period].period)\
+    \       if (z_rl[size - period] == period) {\n                    if (run_m[period].period)\
     \ {\n                        run.r = run_m[period].r;\n                      \
     \  run_m[period] = Run{};\n                        add_ans(std::move(run));\n\
     \                    } else {\n                        run.r = m + period + z_rl[period];\n\
     \                        add_ans(std::move(run));\n                    }\n   \
-    \             } else {\n                    run.r = m + z_rl[siz - period];\n\
+    \             } else {\n                    run.r = m + z_rl[size - period];\n\
     \                    add_ans(std::move(run));\n                }\n           \
     \ }\n            for (auto& run : run_m) if (run.period) {\n                const\
-    \ int period = run.period;\n                if (z_rl[siz - period] == period)\
-    \ {\n                    if (2 * period <= len_l and z_rl[siz - 2 * period] >=\
+    \ int period = run.period;\n                if (z_rl[size - period] == period)\
+    \ {\n                    if (2 * period <= len_l and z_rl[size - 2 * period] >=\
     \ period) continue;\n                    run.l = m - period - z_rl_rev[period];\n\
     \                    add_ans(std::move(run));\n                } else {\n    \
-    \                run.l = m - z_rl_rev[siz - period];\n                    add_ans(std::move(run));\n\
+    \                run.l = m - z_rl_rev[size - period];\n                    add_ans(std::move(run));\n\
     \                }\n            }\n\n            for (int period = 1; period <=\
     \ len_l; ++period) {\n                bool skip_r = 2 * period <= len_r and z_rl[period]\
-    \ >= period;\n                bool skip_l = 2 * period <= len_l and z_rl[siz -\
-    \ 2 * period] >= period;\n                if (z_rl[siz - period] == period) {\n\
-    \                    if (skip_l or skip_r) continue;\n\n                    const\
-    \ int beg_pos = m - period - z_rl_rev[period];\n                    const int\
-    \ end_pos = m + period + z_rl[period];\n                    add_ans(Run{ period,\
+    \ >= period;\n                bool skip_l = 2 * period <= len_l and z_rl[size\
+    \ - 2 * period] >= period;\n                if (z_rl[size - period] == period)\
+    \ {\n                    if (skip_l or skip_r) continue;\n\n                 \
+    \   const int beg_pos = m - period - z_rl_rev[period];\n                    const\
+    \ int end_pos = m + period + z_rl[period];\n                    add_ans(Run{ period,\
     \ beg_pos, end_pos });\n                } else {\n                    if (not\
-    \ skip_r) {\n                        const int beg_pos = m - z_rl_rev[siz - period];\n\
+    \ skip_r) {\n                        const int beg_pos = m - z_rl_rev[size - period];\n\
     \                        const int end_pos = m + period + z_rl[period];\n    \
     \                    if (end_pos - beg_pos >= 2 * period) {\n                \
     \            add_ans(Run{ period, beg_pos, end_pos });\n                     \
     \   }\n                    }\n                    if (not skip_l) {\n        \
     \                const int beg_pos = m - period - z_rl_rev[period];\n        \
-    \                const int end_pos = m + z_rl[siz - period];\n               \
-    \         if (end_pos - beg_pos >= 2 * period) {\n                           \
-    \ add_ans(Run{ period, beg_pos, end_pos });\n                        }\n     \
-    \               }\n                }\n            }\n            return result;\n\
+    \                const int end_pos = m + z_rl[size - period];\n              \
+    \          if (end_pos - beg_pos >= 2 * period) {\n                          \
+    \  add_ans(Run{ period, beg_pos, end_pos });\n                        }\n    \
+    \                }\n                }\n            }\n            return result;\n\
     \        };\n        const int n = s.size();\n        std::vector<std::tuple<int,\
     \ int, int>> runs;\n        for (Run& run : div_conq(div_conq, 0, n)) {\n    \
     \        runs.emplace_back(run.l, run.r, run.period);\n        }\n        for\
@@ -171,7 +171,7 @@ data:
   isVerificationFile: false
   path: library/string/run_enumerate.hpp
   requiredBy: []
-  timestamp: '2022-10-20 19:30:06+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/string/run_enumerate/runenumerate.test.cpp

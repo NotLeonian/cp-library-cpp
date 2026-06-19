@@ -84,7 +84,7 @@ data:
     \ <typename T> static constexpr bool is_readable_v = is_readable<T>::value;\n\
     } // namespace suisen\n\n#line 11 \"library/polynomial/fps_naive.hpp\"\n\n#line\
     \ 1 \"library/math/modint_extension.hpp\"\n\n\n\n#line 5 \"library/math/modint_extension.hpp\"\
-    \n#include <optional>\n\n/**\n * refernce: https://37zigen.com/tonelli-shanks-algorithm/\n\
+    \n#include <optional>\n\n/**\n * reference: https://37zigen.com/tonelli-shanks-algorithm/\n\
     \ * calculates x s.t. x^2 = a mod p in O((log p)^2).\n */\ntemplate <typename\
     \ mint>\nstd::optional<mint> safe_sqrt(mint a) {\n    static int p = mint::mod();\n\
     \    if (a == 0) return std::make_optional(0);\n    if (p == 2) return std::make_optional(a);\n\
@@ -486,9 +486,9 @@ data:
     \            P[j][k].concat((P[lv][j] + P[lv][k]) * (P[rv][j] + P[rv][k]) - zPlr[j]\
     \ - zPlr[k]);\n            }\n            P.pop_back(), P.pop_back();\n      \
     \  }\n        SetPowerSeries<T> f = h.mobius_inplace(), g = P[1][0].mobius_inplace();\n\
-    \        T res = 0;\n        for (int i = 0, siz = h.size(); i < siz; ++i) {\n\
-    \            res += f[i] * g[siz - i - 1];\n        }\n        return res;\n \
-    \   }\n} // namespace suisen\n\n\n"
+    \        T res = 0;\n        for (int i = 0, size = h.size(); i < size; ++i) {\n\
+    \            res += f[i] * g[size - i - 1];\n        }\n        return res;\n\
+    \    }\n} // namespace suisen\n\n\n"
   code: "#ifndef SUISEN_HAFNIAN\n#define SUISEN_HAFNIAN\n\n#include \"library/math/set_power_series.hpp\"\
     \n\nnamespace suisen {\n    template <typename T, typename U = T, std::enable_if_t<std::is_constructible_v<T,\
     \ U>, std::nullptr_t> = nullptr>\n    T hafnian(const std::vector<std::vector<U>>&\
@@ -505,9 +505,9 @@ data:
     \            P[j][k].concat((P[lv][j] + P[lv][k]) * (P[rv][j] + P[rv][k]) - zPlr[j]\
     \ - zPlr[k]);\n            }\n            P.pop_back(), P.pop_back();\n      \
     \  }\n        SetPowerSeries<T> f = h.mobius_inplace(), g = P[1][0].mobius_inplace();\n\
-    \        T res = 0;\n        for (int i = 0, siz = h.size(); i < siz; ++i) {\n\
-    \            res += f[i] * g[siz - i - 1];\n        }\n        return res;\n \
-    \   }\n} // namespace suisen\n\n#endif // SUISEN_HAFNIAN\n"
+    \        T res = 0;\n        for (int i = 0, size = h.size(); i < size; ++i) {\n\
+    \            res += f[i] * g[size - i - 1];\n        }\n        return res;\n\
+    \    }\n} // namespace suisen\n\n#endif // SUISEN_HAFNIAN\n"
   dependsOn:
   - library/math/set_power_series.hpp
   - library/convolution/subset_convolution.hpp
@@ -521,7 +521,7 @@ data:
   isVerificationFile: false
   path: library/linear_algebra/hafnian.hpp
   requiredBy: []
-  timestamp: '2025-12-23 12:59:53+00:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/linear_algebra/hafnian/hafnian_of_matrix.test.cpp

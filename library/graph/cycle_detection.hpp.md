@@ -47,57 +47,58 @@ data:
     \ std::vector<value_type>::const_iterator;\n            using reverse_iterator\
     \ = typename std::vector<value_type>::reverse_iterator;\n            using const_reverse_iterator\
     \ = typename std::vector<value_type>::const_reverse_iterator;\n\n            AdjacentList()\
-    \ = default;\n\n            int size() const { return _siz; }\n            bool\
-    \ empty() const { return _siz == 0; }\n            int capacity() const { return\
+    \ = default;\n\n            int size() const { return _size; }\n            bool\
+    \ empty() const { return _size == 0; }\n            int capacity() const { return\
     \ _cap; }\n\n            value_type& operator[](int i) { return *(begin() + i);\
     \ }\n            const value_type& operator[](int i) const { return *(cbegin()\
-    \ + i); }\n            value_type& at(uint32_t i) { assert(i < _siz); return *(begin()\
-    \ + i); }\n            const value_type& at(uint32_t i) const { assert(i < _siz);\
-    \ return *(cbegin() + i); }\n\n            value_type* data() { return _g->_edges.data()\
-    \ + _offset; }\n            const value_type* data() const { return _g->_edges.data()\
-    \ + _offset; }\n\n            iterator begin() const { return _g->_edges.begin()\
-    \ + _offset; }\n            iterator end() const { return begin() + _siz; }\n\
-    \            const_iterator cbegin() const { return _g->_edges.cbegin() + _offset;\
-    \ }\n            const_iterator cend() const { return cbegin() + _siz; }\n   \
-    \         reverse_iterator rbegin() const { return _g->_edges.rbegin() + (_g->_edges.size()\
-    \ - (_offset + _siz)); }\n            reverse_iterator rend() const { return rbegin()\
-    \ + _siz; }\n            const_reverse_iterator crbegin() const { return _g->_edges.crbegin()\
-    \ + (_g->_edges.size() - (_offset + _siz)); }\n            const_reverse_iterator\
-    \ crend() const { return crbegin() + _siz; }\n\n            void erase(const_iterator\
-    \ pos) {\n                erase(pos, std::next(pos));\n            }\n       \
-    \     void erase(const_iterator first, const_iterator last) {\n              \
-    \  const int num = last - first, k = first - cbegin();\n                assert(num\
-    \ >= 0);\n                if (num == 0) return;\n                assert(0 <= k\
-    \ and k <= _siz - num);\n                std::move(begin() + k + num, end(), begin()\
-    \ + k);\n                _siz -= num;\n            }\n            void pop_back()\
-    \ {\n                assert(_siz);\n                --_siz;\n            }\n \
-    \           void clear() { _siz = 0; }\n\n            const value_type& back()\
-    \ const { return *--cend(); }\n            value_type& back() { return *--end();\
-    \ }\n            const value_type& front() const { return *cbegin(); }\n     \
-    \       value_type& front() { return *begin(); }\n\n            void push_back(const\
-    \ value_type& x) {\n                ++_siz;\n                assert(_siz <= _cap);\n\
-    \                back() = x;\n            }\n            template <typename ...Args>\n\
-    \            void emplace_back(Args &&...args) {\n                ++_siz;\n  \
-    \              assert(_siz <= _cap);\n                back() = value_type(std::forward<Args>(args)...);\n\
+    \ + i); }\n            value_type& at(uint32_t i) { assert(i < _size); return\
+    \ *(begin() + i); }\n            const value_type& at(uint32_t i) const { assert(i\
+    \ < _size); return *(cbegin() + i); }\n\n            value_type* data() { return\
+    \ _g->_edges.data() + _offset; }\n            const value_type* data() const {\
+    \ return _g->_edges.data() + _offset; }\n\n            iterator begin() const\
+    \ { return _g->_edges.begin() + _offset; }\n            iterator end() const {\
+    \ return begin() + _size; }\n            const_iterator cbegin() const { return\
+    \ _g->_edges.cbegin() + _offset; }\n            const_iterator cend() const {\
+    \ return cbegin() + _size; }\n            reverse_iterator rbegin() const { return\
+    \ _g->_edges.rbegin() + (_g->_edges.size() - (_offset + _size)); }\n         \
+    \   reverse_iterator rend() const { return rbegin() + _size; }\n            const_reverse_iterator\
+    \ crbegin() const { return _g->_edges.crbegin() + (_g->_edges.size() - (_offset\
+    \ + _size)); }\n            const_reverse_iterator crend() const { return crbegin()\
+    \ + _size; }\n\n            void erase(const_iterator pos) {\n               \
+    \ erase(pos, std::next(pos));\n            }\n            void erase(const_iterator\
+    \ first, const_iterator last) {\n                const int num = last - first,\
+    \ k = first - cbegin();\n                assert(num >= 0);\n                if\
+    \ (num == 0) return;\n                assert(0 <= k and k <= _size - num);\n \
+    \               std::move(begin() + k + num, end(), begin() + k);\n          \
+    \      _size -= num;\n            }\n            void pop_back() {\n         \
+    \       assert(_size);\n                --_size;\n            }\n            void\
+    \ clear() { _size = 0; }\n\n            const value_type& back() const { return\
+    \ *--cend(); }\n            value_type& back() { return *--end(); }\n        \
+    \    const value_type& front() const { return *cbegin(); }\n            value_type&\
+    \ front() { return *begin(); }\n\n            void push_back(const value_type&\
+    \ x) {\n                ++_size;\n                assert(_size <= _cap);\n   \
+    \             back() = x;\n            }\n            template <typename ...Args>\n\
+    \            void emplace_back(Args &&...args) {\n                ++_size;\n \
+    \               assert(_size <= _cap);\n                back() = value_type(std::forward<Args>(args)...);\n\
     \            }\n\n            void insert(const_iterator pos, const value_type&\
     \ x) {\n                emplace(pos, x);\n            }\n            void insert(const_iterator\
     \ pos, int num, const value_type& x) {\n                const int k = pos - cbegin();\n\
-    \                assert(0 <= k and k <= _siz);\n                std::fill(begin()\
+    \                assert(0 <= k and k <= _size);\n                std::fill(begin()\
     \ + k, shift_back(begin() + k, num), x);\n            }\n            template\
     \ <class RandomAccessIterator>\n            auto insert(const_iterator pos, RandomAccessIterator\
     \ first, RandomAccessIterator last) -> decltype(*first++, last - first, void())\
     \ {\n                const int num = last - first, k = pos - cbegin();\n     \
-    \           assert(0 <= k and k <= _siz);\n                shift_back(begin()\
+    \           assert(0 <= k and k <= _size);\n                shift_back(begin()\
     \ + k, num);\n                std::copy(first, last, begin() + k);\n         \
     \   }\n            void insert(const_iterator pos, std::initializer_list<value_type>\
     \ il) { insert(pos, il.begin(), il.end()); }\n            template <typename ...Args>\n\
     \            void emplace(const_iterator pos, Args &&...args) {\n            \
-    \    const int k = pos - cbegin();\n                assert(0 <= k and k <= _siz);\n\
+    \    const int k = pos - cbegin();\n                assert(0 <= k and k <= _size);\n\
     \                *--shift_back(begin() + k) = value_type(std::forward<Args>(args)...);\n\
     \            }\n        private:\n            mutable Graph* _g;\n           \
-    \ int _cap;\n            int _offset;\n            int _siz;\n\n            iterator\
-    \ shift_back(iterator pos, int num = 1) {\n                _siz += num;\n    \
-    \            assert(_siz <= _cap);\n                return std::move_backward(pos,\
+    \ int _cap;\n            int _offset;\n            int _size;\n\n            iterator\
+    \ shift_back(iterator pos, int num = 1) {\n                _size += num;\n   \
+    \             assert(_size <= _cap);\n                return std::move_backward(pos,\
     \ end() - num, end());\n            }\n        };\n    public:\n        using\
     \ adjacent_list = AdjacentList;\n\n        Graph() = default;\n\n        template\
     \ <typename GraphTag, std::enable_if_t<is_graph_tag_v<GraphTag>, std::nullptr_t>\
@@ -105,14 +106,14 @@ data:
     \ GraphTag, std::vector<int> cap = {}) : _n(n), _adj(_n) {\n            static\
     \ constexpr bool undirected = std::is_same_v<undirected_graph_tag, GraphTag>;\n\
     \n            for (const auto& e : edges) {\n                const int u = std::get<0>(e);\n\
-    \                ++_adj[u]._siz;\n                if constexpr (undirected) {\n\
-    \                    const int v = std::get<1>(e);\n                    ++_adj[v]._siz;\n\
+    \                ++_adj[u]._size;\n                if constexpr (undirected) {\n\
+    \                    const int v = std::get<1>(e);\n                    ++_adj[v]._size;\n\
     \                }\n            }\n            if (cap.empty()) cap.resize(_n,\
     \ std::numeric_limits<int>::max());\n            int edge_num = 0;\n         \
     \   for (int i = 0; i < _n; ++i) {\n                _adj[i]._g = this;\n     \
-    \           _adj[i]._cap = std::min(_adj[i]._siz, cap[i]);\n                _adj[i]._offset\
-    \ = edge_num;\n                edge_num += _adj[i]._siz;\n            }\n    \
-    \        _edges.resize(edge_num);\n            std::vector<typename std::vector<edge_type>::iterator>\
+    \           _adj[i]._cap = std::min(_adj[i]._size, cap[i]);\n                _adj[i]._offset\
+    \ = edge_num;\n                edge_num += _adj[i]._size;\n            }\n   \
+    \         _edges.resize(edge_num);\n            std::vector<typename std::vector<edge_type>::iterator>\
     \ ptr(_n);\n            for (int i = 0; i < _n; ++i) ptr[i] = _adj[i].begin();\n\
     \            for (const auto& e : edges) {\n                const int u = std::get<0>(e);\n\
     \                const int v = std::get<1>(e);\n                if constexpr (weighted)\
@@ -137,7 +138,7 @@ data:
     \ = new_edges.begin();\n            for (int i = 0; i < _n; ++i) {\n         \
     \       int nl = it - new_edges.begin();\n                it = std::move(_adj[i].begin(),\
     \ _adj[i].end(), it);\n                _adj[i]._offset = nl;\n               \
-    \ _adj[i]._cap = _adj[i]._siz;\n            }\n            _edges.swap(new_edges);\n\
+    \ _adj[i]._cap = _adj[i]._size;\n            }\n            _edges.swap(new_edges);\n\
     \        }\n\n        static weight_type_or_1 get_weight(const edge_type& edge)\
     \ {\n            if constexpr (weighted) return std::get<1>(edge);\n         \
     \   else return 1;\n        }\n\n        Graph reversed(const std::vector<int>&\
@@ -304,7 +305,7 @@ data:
   isVerificationFile: false
   path: library/graph/cycle_detection.hpp
   requiredBy: []
-  timestamp: '2026-06-01 16:32:36+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/graph/cycle_detection/dummy.test.cpp

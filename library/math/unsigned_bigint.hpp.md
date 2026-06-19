@@ -112,13 +112,13 @@ data:
     \ = nullptr>\n        unsigned_bigint(T v) {\n            if constexpr (std::is_signed_v<T>)\
     \ {\n                assert(v >= 0);\n            }\n            for (; v; v /=\
     \ D) {\n                this->push_back(v % D);\n            }\n        }\n  \
-    \      unsigned_bigint(const std::string& s) : vector() {\n            int siz\
-    \ = s.size();\n            for (int i = siz; i > 0; i -= LogD) {\n           \
-    \     int l = std::max(0, i - LogD);\n                int r = i;\n           \
-    \     int& v = this->emplace_back();\n                for (int j = l; j < r; ++j)\
-    \ {\n                    int d = s[j] - '0';\n                    assert(0 <=\
-    \ d and d <= 9);\n                    v = v * 10 + d;\n                }\n   \
-    \         }\n        }\n        unsigned_bigint(const char* s) : unsigned_bigint(std::string(s))\
+    \      unsigned_bigint(const std::string& s) : vector() {\n            int size\
+    \ = s.size();\n            for (int i = size; i > 0; i -= LogD) {\n          \
+    \      int l = std::max(0, i - LogD);\n                int r = i;\n          \
+    \      int& v = this->emplace_back();\n                for (int j = l; j < r;\
+    \ ++j) {\n                    int d = s[j] - '0';\n                    assert(0\
+    \ <= d and d <= 9);\n                    v = v * 10 + d;\n                }\n\
+    \            }\n        }\n        unsigned_bigint(const char* s) : unsigned_bigint(std::string(s))\
     \ {}\n\n        operator bool() const {\n            return not this->empty();\n\
     \        }\n\n        friend bool operator==(const unsigned_bigint& a, const unsigned_bigint&\
     \ b) {\n            if (a.size() != b.size()) {\n                return false;\n\
@@ -337,14 +337,14 @@ data:
     \ (std::is_signed_v<T>) {\n                assert(v >= 0);\n            }\n  \
     \          for (; v; v /= D) {\n                this->push_back(v % D);\n    \
     \        }\n        }\n        unsigned_bigint(const std::string& s) : vector()\
-    \ {\n            int siz = s.size();\n            for (int i = siz; i > 0; i -=\
-    \ LogD) {\n                int l = std::max(0, i - LogD);\n                int\
-    \ r = i;\n                int& v = this->emplace_back();\n                for\
-    \ (int j = l; j < r; ++j) {\n                    int d = s[j] - '0';\n       \
-    \             assert(0 <= d and d <= 9);\n                    v = v * 10 + d;\n\
-    \                }\n            }\n        }\n        unsigned_bigint(const char*\
-    \ s) : unsigned_bigint(std::string(s)) {}\n\n        operator bool() const {\n\
-    \            return not this->empty();\n        }\n\n        friend bool operator==(const\
+    \ {\n            int size = s.size();\n            for (int i = size; i > 0; i\
+    \ -= LogD) {\n                int l = std::max(0, i - LogD);\n               \
+    \ int r = i;\n                int& v = this->emplace_back();\n               \
+    \ for (int j = l; j < r; ++j) {\n                    int d = s[j] - '0';\n   \
+    \                 assert(0 <= d and d <= 9);\n                    v = v * 10 +\
+    \ d;\n                }\n            }\n        }\n        unsigned_bigint(const\
+    \ char* s) : unsigned_bigint(std::string(s)) {}\n\n        operator bool() const\
+    \ {\n            return not this->empty();\n        }\n\n        friend bool operator==(const\
     \ unsigned_bigint& a, const unsigned_bigint& b) {\n            if (a.size() !=\
     \ b.size()) {\n                return false;\n            }\n            for (size_t\
     \ i = 0; i < a.size(); ++i) {\n                if (a[i] != b[i]) return false;\n\
@@ -556,7 +556,7 @@ data:
   path: library/math/unsigned_bigint.hpp
   requiredBy:
   - library/math/bigint.hpp
-  timestamp: '2024-01-30 21:01:49+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/math/bigint/NTL_2_F.test.cpp

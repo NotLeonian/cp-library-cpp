@@ -79,7 +79,7 @@ data:
     \ <typename T> static constexpr bool is_readable_v = is_readable<T>::value;\n\
     } // namespace suisen\n\n#line 11 \"library/polynomial/fps_naive.hpp\"\n\n#line\
     \ 1 \"library/math/modint_extension.hpp\"\n\n\n\n#line 5 \"library/math/modint_extension.hpp\"\
-    \n#include <optional>\n\n/**\n * refernce: https://37zigen.com/tonelli-shanks-algorithm/\n\
+    \n#include <optional>\n\n/**\n * reference: https://37zigen.com/tonelli-shanks-algorithm/\n\
     \ * calculates x s.t. x^2 = a mod p in O((log p)^2).\n */\ntemplate <typename\
     \ mint>\nstd::optional<mint> safe_sqrt(mint a) {\n    static int p = mint::mod();\n\
     \    if (a == 0) return std::make_optional(0);\n    if (p == 2) return std::make_optional(a);\n\
@@ -408,128 +408,128 @@ data:
     \ v);\n            if (int(res.size()) > max_size) return std::nullopt;\n    \
     \        return res;\n        }\n\n    protected:\n        static convolution_t<mint>\
     \ mult;\n\n        static FPS div_fps_sparse(const FPS& f, const std::vector<std::pair<int,\
-    \ value_type>>& g, int n) {\n            const int siz = g.size();\n         \
-    \   assert(siz and g[0].first == 0);\n            const value_type inv_g0 = g[0].second.inv();\n\
-    \            FPS h(n);\n            for (int i = 0; i < n; ++i) {\n          \
-    \      value_type v = f.safe_get(i);\n                for (int idx = 1; idx <\
-    \ siz; ++idx) {\n                    const auto& [j, gj] = g[idx];\n         \
-    \           if (j > i) break;\n                    v -= gj * h[i - j];\n     \
-    \           }\n                h[i] = v * inv_g0;\n            }\n           \
-    \ return h;\n        }\n        static FPS inv_sparse(const std::vector<std::pair<int,\
+    \ value_type>>& g, int n) {\n            const int size = g.size();\n        \
+    \    assert(size and g[0].first == 0);\n            const value_type inv_g0 =\
+    \ g[0].second.inv();\n            FPS h(n);\n            for (int i = 0; i < n;\
+    \ ++i) {\n                value_type v = f.safe_get(i);\n                for (int\
+    \ idx = 1; idx < size; ++idx) {\n                    const auto& [j, gj] = g[idx];\n\
+    \                    if (j > i) break;\n                    v -= gj * h[i - j];\n\
+    \                }\n                h[i] = v * inv_g0;\n            }\n      \
+    \      return h;\n        }\n        static FPS inv_sparse(const std::vector<std::pair<int,\
     \ value_type>>& g, const int n) {\n            return div_fps_sparse(FPS{ 1 },\
     \ g, n);\n        }\n        static FPS exp_sparse(const std::vector<std::pair<int,\
-    \ value_type>>& f, const int n) {\n            const int siz = f.size();\n   \
-    \         assert(not siz or f[0].first != 0);\n            FPS g(n);\n       \
-    \     g[0] = 1;\n            inv_mods<value_type> invs(n);\n            for (int\
-    \ i = 1; i < n; ++i) {\n                value_type v = 0;\n                for\
-    \ (const auto& [j, fj] : f) {\n                    if (j > i) break;\n       \
-    \             v += j * fj * g[i - j];\n                }\n                v *=\
-    \ invs[i];\n                g[i] = v;\n            }\n            return g;\n\
-    \        }\n        static FPS log_sparse(const std::vector<std::pair<int, value_type>>&\
-    \ f, const int n) {\n            const int siz = f.size();\n            assert(siz\
-    \ and f[0].first == 0 and f[0].second == 1);\n            FPS g(n);\n        \
-    \    for (int idx = 1; idx < siz; ++idx) {\n                const auto& [j, fj]\
-    \ = f[idx];\n                if (j >= n) break;\n                g[j] = j * fj;\n\
-    \            }\n            inv_mods<value_type> invs(n);\n            for (int\
-    \ i = 1; i < n; ++i) {\n                value_type v = g[i];\n               \
-    \ for (int idx = 1; idx < siz; ++idx) {\n                    const auto& [j, fj]\
-    \ = f[idx];\n                    if (j > i) break;\n                    v -= fj\
-    \ * g[i - j] * (i - j);\n                }\n                v *= invs[i];\n  \
-    \              g[i] = v;\n            }\n            return g;\n        }\n  \
-    \      static FPS pow_sparse(const std::vector<std::pair<int, value_type>>& f,\
-    \ const long long k, const int n) {\n            if (k == 0) {\n             \
-    \   FPS res(n, 0);\n                res[0] = 1;\n                return res;\n\
-    \            }\n            const int siz = f.size();\n            if (not siz)\
+    \ value_type>>& f, const int n) {\n            const int size = f.size();\n  \
+    \          assert(not size or f[0].first != 0);\n            FPS g(n);\n     \
+    \       g[0] = 1;\n            inv_mods<value_type> invs(n);\n            for\
+    \ (int i = 1; i < n; ++i) {\n                value_type v = 0;\n             \
+    \   for (const auto& [j, fj] : f) {\n                    if (j > i) break;\n \
+    \                   v += j * fj * g[i - j];\n                }\n             \
+    \   v *= invs[i];\n                g[i] = v;\n            }\n            return\
+    \ g;\n        }\n        static FPS log_sparse(const std::vector<std::pair<int,\
+    \ value_type>>& f, const int n) {\n            const int size = f.size();\n  \
+    \          assert(size and f[0].first == 0 and f[0].second == 1);\n          \
+    \  FPS g(n);\n            for (int idx = 1; idx < size; ++idx) {\n           \
+    \     const auto& [j, fj] = f[idx];\n                if (j >= n) break;\n    \
+    \            g[j] = j * fj;\n            }\n            inv_mods<value_type> invs(n);\n\
+    \            for (int i = 1; i < n; ++i) {\n                value_type v = g[i];\n\
+    \                for (int idx = 1; idx < size; ++idx) {\n                    const\
+    \ auto& [j, fj] = f[idx];\n                    if (j > i) break;\n           \
+    \         v -= fj * g[i - j] * (i - j);\n                }\n                v\
+    \ *= invs[i];\n                g[i] = v;\n            }\n            return g;\n\
+    \        }\n        static FPS pow_sparse(const std::vector<std::pair<int, value_type>>&\
+    \ f, const long long k, const int n) {\n            if (k == 0) {\n          \
+    \      FPS res(n, 0);\n                res[0] = 1;\n                return res;\n\
+    \            }\n            const int size = f.size();\n            if (not size)\
     \ return FPS(n, 0);\n            const int p = f[0].first;\n            if (p\
     \ > (n - 1) / k) return FPS(n, 0);\n            const value_type inv_f0 = f[0].second.inv();\n\
     \            const int lz = p * k;\n            FPS g(n);\n            g[lz] =\
     \ f[0].second.pow(k);\n            inv_mods<value_type> invs(n);\n           \
     \ for (int i = 1; lz + i < n; ++i) {\n                value_type v = 0;\n    \
-    \            for (int idx = 1; idx < siz; ++idx) {\n                    auto [j,\
-    \ fj] = f[idx];\n                    j -= p;\n                    if (j > i) break;\n\
-    \                    v += fj * g[lz + i - j] * (value_type(k) * j - (i - j));\n\
-    \                }\n                v *= invs[i] * inv_f0;\n                g[lz\
-    \ + i] = v;\n            }\n            return g;\n        }\n        static std::optional<FPS>\
-    \ safe_sqrt_sparse(const std::vector<std::pair<int, value_type>>& f, const int\
-    \ n) {\n            const int siz = f.size();\n            if (not siz) return\
-    \ FPS(n, 0);\n            const int p = f[0].first;\n            if (p % 2 ==\
-    \ 1) return std::nullopt;\n            if (p / 2 >= n) return FPS(n, 0);\n   \
-    \         const value_type inv_f0 = f[0].second.inv();\n            const int\
-    \ lz = p / 2;\n            FPS g(n);\n            auto opt_g0 = ::safe_sqrt(f[0].second);\n\
-    \            if (not opt_g0.has_value()) return std::nullopt;\n            g[lz]\
-    \ = *opt_g0;\n            value_type k = mint(2).inv();\n            inv_mods<value_type>\
-    \ invs(n);\n            for (int i = 1; lz + i < n; ++i) {\n                value_type\
-    \ v = 0;\n                for (int idx = 1; idx < siz; ++idx) {\n            \
-    \        auto [j, fj] = f[idx];\n                    j -= p;\n               \
-    \     if (j > i) break;\n                    v += fj * g[lz + i - j] * (k * j\
+    \            for (int idx = 1; idx < size; ++idx) {\n                    auto\
+    \ [j, fj] = f[idx];\n                    j -= p;\n                    if (j >\
+    \ i) break;\n                    v += fj * g[lz + i - j] * (value_type(k) * j\
     \ - (i - j));\n                }\n                v *= invs[i] * inv_f0;\n   \
     \             g[lz + i] = v;\n            }\n            return g;\n        }\n\
-    \        static FPS sqrt_sparse(const std::vector<std::pair<int, value_type>>&\
-    \ f, const int n) {\n            return *safe_sqrt(f, n);\n        }\n    };\n\
-    \n    template <typename mint>\n    convolution_t<mint> FPS<mint>::mult = [](const\
-    \ auto&, const auto&) {\n        std::cerr << \"convolution function is not available.\"\
-    \ << std::endl;\n        assert(false);\n        return std::vector<mint>{};\n\
-    \    };\n\n} // namespace suisen\n\ntemplate <typename mint>\nsuisen::FPS<mint>\
-    \ sqrt(suisen::FPS<mint> a) {\n    return a.sqrt();\n}\ntemplate <typename mint>\n\
-    suisen::FPS<mint> log(suisen::FPS<mint> a) {\n    return a.log();\n}\ntemplate\
-    \ <typename mint>\nsuisen::FPS<mint> exp(suisen::FPS<mint> a) {\n    return a.exp();\n\
-    }\ntemplate <typename mint, typename T>\nsuisen::FPS<mint> pow(suisen::FPS<mint>\
-    \ a, T b) {\n    return a.pow(b);\n}\ntemplate <typename mint>\nsuisen::FPS<mint>\
-    \ inv(suisen::FPS<mint> a) {\n    return a.inv();\n}\n\n\n#line 1 \"library/polynomial/polynomial_taylor_shift.hpp\"\
-    \n\n\n\n#line 5 \"library/polynomial/polynomial_taylor_shift.hpp\"\n\n#line 1\
-    \ \"library/math/factorial.hpp\"\n\n\n\n#line 6 \"library/math/factorial.hpp\"\
-    \n\nnamespace suisen {\n    template <typename T, typename U = T>\n    struct\
-    \ factorial {\n        factorial() = default;\n        factorial(int n) { ensure(n);\
-    \ }\n\n        static void ensure(const int n) {\n            int sz = _fac.size();\n\
-    \            if (n + 1 <= sz) return;\n            int new_size = std::max(n +\
-    \ 1, sz * 2);\n            _fac.resize(new_size), _fac_inv.resize(new_size);\n\
-    \            for (int i = sz; i < new_size; ++i) _fac[i] = _fac[i - 1] * i;\n\
-    \            _fac_inv[new_size - 1] = U(1) / _fac[new_size - 1];\n           \
-    \ for (int i = new_size - 1; i > sz; --i) _fac_inv[i - 1] = _fac_inv[i] * i;\n\
-    \        }\n\n        T fac(const int i) {\n            ensure(i);\n         \
-    \   return _fac[i];\n        }\n        T operator()(int i) {\n            return\
-    \ fac(i);\n        }\n        U fac_inv(const int i) {\n            ensure(i);\n\
-    \            return _fac_inv[i];\n        }\n        U binom(const int n, const\
-    \ int r) {\n            if (n < 0 or r < 0 or n < r) return 0;\n            ensure(n);\n\
-    \            return _fac[n] * _fac_inv[r] * _fac_inv[n - r];\n        }\n    \
-    \    // binom(n, r) \u306E\u9006\u6570\n        // binom(n, r) = 0 \u306E\u5834\
-    \u5408\u306F assert \u9055\u53CD\u3068\u306A\u308B\n        U binom_inv(const\
-    \ int n, const int r) {\n            assert(r >= 0 and n >= r);\n            ensure(n);\n\
-    \            return _fac_inv[n] * _fac[r] * _fac[n - r];\n        }\n        //\
-    \ n \u7A2E\u985E\u304B\u3089\u91CD\u8907\u3092\u8A31\u3057\u3066 r \u500B\u9078\
-    \u3076\u5834\u5408\u306E\u6570\n        // x_1+x_2+...+x_n=r\uFF08x_i \u306F\u975E\
-    \u8CA0\u6574\u6570\uFF09\u3068\u306A\u308B x \u306E\u500B\u6570\u3067\u3082\u3042\
-    \u308B\n        // multichoose(n, r) = binom(n + r - 1, r)\n        U multichoose(const\
-    \ int n, const int r) {\n            if (n < 0 or r < 0) return 0;\n         \
-    \   return r > 0 ? binom(n + r - 1, r) : U(1);\n        }\n        // n \u7A2E\
-    \u985E\u304B\u3089\u91CD\u8907\u3092\u8A31\u3057\u3066 r \u500B\u9078\u3076\u5834\
-    \u5408\u306E\u6570 multichoose(n, r) \u306E\u9006\u6570\n        // x_1+x_2+...+x_n=r\uFF08\
-    x_i \u306F\u975E\u8CA0\u6574\u6570\uFF09\u3068\u306A\u308B x \u306E\u500B\u6570\
-    \u306E\u9006\u6570\u3067\u3082\u3042\u308B\n        // multichoose(n, r) = binom(n\
-    \ + r - 1, r)\n        // multichoose(n, r) = 0 \u306E\u5834\u5408\u306F assert\
-    \ \u9055\u53CD\u3068\u306A\u308B\n        U multichoose_inv(const int n, const\
-    \ int r) {\n            assert(n >= 0 and r >= 0);\n            return r > 0 ?\
-    \ binom_inv(n + r - 1, r) : U(1);\n        }\n        template <typename ...Ds,\
-    \ std::enable_if_t<std::conjunction_v<std::is_integral<Ds>...>, std::nullptr_t>\
-    \ = nullptr>\n        U polynom(const int n, const Ds& ...ds) {\n            if\
-    \ (n < 0) return 0;\n            ensure(n);\n            int sumd = 0;\n     \
-    \       U res = _fac[n];\n            for (int d : { ds... }) {\n            \
-    \    if (d < 0 or d > n) return 0;\n                sumd += d;\n             \
-    \   res *= _fac_inv[d];\n            }\n            if (sumd > n) return 0;\n\
-    \            res *= _fac_inv[n - sumd];\n            return res;\n        }\n\
-    \        U perm(const int n, const int r) {\n            if (n < 0 or r < 0 or\
-    \ n < r) return 0;\n            ensure(n);\n            return _fac[n] * _fac_inv[n\
-    \ - r];\n        }\n        // perm(n, r) \u306E\u9006\u6570\n        // perm(n,\
+    \        static std::optional<FPS> safe_sqrt_sparse(const std::vector<std::pair<int,\
+    \ value_type>>& f, const int n) {\n            const int size = f.size();\n  \
+    \          if (not size) return FPS(n, 0);\n            const int p = f[0].first;\n\
+    \            if (p % 2 == 1) return std::nullopt;\n            if (p / 2 >= n)\
+    \ return FPS(n, 0);\n            const value_type inv_f0 = f[0].second.inv();\n\
+    \            const int lz = p / 2;\n            FPS g(n);\n            auto opt_g0\
+    \ = ::safe_sqrt(f[0].second);\n            if (not opt_g0.has_value()) return\
+    \ std::nullopt;\n            g[lz] = *opt_g0;\n            value_type k = mint(2).inv();\n\
+    \            inv_mods<value_type> invs(n);\n            for (int i = 1; lz + i\
+    \ < n; ++i) {\n                value_type v = 0;\n                for (int idx\
+    \ = 1; idx < size; ++idx) {\n                    auto [j, fj] = f[idx];\n    \
+    \                j -= p;\n                    if (j > i) break;\n            \
+    \        v += fj * g[lz + i - j] * (k * j - (i - j));\n                }\n   \
+    \             v *= invs[i] * inv_f0;\n                g[lz + i] = v;\n       \
+    \     }\n            return g;\n        }\n        static FPS sqrt_sparse(const\
+    \ std::vector<std::pair<int, value_type>>& f, const int n) {\n            return\
+    \ *safe_sqrt(f, n);\n        }\n    };\n\n    template <typename mint>\n    convolution_t<mint>\
+    \ FPS<mint>::mult = [](const auto&, const auto&) {\n        std::cerr << \"convolution\
+    \ function is not available.\" << std::endl;\n        assert(false);\n       \
+    \ return std::vector<mint>{};\n    };\n\n} // namespace suisen\n\ntemplate <typename\
+    \ mint>\nsuisen::FPS<mint> sqrt(suisen::FPS<mint> a) {\n    return a.sqrt();\n\
+    }\ntemplate <typename mint>\nsuisen::FPS<mint> log(suisen::FPS<mint> a) {\n  \
+    \  return a.log();\n}\ntemplate <typename mint>\nsuisen::FPS<mint> exp(suisen::FPS<mint>\
+    \ a) {\n    return a.exp();\n}\ntemplate <typename mint, typename T>\nsuisen::FPS<mint>\
+    \ pow(suisen::FPS<mint> a, T b) {\n    return a.pow(b);\n}\ntemplate <typename\
+    \ mint>\nsuisen::FPS<mint> inv(suisen::FPS<mint> a) {\n    return a.inv();\n}\n\
+    \n\n#line 1 \"library/polynomial/polynomial_taylor_shift.hpp\"\n\n\n\n#line 5\
+    \ \"library/polynomial/polynomial_taylor_shift.hpp\"\n\n#line 1 \"library/math/factorial.hpp\"\
+    \n\n\n\n#line 6 \"library/math/factorial.hpp\"\n\nnamespace suisen {\n    template\
+    \ <typename T, typename U = T>\n    struct factorial {\n        factorial() =\
+    \ default;\n        factorial(int n) { ensure(n); }\n\n        static void ensure(const\
+    \ int n) {\n            int sz = _fac.size();\n            if (n + 1 <= sz) return;\n\
+    \            int new_size = std::max(n + 1, sz * 2);\n            _fac.resize(new_size),\
+    \ _fac_inv.resize(new_size);\n            for (int i = sz; i < new_size; ++i)\
+    \ _fac[i] = _fac[i - 1] * i;\n            _fac_inv[new_size - 1] = U(1) / _fac[new_size\
+    \ - 1];\n            for (int i = new_size - 1; i > sz; --i) _fac_inv[i - 1] =\
+    \ _fac_inv[i] * i;\n        }\n\n        T fac(const int i) {\n            ensure(i);\n\
+    \            return _fac[i];\n        }\n        T operator()(int i) {\n     \
+    \       return fac(i);\n        }\n        U fac_inv(const int i) {\n        \
+    \    ensure(i);\n            return _fac_inv[i];\n        }\n        U binom(const\
+    \ int n, const int r) {\n            if (n < 0 or r < 0 or n < r) return 0;\n\
+    \            ensure(n);\n            return _fac[n] * _fac_inv[r] * _fac_inv[n\
+    \ - r];\n        }\n        // binom(n, r) \u306E\u9006\u6570\n        // binom(n,\
     \ r) = 0 \u306E\u5834\u5408\u306F assert \u9055\u53CD\u3068\u306A\u308B\n    \
-    \    U perm_inv(const int n, const int r) {\n            assert(r >= 0 and n >=\
-    \ r);\n            ensure(n);\n            return _fac_inv[n] * _fac[n - r];\n\
-    \        }\n    private:\n        static std::vector<T> _fac;\n        static\
-    \ std::vector<U> _fac_inv;\n    };\n    template <typename T, typename U>\n  \
-    \  std::vector<T> factorial<T, U>::_fac{ 1 };\n    template <typename T, typename\
-    \ U>\n    std::vector<U> factorial<T, U>::_fac_inv{ 1 };\n} // namespace suisen\n\
-    \n\n#line 7 \"library/polynomial/polynomial_taylor_shift.hpp\"\n\nnamespace suisen\
-    \ {\n    // return f(x + c) \n    template <typename FPSType, typename T>\n  \
-    \  FPSType translate(const FPSType& f, const T c) {\n        int d = f.deg();\n\
+    \    U binom_inv(const int n, const int r) {\n            assert(r >= 0 and n\
+    \ >= r);\n            ensure(n);\n            return _fac_inv[n] * _fac[r] * _fac[n\
+    \ - r];\n        }\n        // n \u7A2E\u985E\u304B\u3089\u91CD\u8907\u3092\u8A31\
+    \u3057\u3066 r \u500B\u9078\u3076\u5834\u5408\u306E\u6570\n        // x_1+x_2+...+x_n=r\uFF08\
+    x_i \u306F\u975E\u8CA0\u6574\u6570\uFF09\u3068\u306A\u308B x \u306E\u500B\u6570\
+    \u3067\u3082\u3042\u308B\n        // multichoose(n, r) = binom(n + r - 1, r)\n\
+    \        U multichoose(const int n, const int r) {\n            if (n < 0 or r\
+    \ < 0) return 0;\n            return r > 0 ? binom(n + r - 1, r) : U(1);\n   \
+    \     }\n        // n \u7A2E\u985E\u304B\u3089\u91CD\u8907\u3092\u8A31\u3057\u3066\
+    \ r \u500B\u9078\u3076\u5834\u5408\u306E\u6570 multichoose(n, r) \u306E\u9006\u6570\
+    \n        // x_1+x_2+...+x_n=r\uFF08x_i \u306F\u975E\u8CA0\u6574\u6570\uFF09\u3068\
+    \u306A\u308B x \u306E\u500B\u6570\u306E\u9006\u6570\u3067\u3082\u3042\u308B\n\
+    \        // multichoose(n, r) = binom(n + r - 1, r)\n        // multichoose(n,\
+    \ r) = 0 \u306E\u5834\u5408\u306F assert \u9055\u53CD\u3068\u306A\u308B\n    \
+    \    U multichoose_inv(const int n, const int r) {\n            assert(n >= 0\
+    \ and r >= 0);\n            return r > 0 ? binom_inv(n + r - 1, r) : U(1);\n \
+    \       }\n        template <typename ...Ds, std::enable_if_t<std::conjunction_v<std::is_integral<Ds>...>,\
+    \ std::nullptr_t> = nullptr>\n        U polynom(const int n, const Ds& ...ds)\
+    \ {\n            if (n < 0) return 0;\n            ensure(n);\n            int\
+    \ sumd = 0;\n            U res = _fac[n];\n            for (int d : { ds... })\
+    \ {\n                if (d < 0 or d > n) return 0;\n                sumd += d;\n\
+    \                res *= _fac_inv[d];\n            }\n            if (sumd > n)\
+    \ return 0;\n            res *= _fac_inv[n - sumd];\n            return res;\n\
+    \        }\n        U perm(const int n, const int r) {\n            if (n < 0\
+    \ or r < 0 or n < r) return 0;\n            ensure(n);\n            return _fac[n]\
+    \ * _fac_inv[n - r];\n        }\n        // perm(n, r) \u306E\u9006\u6570\n  \
+    \      // perm(n, r) = 0 \u306E\u5834\u5408\u306F assert \u9055\u53CD\u3068\u306A\
+    \u308B\n        U perm_inv(const int n, const int r) {\n            assert(r >=\
+    \ 0 and n >= r);\n            ensure(n);\n            return _fac_inv[n] * _fac[n\
+    \ - r];\n        }\n    private:\n        static std::vector<T> _fac;\n      \
+    \  static std::vector<U> _fac_inv;\n    };\n    template <typename T, typename\
+    \ U>\n    std::vector<T> factorial<T, U>::_fac{ 1 };\n    template <typename T,\
+    \ typename U>\n    std::vector<U> factorial<T, U>::_fac_inv{ 1 };\n} // namespace\
+    \ suisen\n\n\n#line 7 \"library/polynomial/polynomial_taylor_shift.hpp\"\n\nnamespace\
+    \ suisen {\n    // return f(x + c) \n    template <typename FPSType, typename\
+    \ T>\n    FPSType translate(const FPSType& f, const T c) {\n        int d = f.deg();\n\
     \        if (d < 0) return FPSType{ 0 };\n        using mint = typename FPSType::value_type;\n\
     \        factorial<mint> fac(d);\n        FPSType expc(d + 1), g(d + 1);\n   \
     \     mint p = 1;\n        for (int i = 0; i <= d; ++i, p *= c) {\n          \
@@ -566,7 +566,7 @@ data:
   isVerificationFile: true
   path: test/src/polynomial/polynomial_taylor_shift/polynomial_taylor_shift.test.cpp
   requiredBy: []
-  timestamp: '2026-06-14 12:42:12+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/polynomial/polynomial_taylor_shift/polynomial_taylor_shift.test.cpp

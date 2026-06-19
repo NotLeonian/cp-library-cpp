@@ -60,20 +60,20 @@ data:
     \ default: assert(false);\n    }\n}\n} // namespace suisen::internal::sieve\n\n\
     \n#line 9 \"library/number/sieve_of_eratosthenes.hpp\"\n\nnamespace suisen {\n\
     \ntemplate <unsigned int N>\nclass SimpleSieve {\n    private:\n        static\
-    \ constexpr unsigned int siz = N / internal::sieve::PROD + 1;\n        static\
-    \ std::uint8_t flag[siz];\n    public:\n        SimpleSieve() {\n            using\
-    \ namespace internal::sieve;\n            flag[0] |= 1;\n            unsigned\
+    \ constexpr unsigned int size = N / internal::sieve::PROD + 1;\n        static\
+    \ std::uint8_t flag[size];\n    public:\n        SimpleSieve() {\n           \
+    \ using namespace internal::sieve;\n            flag[0] |= 1;\n            unsigned\
     \ int k_max = (unsigned int) std::sqrt(N + 2) / PROD;\n            for (unsigned\
     \ int kp = 0; kp <= k_max; ++kp) {\n                for (std::uint8_t bits = ~flag[kp];\
     \ bits; bits &= bits - 1) {\n                    const std::uint8_t mp = mask_to_index(bits\
     \ & -bits), m = RM[mp];\n                    unsigned int kr = kp * (PROD * kp\
     \ + 2 * m) + m * m / PROD;\n                    for (std::uint8_t mq = mp; kr\
-    \ < siz; kr += kp * DR[mq] + DF[mp][mq], ++mq &= 7) {\n                      \
-    \  flag[kr] |= MASK[mp][mq];\n                    }\n                }\n     \
-    \       }\n        }\n        std::vector<int> prime_list(unsigned int max_val\
+    \ < size; kr += kp * DR[mq] + DF[mp][mq], ++mq &= 7) {\n                     \
+    \   flag[kr] |= MASK[mp][mq];\n                    }\n                }\n    \
+    \        }\n        }\n        std::vector<int> prime_list(unsigned int max_val\
     \ = N) const {\n            using namespace internal::sieve;\n            std::vector<int>\
     \ res { 2, 3, 5 };\n            res.reserve(max_val / 25);\n            for (unsigned\
-    \ int i = 0, offset = 0; i < siz and offset < max_val; ++i, offset += PROD) {\n\
+    \ int i = 0, offset = 0; i < size and offset < max_val; ++i, offset += PROD) {\n\
     \                for (uint8_t f = ~flag[i]; f;) {\n                    uint8_t\
     \ g = f & -f;\n                    res.push_back(offset + RM[mask_to_index(g)]);\n\
     \                    f ^= g;\n                }\n            }\n            while\
@@ -91,7 +91,7 @@ data:
     \ return ((flag[p / PROD] >> 6) & 1) == 0;\n                        case RM[7]:\
     \ return ((flag[p / PROD] >> 7) & 1) == 0;\n                        default: return\
     \ false;\n                    }\n            }\n        }\n};\ntemplate <unsigned\
-    \ int N>\nstd::uint8_t SimpleSieve<N>::flag[SimpleSieve<N>::siz];\n\ntemplate\
+    \ int N>\nstd::uint8_t SimpleSieve<N>::flag[SimpleSieve<N>::size];\n\ntemplate\
     \ <unsigned int N>\nclass Sieve {\n    private:\n        static constexpr unsigned\
     \ int base_max = (N + 1) * internal::sieve::K / internal::sieve::PROD;\n     \
     \   static unsigned int pf[base_max + internal::sieve::K];\n\n    public:\n  \
@@ -207,28 +207,29 @@ data:
     \        template <typename U>\n        using container_type = std::conditional_t<auto_extend,\
     \ std::deque<U>, std::vector<U>>;\n\n        container_type<value_type> pool;\n\
     \        container_type<value_pointer_type> stock;\n        decltype(stock.begin())\
-    \ it;\n\n        ObjectPool() : ObjectPool(0) {}\n        ObjectPool(int siz)\
-    \ : pool(siz), stock(siz) {\n            clear();\n        }\n\n        int capacity()\
-    \ const { return pool.size(); }\n        int size() const { return it - stock.begin();\
-    \ }\n\n        value_pointer_type alloc() {\n            if constexpr (auto_extend)\
-    \ ensure();\n            return *it++;\n        }\n\n        void free(value_pointer_type\
-    \ t) {\n            *--it = t;\n        }\n\n        void clear() {\n        \
-    \    int siz = pool.size();\n            it = stock.begin();\n            for\
-    \ (int i = 0; i < siz; i++) stock[i] = &pool[i];\n        }\n\n        void ensure()\
-    \ {\n            if (it != stock.end()) return;\n            int siz = stock.size();\n\
-    \            for (int i = siz; i <= siz * 2; ++i) {\n                stock.push_back(&pool.emplace_back());\n\
-    \            }\n            it = stock.begin() + siz;\n        }\n    };\n} //\
-    \ namespace suisen\n\n\n#line 10 \"library/datastructure/bbst/red_black_tree_base.hpp\"\
-    \n\nnamespace suisen::bbst::internal {\n    template <typename T, typename Derived>\n\
+    \ it;\n\n        ObjectPool() : ObjectPool(0) {}\n        ObjectPool(int size)\
+    \ : pool(size), stock(size) {\n            clear();\n        }\n\n        int\
+    \ capacity() const { return pool.size(); }\n        int size() const { return\
+    \ it - stock.begin(); }\n\n        value_pointer_type alloc() {\n            if\
+    \ constexpr (auto_extend) ensure();\n            return *it++;\n        }\n\n\
+    \        void free(value_pointer_type t) {\n            *--it = t;\n        }\n\
+    \n        void clear() {\n            int size = pool.size();\n            it\
+    \ = stock.begin();\n            for (int i = 0; i < size; i++) stock[i] = &pool[i];\n\
+    \        }\n\n        void ensure() {\n            if (it != stock.end()) return;\n\
+    \            int size = stock.size();\n            for (int i = size; i <= size\
+    \ * 2; ++i) {\n                stock.push_back(&pool.emplace_back());\n      \
+    \      }\n            it = stock.begin() + size;\n        }\n    };\n} // namespace\
+    \ suisen\n\n\n#line 10 \"library/datastructure/bbst/red_black_tree_base.hpp\"\n\
+    \nnamespace suisen::bbst::internal {\n    template <typename T, typename Derived>\n\
     \    struct RedBlackTreeNodeBase {\n        enum RedBlackTreeNodeColor { RED,\
     \ BLACK };\n\n        using base_type = void;\n        using size_type = int;\n\
     \n        using value_type = T;\n\n        using node_type = Derived;\n      \
     \  using tree_type = node_type*;\n\n        using color_type = RedBlackTreeNodeColor;\n\
     \n        RedBlackTreeNodeBase() = default;\n\n        static inline ObjectPool<node_type>\
-    \ pool{};\n\n        static void init_pool(int siz) { pool = ObjectPool<node_type>(siz);\
+    \ pool{};\n\n        static void init_pool(int size) { pool = ObjectPool<node_type>(size);\
     \ }\n        static int node_num() { return pool.size(); }\n\n        static tree_type\
     \ empty_tree() { return nullptr; }\n\n        static size_type size(tree_type\
-    \ node) { return node ? node->_siz : 0; }\n        static bool empty(tree_type\
+    \ node) { return node ? node->_size : 0; }\n        static bool empty(tree_type\
     \ node) { return not node; }\n\n        template <bool force_black_root = true>\n\
     \        static tree_type merge(tree_type l, tree_type r) {\n            if (not\
     \ l) return r;\n            if (not r) return l;\n\n            tree_type res\
@@ -299,11 +300,11 @@ data:
     \            };\n            dfs(dfs, node);\n        }\n\n        template <typename\
     \ ToStr>\n        static std::string to_string(tree_type node, ToStr f) {\n  \
     \          std::vector<value_type> dat;\n            node_type::dump(node, std::back_inserter(dat));\n\
-    \            std::ostringstream res;\n            int siz = dat.size();\n    \
-    \        res << '[';\n            for (int i = 0; i < siz; ++i) {\n          \
-    \      res << f(dat[i]);\n                if (i != siz - 1) res << \", \";\n \
-    \           }\n            res << ']';\n            return res.str();\n      \
-    \  }\n        static std::string to_string(tree_type node) {\n            return\
+    \            std::ostringstream res;\n            int size = dat.size();\n   \
+    \         res << '[';\n            for (int i = 0; i < size; ++i) {\n        \
+    \        res << f(dat[i]);\n                if (i != size - 1) res << \", \";\n\
+    \            }\n            res << ']';\n            return res.str();\n     \
+    \   }\n        static std::string to_string(tree_type node) {\n            return\
     \ to_string(node, [](const auto &e) { return e; });\n        }\n\n        static\
     \ void check_rbtree_properties(tree_type node) {\n            assert(color(node)\
     \ == BLACK);\n            auto dfs = [&](auto dfs, tree_type cur) -> int {\n \
@@ -314,16 +315,16 @@ data:
     \                assert(bl == br);\n                return bl + (cur->_col ==\
     \ BLACK);\n            };\n            dfs(dfs, node);\n        }\n\n    protected:\n\
     \        color_type _col;\n        tree_type _ch[2]{ nullptr, nullptr };\n   \
-    \     value_type _val;\n        size_type _siz, _lev;\n\n        RedBlackTreeNodeBase(const\
-    \ value_type& val) : _col(BLACK), _val(val), _siz(1), _lev(0) {}\n        RedBlackTreeNodeBase(tree_type\
-    \ l, tree_type r) : _col(RED), _ch{ l, r }, _siz(l->_siz + r->_siz), _lev(l->_lev\
+    \     value_type _val;\n        size_type _size, _lev;\n\n        RedBlackTreeNodeBase(const\
+    \ value_type& val) : _col(BLACK), _val(val), _size(1), _lev(0) {}\n        RedBlackTreeNodeBase(tree_type\
+    \ l, tree_type r) : _col(RED), _ch{ l, r }, _size(l->_size + r->_size), _lev(l->_lev\
     \ + (l->_col == BLACK)) {}\n\n        static void clear_pool() { pool.clear();\
     \ }\n        static int pool_capacity() { return pool.capacity(); }\n\n      \
     \  static color_type color(tree_type node) { return node ? node->_col : BLACK;\
     \ }\n        static size_type height(tree_type node) { return node ? node->_lev\
     \ : 0; }\n\n        bool is_leaf() const { return not (_ch[0] or _ch[1]); }\n\n\
     \        static tree_type clone(tree_type node) {\n            return node;\n\
-    \        }\n        static tree_type update(tree_type node) {\n            node->_siz\
+    \        }\n        static tree_type update(tree_type node) {\n            node->_size\
     \ = node->is_leaf() ? 1 : size(node->_ch[0]) + size(node->_ch[1]);\n         \
     \   node->_lev = node->_ch[0] ? height(node->_ch[0]) + (node->_ch[0]->_col ==\
     \ BLACK) : 0;\n            return node;\n        }\n        static tree_type push(tree_type\
@@ -490,7 +491,7 @@ data:
   isVerificationFile: false
   path: library/string/dynamic_rolling_hash.hpp
   requiredBy: []
-  timestamp: '2026-06-01 16:32:36+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: library/string/dynamic_rolling_hash.hpp

@@ -120,8 +120,8 @@ data:
     \             g[id_last].push_back(id_w);\n                }\n               \
     \ st.push_back(i + 1);\n            }\n            if (k) assert(st.size());\n\
     \            const int root = st.empty() ? 0 : st.front();\n            const\
-    \ int siz = st.size();\n            for (int i = 0; i < siz - 1; ++i) {\n    \
-    \            g[st[i]].push_back(st[i + 1]);\n                g[st[i + 1]].push_back(st[i]);\n\
+    \ int size = st.size();\n            for (int i = 0; i < size - 1; ++i) {\n  \
+    \              g[st[i]].push_back(st[i + 1]);\n                g[st[i + 1]].push_back(st[i]);\n\
     \            }\n            struct AuxiliaryTree {\n                AuxiliaryTree(int\
     \ root, const std::vector<sbt_node> &nodes, const std::vector<std::vector<int>>\
     \ &g) : _root(root), _nodes(nodes), _g(g) {}\n                \n             \
@@ -245,8 +245,8 @@ data:
     \             g[id_last].push_back(id_w);\n                }\n               \
     \ st.push_back(i + 1);\n            }\n            if (k) assert(st.size());\n\
     \            const int root = st.empty() ? 0 : st.front();\n            const\
-    \ int siz = st.size();\n            for (int i = 0; i < siz - 1; ++i) {\n    \
-    \            g[st[i]].push_back(st[i + 1]);\n                g[st[i + 1]].push_back(st[i]);\n\
+    \ int size = st.size();\n            for (int i = 0; i < size - 1; ++i) {\n  \
+    \              g[st[i]].push_back(st[i + 1]);\n                g[st[i + 1]].push_back(st[i]);\n\
     \            }\n            struct AuxiliaryTree {\n                AuxiliaryTree(int\
     \ root, const std::vector<sbt_node> &nodes, const std::vector<std::vector<int>>\
     \ &g) : _root(root), _nodes(nodes), _g(g) {}\n                \n             \
@@ -268,7 +268,7 @@ data:
   isVerificationFile: false
   path: library/number/stern_brocot_tree.hpp
   requiredBy: []
-  timestamp: '2024-01-30 21:22:46+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/number/stern_brocot_tree/abc273_h.test.cpp

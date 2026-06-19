@@ -32,67 +32,67 @@ data:
     \        template <typename U>\n        using container_type = std::conditional_t<auto_extend,\
     \ std::deque<U>, std::vector<U>>;\n\n        container_type<value_type> pool;\n\
     \        container_type<value_pointer_type> stock;\n        decltype(stock.begin())\
-    \ it;\n\n        ObjectPool() : ObjectPool(0) {}\n        ObjectPool(int siz)\
-    \ : pool(siz), stock(siz) {\n            clear();\n        }\n\n        int capacity()\
-    \ const { return pool.size(); }\n        int size() const { return it - stock.begin();\
-    \ }\n\n        value_pointer_type alloc() {\n            if constexpr (auto_extend)\
-    \ ensure();\n            return *it++;\n        }\n\n        void free(value_pointer_type\
-    \ t) {\n            *--it = t;\n        }\n\n        void clear() {\n        \
-    \    int siz = pool.size();\n            it = stock.begin();\n            for\
-    \ (int i = 0; i < siz; i++) stock[i] = &pool[i];\n        }\n\n        void ensure()\
-    \ {\n            if (it != stock.end()) return;\n            int siz = stock.size();\n\
-    \            for (int i = siz; i <= siz * 2; ++i) {\n                stock.push_back(&pool.emplace_back());\n\
-    \            }\n            it = stock.begin() + siz;\n        }\n    };\n} //\
-    \ namespace suisen\n\n\n#line 10 \"library/tree/link_cut_tree_base.hpp\"\n\nnamespace\
-    \ suisen::internal::link_cut_tree {\n    template <typename T, typename Derived>\n\
-    \    struct SplayTreeNodeBase {\n        friend Derived;\n        template <typename,\
-    \ typename>\n        friend struct LinkCutTreeBase;\n\n        using value_type\
-    \ = T;\n        using node_type = Derived;\n        using node_pointer_type =\
-    \ node_type*;\n\n        explicit SplayTreeNodeBase(const value_type& val = value_type{})\
-    \ : _val(val) {}\n\n    protected:\n        node_pointer_type _p = nullptr;\n\
-    \        node_pointer_type _ch[2]{ nullptr, nullptr };\n\n        int _siz = 1;\n\
-    \        value_type _val;\n\n        bool _rev = false;\n        \n        static\
-    \ bool is_root(node_pointer_type node) {\n            return not node->_p or (node->_p->_ch[0]\
-    \ != node and node->_p->_ch[1] != node);\n        }\n        static node_pointer_type&\
-    \ parent(node_pointer_type node) {\n            return node->_p;\n        }\n\
-    \        static node_pointer_type& child(node_pointer_type node, int ch_idx) {\n\
-    \            return node->_ch[ch_idx];\n        }\n        static int size(node_pointer_type\
-    \ node) {\n            return node ? node->_siz : 0;\n        }\n        static\
-    \ const value_type& value(node_pointer_type node) {\n            return node->_val;\n\
-    \        }\n        static void set_value(node_pointer_type node, const value_type\
-    \ &new_val) {\n            node->_val = new_val;\n        }\n        static void\
-    \ update(node_pointer_type node) {\n            node->_siz = 1 + node_type::size(node->_ch[0])\
-    \ + node_type::size(node->_ch[1]);\n        }\n\n        static void reverse_all(node_pointer_type\
-    \ node) {\n            if (not node) return;\n            node->_rev ^= true;\n\
-    \            std::swap(node->_ch[0], node->_ch[1]);\n        }\n\n        static\
-    \ void push(node_pointer_type node) {\n            if (std::exchange(node->_rev,\
-    \ false)) {\n                node_type::reverse_all(node->_ch[0]);\n         \
-    \       node_type::reverse_all(node->_ch[1]);\n            }\n        }\n\n  \
-    \      static void rot(node_pointer_type node, int ch_idx) {\n            assert(node->_ch[ch_idx]);\n\
-    \n            node_pointer_type rt = node->_ch[ch_idx];\n            if (not node_type::is_root(node))\
-    \ node->_p->_ch[node->_p->_ch[1] == node] = rt;\n\n            if ((node->_ch[ch_idx]\
-    \ = rt->_ch[ch_idx ^ 1])) node->_ch[ch_idx]->_p = node;\n\n            rt->_ch[ch_idx\
-    \ ^ 1] = node;\n            rt->_p = std::exchange(node->_p, rt);\n\n        \
-    \    node_type::update(node), node_type::update(rt);\n        }\n\n        static\
-    \ void splay(node_pointer_type node) {\n            node_type::push(node);\n \
-    \           while (not node_type::is_root(node)) {\n                node_pointer_type\
-    \ p = node->_p;\n                if (node_type::is_root(p)) {\n              \
-    \      node_type::push(p), node_type::push(node);\n                    node_type::rot(p,\
-    \ p->_ch[1] == node);\n                } else {\n                    node_pointer_type\
-    \ pp = p->_p;\n                    node_type::push(pp), node_type::push(p), node_type::push(node);\n\
-    \                    const int idx_pp = pp->_ch[1] == p, idx_p = p->_ch[1] ==\
-    \ node;\n                    if (idx_p == idx_pp) {\n                        node_type::rot(pp,\
-    \ idx_pp), node_type::rot(p, idx_p);\n                    } else {\n         \
-    \               node_type::rot(p, idx_p), node_type::rot(pp, idx_pp);\n      \
-    \              }\n                }\n            }\n        }\n    };\n\n    template\
-    \ <typename NodeType, typename Derived>\n    struct LinkCutTreeBase {\n      \
-    \  using derived_tree_type = Derived;\n\n        using node_type = typename NodeType::node_type;\n\
-    \        using node_pointer_type = typename NodeType::node_pointer_type;\n   \
-    \     using value_type = typename NodeType::value_type;\n\n        LinkCutTreeBase()\
-    \ = delete;\n\n        static void init_pool(int capacity) {\n            _pool\
-    \ = ObjectPool<node_type>(capacity);\n        }\n\n        template <typename\
-    \ ...Args>\n        static node_pointer_type make_node(Args&&...args) {\n    \
-    \        return &(*_pool.alloc() = node_type(std::forward<Args>(args)...));\n\
+    \ it;\n\n        ObjectPool() : ObjectPool(0) {}\n        ObjectPool(int size)\
+    \ : pool(size), stock(size) {\n            clear();\n        }\n\n        int\
+    \ capacity() const { return pool.size(); }\n        int size() const { return\
+    \ it - stock.begin(); }\n\n        value_pointer_type alloc() {\n            if\
+    \ constexpr (auto_extend) ensure();\n            return *it++;\n        }\n\n\
+    \        void free(value_pointer_type t) {\n            *--it = t;\n        }\n\
+    \n        void clear() {\n            int size = pool.size();\n            it\
+    \ = stock.begin();\n            for (int i = 0; i < size; i++) stock[i] = &pool[i];\n\
+    \        }\n\n        void ensure() {\n            if (it != stock.end()) return;\n\
+    \            int size = stock.size();\n            for (int i = size; i <= size\
+    \ * 2; ++i) {\n                stock.push_back(&pool.emplace_back());\n      \
+    \      }\n            it = stock.begin() + size;\n        }\n    };\n} // namespace\
+    \ suisen\n\n\n#line 10 \"library/tree/link_cut_tree_base.hpp\"\n\nnamespace suisen::internal::link_cut_tree\
+    \ {\n    template <typename T, typename Derived>\n    struct SplayTreeNodeBase\
+    \ {\n        friend Derived;\n        template <typename, typename>\n        friend\
+    \ struct LinkCutTreeBase;\n\n        using value_type = T;\n        using node_type\
+    \ = Derived;\n        using node_pointer_type = node_type*;\n\n        explicit\
+    \ SplayTreeNodeBase(const value_type& val = value_type{}) : _val(val) {}\n\n \
+    \   protected:\n        node_pointer_type _p = nullptr;\n        node_pointer_type\
+    \ _ch[2]{ nullptr, nullptr };\n\n        int _size = 1;\n        value_type _val;\n\
+    \n        bool _rev = false;\n        \n        static bool is_root(node_pointer_type\
+    \ node) {\n            return not node->_p or (node->_p->_ch[0] != node and node->_p->_ch[1]\
+    \ != node);\n        }\n        static node_pointer_type& parent(node_pointer_type\
+    \ node) {\n            return node->_p;\n        }\n        static node_pointer_type&\
+    \ child(node_pointer_type node, int ch_idx) {\n            return node->_ch[ch_idx];\n\
+    \        }\n        static int size(node_pointer_type node) {\n            return\
+    \ node ? node->_size : 0;\n        }\n        static const value_type& value(node_pointer_type\
+    \ node) {\n            return node->_val;\n        }\n        static void set_value(node_pointer_type\
+    \ node, const value_type &new_val) {\n            node->_val = new_val;\n    \
+    \    }\n        static void update(node_pointer_type node) {\n            node->_size\
+    \ = 1 + node_type::size(node->_ch[0]) + node_type::size(node->_ch[1]);\n     \
+    \   }\n\n        static void reverse_all(node_pointer_type node) {\n         \
+    \   if (not node) return;\n            node->_rev ^= true;\n            std::swap(node->_ch[0],\
+    \ node->_ch[1]);\n        }\n\n        static void push(node_pointer_type node)\
+    \ {\n            if (std::exchange(node->_rev, false)) {\n                node_type::reverse_all(node->_ch[0]);\n\
+    \                node_type::reverse_all(node->_ch[1]);\n            }\n      \
+    \  }\n\n        static void rot(node_pointer_type node, int ch_idx) {\n      \
+    \      assert(node->_ch[ch_idx]);\n\n            node_pointer_type rt = node->_ch[ch_idx];\n\
+    \            if (not node_type::is_root(node)) node->_p->_ch[node->_p->_ch[1]\
+    \ == node] = rt;\n\n            if ((node->_ch[ch_idx] = rt->_ch[ch_idx ^ 1]))\
+    \ node->_ch[ch_idx]->_p = node;\n\n            rt->_ch[ch_idx ^ 1] = node;\n \
+    \           rt->_p = std::exchange(node->_p, rt);\n\n            node_type::update(node),\
+    \ node_type::update(rt);\n        }\n\n        static void splay(node_pointer_type\
+    \ node) {\n            node_type::push(node);\n            while (not node_type::is_root(node))\
+    \ {\n                node_pointer_type p = node->_p;\n                if (node_type::is_root(p))\
+    \ {\n                    node_type::push(p), node_type::push(node);\n        \
+    \            node_type::rot(p, p->_ch[1] == node);\n                } else {\n\
+    \                    node_pointer_type pp = p->_p;\n                    node_type::push(pp),\
+    \ node_type::push(p), node_type::push(node);\n                    const int idx_pp\
+    \ = pp->_ch[1] == p, idx_p = p->_ch[1] == node;\n                    if (idx_p\
+    \ == idx_pp) {\n                        node_type::rot(pp, idx_pp), node_type::rot(p,\
+    \ idx_p);\n                    } else {\n                        node_type::rot(p,\
+    \ idx_p), node_type::rot(pp, idx_pp);\n                    }\n               \
+    \ }\n            }\n        }\n    };\n\n    template <typename NodeType, typename\
+    \ Derived>\n    struct LinkCutTreeBase {\n        using derived_tree_type = Derived;\n\
+    \n        using node_type = typename NodeType::node_type;\n        using node_pointer_type\
+    \ = typename NodeType::node_pointer_type;\n        using value_type = typename\
+    \ NodeType::value_type;\n\n        LinkCutTreeBase() = delete;\n\n        static\
+    \ void init_pool(int capacity) {\n            _pool = ObjectPool<node_type>(capacity);\n\
+    \        }\n\n        template <typename ...Args>\n        static node_pointer_type\
+    \ make_node(Args&&...args) {\n            return &(*_pool.alloc() = node_type(std::forward<Args>(args)...));\n\
     \        }\n        static std::vector<node_pointer_type> make_nodes(const std::vector<value_type>&\
     \ vals) {\n            std::vector<node_pointer_type> nodes;\n            nodes.reserve(vals.size());\n\
     \            for (const auto& val : vals) nodes.push_back(make_node(val));\n \
@@ -246,7 +246,7 @@ data:
   isVerificationFile: true
   path: test/src/tree/link_cut_tree_path_foldable_lazy/GRL_5_E.test.cpp
   requiredBy: []
-  timestamp: '2022-06-23 03:06:22+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/tree/link_cut_tree_path_foldable_lazy/GRL_5_E.test.cpp

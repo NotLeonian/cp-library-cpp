@@ -120,16 +120,16 @@ data:
     \           friend struct PalindromicTreeBase;\n                PalindromicTreeNode()\
     \ = default;\n            private:\n                children_container_type _children;\n\
     \                int _suffix_link;\n                int _length;\n           \
-    \     int _multiplicity;\n                int _first_occurence;\n            };\n\
-    \n            using node_type = PalindromicTreeNode;\n            using node_pointer_type\
-    \ = node_type*;\n\n            static constexpr int NODE_NULL = -1;\n        \
-    \    static constexpr int NODE_M1 = 0;\n            static constexpr int NODE_0\
-    \ = 1;\n\n            PalindromicTreeBase() {\n                node_pointer_type\
+    \     int _multiplicity;\n                int _first_occurrence;\n           \
+    \ };\n\n            using node_type = PalindromicTreeNode;\n            using\
+    \ node_pointer_type = node_type*;\n\n            static constexpr int NODE_NULL\
+    \ = -1;\n            static constexpr int NODE_M1 = 0;\n            static constexpr\
+    \ int NODE_0 = 1;\n\n            PalindromicTreeBase() {\n                node_pointer_type\
     \ node_m1 = _new_node();\n                node_m1->_suffix_link = NODE_M1;\n \
-    \               node_m1->_length = -1;\n                node_m1->_first_occurence\
+    \               node_m1->_length = -1;\n                node_m1->_first_occurrence\
     \ = 1;\n\n                node_pointer_type node_0 = _new_node();\n          \
     \      node_0->_suffix_link = NODE_M1;\n                node_0->_length = 0;\n\
-    \                node_0->_first_occurence = 0;\n\n                _active_index\
+    \                node_0->_first_occurrence = 0;\n\n                _active_index\
     \ = 0;\n            }\n            template <typename Iterable>\n            PalindromicTreeBase(const\
     \ Iterable& seq) : PalindromicTreeBase() {\n                add_all(seq);\n  \
     \          }\n\n            int add(const value_type& val) {\n               \
@@ -154,7 +154,7 @@ data:
     \ = par_node->_length;\n                int par_suffix_link = par_node->_suffix_link;\n\
     \n                node_pointer_type new_node = _new_node();\n\n              \
     \  new_node->_multiplicity = 1;\n                new_node->_length = par_length\
-    \ + 2;\n                new_node->_first_occurence = _seq.size() - new_node->_length;\n\
+    \ + 2;\n                new_node->_first_occurrence = _seq.size() - new_node->_length;\n\
     \                if (new_node->_length == 1) {\n                    new_node->_suffix_link\
     \ = NODE_0;\n                } else {\n                    new_node->_suffix_link\
     \ = _find_next_longest_suffix_palindrome(_get_node(par_suffix_link))->_children[val];\n\
@@ -163,28 +163,29 @@ data:
     \ &seq) {\n                for (const auto &val : seq) add(val);\n           \
     \ }\n\n            int node_num() const {\n                return _nodes.size();\n\
     \            }\n\n            const node_type& get_node(int index) const {\n \
-    \               return _nodes[index];\n            }\n\n            int first_occurence(int\
-    \ index) const {\n                return get_node(index)._first_occurence;\n \
-    \           }\n            int length(int index) const {\n                return\
-    \ get_node(index)._length;\n            }\n            int suffix_link(int index)\
-    \ const {\n                return get_node(index)._suffix_link;\n            }\n\
-    \            int node_multiplicity(int index) const {\n                return\
-    \ get_node(index)._multiplicity;\n            }\n            const children_container_type&\
-    \ children(int index) const {\n                return get_node(index)._children;\n\
-    \            }\n            std::vector<int> parents() const {\n             \
-    \   int sz = node_num();\n                std::vector<int> res(sz, -1);\n    \
-    \            for (int i = 0; i < sz; ++i) {\n                    for (const auto&\
-    \ p : children(i)) {\n                        if constexpr (is_map) {\n      \
-    \                      res[p.second] = i;\n                        } else if (p\
-    \ != NODE_NULL) {\n                            res[p] = i;\n                 \
-    \       }\n                    }\n                }\n                return res;\n\
-    \            }\n\n            const container_type get_palindrome(int index) {\n\
-    \                if (index == NODE_M1) return container_type{};\n            \
-    \    int l = first_occurence(index), r = l + length(index);\n                return\
-    \ container_type{ _seq.begin() + l, _seq.begin() + r };\n            }\n\n   \
-    \         std::vector<int> frequency_table() const {\n                int sz =\
-    \ node_num();\n                std::vector<int> res(sz);\n                for\
-    \ (int i = sz; i-- > 1;) {\n                    res[i] += node_multiplicity(i);\n\
+    \               return _nodes[index];\n            }\n\n            int first_occurrence(int\
+    \ index) const {\n                return get_node(index)._first_occurrence;\n\
+    \            }\n            int first_occurence(int index) const {\n         \
+    \       return first_occurrence(index);\n            }\n            int length(int\
+    \ index) const {\n                return get_node(index)._length;\n          \
+    \  }\n            int suffix_link(int index) const {\n                return get_node(index)._suffix_link;\n\
+    \            }\n            int node_multiplicity(int index) const {\n       \
+    \         return get_node(index)._multiplicity;\n            }\n            const\
+    \ children_container_type& children(int index) const {\n                return\
+    \ get_node(index)._children;\n            }\n            std::vector<int> parents()\
+    \ const {\n                int sz = node_num();\n                std::vector<int>\
+    \ res(sz, -1);\n                for (int i = 0; i < sz; ++i) {\n             \
+    \       for (const auto& p : children(i)) {\n                        if constexpr\
+    \ (is_map) {\n                            res[p.second] = i;\n               \
+    \         } else if (p != NODE_NULL) {\n                            res[p] = i;\n\
+    \                        }\n                    }\n                }\n       \
+    \         return res;\n            }\n\n            const container_type get_palindrome(int\
+    \ index) {\n                if (index == NODE_M1) return container_type{};\n \
+    \               int l = first_occurrence(index), r = l + length(index);\n    \
+    \            return container_type{ _seq.begin() + l, _seq.begin() + r };\n  \
+    \          }\n\n            std::vector<int> frequency_table() const {\n     \
+    \           int sz = node_num();\n                std::vector<int> res(sz);\n\
+    \                for (int i = sz; i-- > 1;) {\n                    res[i] += node_multiplicity(i);\n\
     \                    res[suffix_link(i)] += res[i];\n                }\n     \
     \           return res;\n            }\n\n            template <bool erase_root\
     \ = false>\n            void clear() {\n                _active_index = 0;\n \
@@ -261,7 +262,7 @@ data:
   isVerificationFile: true
   path: test/src/string/palindromic_tree/abc237_h.test.cpp
   requiredBy: []
-  timestamp: '2026-05-19 22:59:21+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/string/palindromic_tree/abc237_h.test.cpp

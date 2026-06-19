@@ -16,14 +16,14 @@ data:
     \ <cstddef>\n#include <vector>\n#include <utility>\n\nnamespace suisen {\nnamespace\
     \ internal::splay_tree_map {\n\ntemplate <typename Key, typename Val, typename\
     \ Derived>\nstruct MapNodeBase {\n    using node_ptr_t = Derived *;\n\n    Key\
-    \ key;\n    Val val;\n    int siz;\n    node_ptr_t ch[2] {nullptr, nullptr};\n\
-    \n    MapNodeBase() : key(), val(), siz(1) {}\n    MapNodeBase(const Key &key,\
-    \ const Val &val) : key(key), val(val), siz(1) {}\n\n    ~MapNodeBase() {\n  \
-    \      delete ch[0];\n        delete ch[1];\n    }\n\n    void update() {\n  \
-    \      siz = 1 + size(ch[0]) + size(ch[1]);\n    }\n    void push() {}\n\n   \
-    \ static int size(node_ptr_t node) {\n        return node == nullptr ? 0 : node->siz;\n\
-    \    }\n\n    static node_ptr_t rotate(node_ptr_t node, bool is_right) {\n   \
-    \     node_ptr_t root = node->ch[is_right ^ true];\n        node->ch[is_right\
+    \ key;\n    Val val;\n    int size_;\n    node_ptr_t ch[2] {nullptr, nullptr};\n\
+    \n    MapNodeBase() : key(), val(), size_(1) {}\n    MapNodeBase(const Key &key,\
+    \ const Val &val) : key(key), val(val), size_(1) {}\n\n    ~MapNodeBase() {\n\
+    \        delete ch[0];\n        delete ch[1];\n    }\n\n    void update() {\n\
+    \        size_ = 1 + size(ch[0]) + size(ch[1]);\n    }\n    void push() {}\n\n\
+    \    static int size(node_ptr_t node) {\n        return node == nullptr ? 0 :\
+    \ node->size_;\n    }\n\n    static node_ptr_t rotate(node_ptr_t node, bool is_right)\
+    \ {\n        node_ptr_t root = node->ch[is_right ^ true];\n        node->ch[is_right\
     \ ^ true] = root->ch[is_right];\n        root->ch[is_right] = node;\n        node->update(),\
     \ root->update();\n        return root;\n    }\n\n    static node_ptr_t splay_by_index(node_ptr_t\
     \ node, int index) {\n        std::vector<node_ptr_t> path;\n        node_ptr_t\
@@ -212,7 +212,7 @@ data:
   isVerificationFile: false
   path: library/datastructure/splay_tree_set.hpp
   requiredBy: []
-  timestamp: '2021-10-16 19:55:44+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: library/datastructure/splay_tree_set.hpp

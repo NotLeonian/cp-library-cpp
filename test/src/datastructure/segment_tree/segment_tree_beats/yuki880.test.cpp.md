@@ -164,19 +164,19 @@ data:
     \n\nconstexpr int inf = 2000000000;\n\nint sat_lcm(int x, int y) {\n    if (x\
     \ == inf or y == inf) return inf;\n    return std::min<long long>(inf, 1LL * (x\
     \ / std::gcd(x, y)) * y);\n}\n\nstruct S {\n    long long sum_v;\n    int max_v;\n\
-    \    int lcm_v;\n    int siz;\n    bool fail = false;\n\n    S(long long sum_v,\
-    \ int max_v, int lcm_v, int siz) : sum_v(sum_v), max_v(max_v), lcm_v(lcm_v), siz(siz)\
-    \ {}\n    S(int v) : sum_v(v), max_v(v), lcm_v(v), siz(1) {}\n    S() = default;\n\
-    };\n\nstruct F {\n    int upd_v = 0;\n    int gcd_v = 0;\n\n    F(int upd_v =\
-    \ 0, int gcd_v = 0) : upd_v(upd_v), gcd_v(gcd_v) {}\n\n    static F upd_query(int\
-    \ upd_v) {\n        return F { upd_v, 0 };\n    }\n    static F gcd_query(int\
-    \ gcd_v) {\n        return F { 0, gcd_v };\n    }\n};\n\nS op(S x, S y) {\n  \
-    \  return S { x.sum_v + y.sum_v, std::max(x.max_v, y.max_v), sat_lcm(x.lcm_v,\
-    \ y.lcm_v), x.siz + y.siz };\n}\nS e() {\n    return S { 0LL, 0, 1, 0 };\n}\n\n\
-    S mapping(F f, S x) {\n    if (x.fail) return x;\n    if (x.sum_v == 1LL * x.max_v\
-    \ * x.siz and f.gcd_v) {\n        f = F::upd_query(std::gcd(x.max_v, f.gcd_v));\n\
-    \    }\n    if (f.upd_v) return S { (long long) f.upd_v * x.siz, f.upd_v, f.upd_v,\
-    \ x.siz };\n    if (f.gcd_v) {\n        if (x.siz == 1) {\n            return\
+    \    int lcm_v;\n    int size;\n    bool fail = false;\n\n    S(long long sum_v,\
+    \ int max_v, int lcm_v, int size) : sum_v(sum_v), max_v(max_v), lcm_v(lcm_v),\
+    \ size(size) {}\n    S(int v) : sum_v(v), max_v(v), lcm_v(v), size(1) {}\n   \
+    \ S() = default;\n};\n\nstruct F {\n    int upd_v = 0;\n    int gcd_v = 0;\n\n\
+    \    F(int upd_v = 0, int gcd_v = 0) : upd_v(upd_v), gcd_v(gcd_v) {}\n\n    static\
+    \ F upd_query(int upd_v) {\n        return F { upd_v, 0 };\n    }\n    static\
+    \ F gcd_query(int gcd_v) {\n        return F { 0, gcd_v };\n    }\n};\n\nS op(S\
+    \ x, S y) {\n    return S { x.sum_v + y.sum_v, std::max(x.max_v, y.max_v), sat_lcm(x.lcm_v,\
+    \ y.lcm_v), x.size + y.size };\n}\nS e() {\n    return S { 0LL, 0, 1, 0 };\n}\n\
+    \nS mapping(F f, S x) {\n    if (x.fail) return x;\n    if (x.sum_v == 1LL * x.max_v\
+    \ * x.size and f.gcd_v) {\n        f = F::upd_query(std::gcd(x.max_v, f.gcd_v));\n\
+    \    }\n    if (f.upd_v) return S { (long long) f.upd_v * x.size, f.upd_v, f.upd_v,\
+    \ x.size };\n    if (f.gcd_v) {\n        if (x.size == 1) {\n            return\
     \ S { std::gcd(x.max_v, f.gcd_v) };\n        } else if (x.lcm_v == inf or f.gcd_v\
     \ % x.lcm_v) {\n            x.fail = true;\n        }\n    }\n    return x;\n\
     }\n\nF composition(F f, F g) {\n    if (f.upd_v) return f;\n    if (g.upd_v) return\
@@ -201,19 +201,19 @@ data:
     \n\nconstexpr int inf = 2000000000;\n\nint sat_lcm(int x, int y) {\n    if (x\
     \ == inf or y == inf) return inf;\n    return std::min<long long>(inf, 1LL * (x\
     \ / std::gcd(x, y)) * y);\n}\n\nstruct S {\n    long long sum_v;\n    int max_v;\n\
-    \    int lcm_v;\n    int siz;\n    bool fail = false;\n\n    S(long long sum_v,\
-    \ int max_v, int lcm_v, int siz) : sum_v(sum_v), max_v(max_v), lcm_v(lcm_v), siz(siz)\
-    \ {}\n    S(int v) : sum_v(v), max_v(v), lcm_v(v), siz(1) {}\n    S() = default;\n\
-    };\n\nstruct F {\n    int upd_v = 0;\n    int gcd_v = 0;\n\n    F(int upd_v =\
-    \ 0, int gcd_v = 0) : upd_v(upd_v), gcd_v(gcd_v) {}\n\n    static F upd_query(int\
-    \ upd_v) {\n        return F { upd_v, 0 };\n    }\n    static F gcd_query(int\
-    \ gcd_v) {\n        return F { 0, gcd_v };\n    }\n};\n\nS op(S x, S y) {\n  \
-    \  return S { x.sum_v + y.sum_v, std::max(x.max_v, y.max_v), sat_lcm(x.lcm_v,\
-    \ y.lcm_v), x.siz + y.siz };\n}\nS e() {\n    return S { 0LL, 0, 1, 0 };\n}\n\n\
-    S mapping(F f, S x) {\n    if (x.fail) return x;\n    if (x.sum_v == 1LL * x.max_v\
-    \ * x.siz and f.gcd_v) {\n        f = F::upd_query(std::gcd(x.max_v, f.gcd_v));\n\
-    \    }\n    if (f.upd_v) return S { (long long) f.upd_v * x.siz, f.upd_v, f.upd_v,\
-    \ x.siz };\n    if (f.gcd_v) {\n        if (x.siz == 1) {\n            return\
+    \    int lcm_v;\n    int size;\n    bool fail = false;\n\n    S(long long sum_v,\
+    \ int max_v, int lcm_v, int size) : sum_v(sum_v), max_v(max_v), lcm_v(lcm_v),\
+    \ size(size) {}\n    S(int v) : sum_v(v), max_v(v), lcm_v(v), size(1) {}\n   \
+    \ S() = default;\n};\n\nstruct F {\n    int upd_v = 0;\n    int gcd_v = 0;\n\n\
+    \    F(int upd_v = 0, int gcd_v = 0) : upd_v(upd_v), gcd_v(gcd_v) {}\n\n    static\
+    \ F upd_query(int upd_v) {\n        return F { upd_v, 0 };\n    }\n    static\
+    \ F gcd_query(int gcd_v) {\n        return F { 0, gcd_v };\n    }\n};\n\nS op(S\
+    \ x, S y) {\n    return S { x.sum_v + y.sum_v, std::max(x.max_v, y.max_v), sat_lcm(x.lcm_v,\
+    \ y.lcm_v), x.size + y.size };\n}\nS e() {\n    return S { 0LL, 0, 1, 0 };\n}\n\
+    \nS mapping(F f, S x) {\n    if (x.fail) return x;\n    if (x.sum_v == 1LL * x.max_v\
+    \ * x.size and f.gcd_v) {\n        f = F::upd_query(std::gcd(x.max_v, f.gcd_v));\n\
+    \    }\n    if (f.upd_v) return S { (long long) f.upd_v * x.size, f.upd_v, f.upd_v,\
+    \ x.size };\n    if (f.gcd_v) {\n        if (x.size == 1) {\n            return\
     \ S { std::gcd(x.max_v, f.gcd_v) };\n        } else if (x.lcm_v == inf or f.gcd_v\
     \ % x.lcm_v) {\n            x.fail = true;\n        }\n    }\n    return x;\n\
     }\n\nF composition(F f, F g) {\n    if (f.upd_v) return f;\n    if (g.upd_v) return\
@@ -241,7 +241,7 @@ data:
   isVerificationFile: true
   path: test/src/datastructure/segment_tree/segment_tree_beats/yuki880.test.cpp
   requiredBy: []
-  timestamp: '2024-01-31 03:27:08+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/datastructure/segment_tree/segment_tree_beats/yuki880.test.cpp

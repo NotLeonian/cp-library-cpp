@@ -94,14 +94,14 @@ data:
     #line 10 \"library/datastructure/dynamic_sequence.hpp\"\n\nnamespace suisen {\n\
     \nnamespace internal::dynamic_sequence {\n\ntemplate <typename T, typename Derived>\n\
     struct DynamicSequenceNodeBase {\n    using node_ptr_t = Derived *;\n\n    T val;\n\
-    \    int siz;\n    bool rev;\n    node_ptr_t ch[2] {nullptr, nullptr};\n\n   \
-    \ DynamicSequenceNodeBase() : val(), siz(1), rev(false) {}\n    DynamicSequenceNodeBase(const\
-    \ T &val) : val(val), siz(1), rev(false) {}\n\n    ~DynamicSequenceNodeBase()\
+    \    int size_;\n    bool rev;\n    node_ptr_t ch[2] {nullptr, nullptr};\n\n \
+    \   DynamicSequenceNodeBase() : val(), size_(1), rev(false) {}\n    DynamicSequenceNodeBase(const\
+    \ T &val) : val(val), size_(1), rev(false) {}\n\n    ~DynamicSequenceNodeBase()\
     \ {\n        delete ch[0];\n        delete ch[1];\n    }\n\n    void update()\
-    \ {\n        siz = 1 + size(ch[0]) + size(ch[1]);\n    }\n    void push() {\n\
+    \ {\n        size_ = 1 + size(ch[0]) + size(ch[1]);\n    }\n    void push() {\n\
     \        reverse_all(this->ch[0], rev), reverse_all(this->ch[1], rev);\n     \
     \   rev = false;\n    }\n    static int size(node_ptr_t node) {\n        return\
-    \ node == nullptr ? 0 : node->siz;\n    }\n\n    static node_ptr_t rotate(node_ptr_t\
+    \ node == nullptr ? 0 : node->size_;\n    }\n\n    static node_ptr_t rotate(node_ptr_t\
     \ node, bool is_right) {\n        node_ptr_t root = node->ch[is_right ^ true];\n\
     \        node->ch[is_right ^ true] = root->ch[is_right];\n        root->ch[is_right]\
     \ = node;\n        node->update(), root->update();\n        return root;\n   \
@@ -173,8 +173,8 @@ data:
     \     int size() const {\n            return SplayNode::size(root);\n        }\n\
     \        void reverse(int l, int r) {\n            range_bounds_check(l, r, size());\n\
     \            root = SplayNode::reverse(root, l, r);\n        }\n        void reverse_all()\
-    \ {\n            SplayNode::reverese_all(root);\n        }\n    protected:\n \
-    \       mutable node_ptr_t root;\n\n        DynamicSequenceBase(node_ptr_t root)\
+    \ {\n            SplayNode::reverse_all(root);\n        }\n    protected:\n  \
+    \      mutable node_ptr_t root;\n\n        DynamicSequenceBase(node_ptr_t root)\
     \ : root(root) {}\n    \n        static void index_bounds_check(unsigned int k,\
     \ unsigned int n) {\n            assert(k < n);\n        }\n        static void\
     \ range_bounds_check(unsigned int l, unsigned int r, unsigned int n) {\n     \
@@ -368,7 +368,7 @@ data:
   isVerificationFile: true
   path: test/src/datastructure/lazy_eval_dynamic_sequence/dynamic_sequence_range_affine_range_sum.test.cpp
   requiredBy: []
-  timestamp: '2024-01-30 22:04:45+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/datastructure/lazy_eval_dynamic_sequence/dynamic_sequence_range_affine_range_sum.test.cpp

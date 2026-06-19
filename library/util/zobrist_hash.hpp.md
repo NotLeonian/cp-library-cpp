@@ -18,13 +18,14 @@ data:
     \       ZobristHashBase(Args &&...args) : rng(std::random_device{}()), h(std::forward<Args>(args)...)\
     \ {}\n\n        hash_type operator()(const value_type &val) {\n            Self::ensure_key_existence(h,\
     \ val, rng);\n            return h[val];\n        }\n        hash_type empty_set()\
-    \ const {\n            return 0;\n        }\n        hash_type sigleton_set(const\
+    \ const {\n            return 0;\n        }\n        hash_type singleton_set(const\
     \ value_type& val) {\n            return (*this)(val);\n        }\n        hash_type\
-    \ flip(hash_type old_hash, const value_type& val) {\n            return old_hash\
-    \ ^ (*this)(val);\n        }\n        hash_type xor_set(hash_type set1, hash_type\
-    \ set2) const {\n            return set1 ^ set2;\n        }\n\n    protected:\n\
-    \        rng_type rng;\n        container_type h;\n\n    private:\n        struct\
-    \ Self : public self_type {\n            using self_type::ensure_key_existence;\n\
+    \ sigleton_set(const value_type& val) {\n            return singleton_set(val);\n\
+    \        }\n        hash_type flip(hash_type old_hash, const value_type& val)\
+    \ {\n            return old_hash ^ (*this)(val);\n        }\n        hash_type\
+    \ xor_set(hash_type set1, hash_type set2) const {\n            return set1 ^ set2;\n\
+    \        }\n\n    protected:\n        rng_type rng;\n        container_type h;\n\
+    \n    private:\n        struct Self : public self_type {\n            using self_type::ensure_key_existence;\n\
     \        };\n    };\n\n    template <typename HashType = std::uint64_t, std::enable_if_t<std::is_integral_v<HashType>,\
     \ std::nullptr_t> = nullptr>\n    struct VecZobristHash : public ZobristHashBase<std::vector<std::make_unsigned_t<HashType>>,\
     \ std::size_t, HashType, VecZobristHash<HashType>> {\n        using Base = ZobristHashBase<std::vector<std::make_unsigned_t<HashType>>,\
@@ -65,13 +66,14 @@ data:
     \       ZobristHashBase(Args &&...args) : rng(std::random_device{}()), h(std::forward<Args>(args)...)\
     \ {}\n\n        hash_type operator()(const value_type &val) {\n            Self::ensure_key_existence(h,\
     \ val, rng);\n            return h[val];\n        }\n        hash_type empty_set()\
-    \ const {\n            return 0;\n        }\n        hash_type sigleton_set(const\
+    \ const {\n            return 0;\n        }\n        hash_type singleton_set(const\
     \ value_type& val) {\n            return (*this)(val);\n        }\n        hash_type\
-    \ flip(hash_type old_hash, const value_type& val) {\n            return old_hash\
-    \ ^ (*this)(val);\n        }\n        hash_type xor_set(hash_type set1, hash_type\
-    \ set2) const {\n            return set1 ^ set2;\n        }\n\n    protected:\n\
-    \        rng_type rng;\n        container_type h;\n\n    private:\n        struct\
-    \ Self : public self_type {\n            using self_type::ensure_key_existence;\n\
+    \ sigleton_set(const value_type& val) {\n            return singleton_set(val);\n\
+    \        }\n        hash_type flip(hash_type old_hash, const value_type& val)\
+    \ {\n            return old_hash ^ (*this)(val);\n        }\n        hash_type\
+    \ xor_set(hash_type set1, hash_type set2) const {\n            return set1 ^ set2;\n\
+    \        }\n\n    protected:\n        rng_type rng;\n        container_type h;\n\
+    \n    private:\n        struct Self : public self_type {\n            using self_type::ensure_key_existence;\n\
     \        };\n    };\n\n    template <typename HashType = std::uint64_t, std::enable_if_t<std::is_integral_v<HashType>,\
     \ std::nullptr_t> = nullptr>\n    struct VecZobristHash : public ZobristHashBase<std::vector<std::make_unsigned_t<HashType>>,\
     \ std::size_t, HashType, VecZobristHash<HashType>> {\n        using Base = ZobristHashBase<std::vector<std::make_unsigned_t<HashType>>,\
@@ -106,7 +108,7 @@ data:
   isVerificationFile: false
   path: library/util/zobrist_hash.hpp
   requiredBy: []
-  timestamp: '2023-07-09 04:04:16+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: library/util/zobrist_hash.hpp

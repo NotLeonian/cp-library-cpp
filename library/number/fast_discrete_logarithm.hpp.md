@@ -14,8 +14,8 @@ data:
     path: library/number/internal_eratosthenes.hpp
     title: Internal Eratosthenes
   - icon: ':heavy_check_mark:'
-    path: library/number/montogomery.hpp
-    title: Montogomery
+    path: library/number/montgomery.hpp
+    title: Montgomery
   - icon: ':heavy_check_mark:'
     path: library/number/order_Z_mZ.hpp
     title: Order of $x \in (\mathbb{Z}/m\mathbb{Z}) ^ \ast$
@@ -78,7 +78,7 @@ data:
     } // namespace suisen\n\n#line 11 \"library/number/fast_factorize.hpp\"\n\n#line\
     \ 1 \"library/number/deterministic_miller_rabin.hpp\"\n\n\n\n#line 6 \"library/number/deterministic_miller_rabin.hpp\"\
     \n#include <cstdint>\n#include <iterator>\n#include <tuple>\n#line 10 \"library/number/deterministic_miller_rabin.hpp\"\
-    \n\n#line 1 \"library/number/montogomery.hpp\"\n\n\n\n#line 7 \"library/number/montogomery.hpp\"\
+    \n\n#line 1 \"library/number/montgomery.hpp\"\n\n\n\n#line 7 \"library/number/montgomery.hpp\"\
     \n\nnamespace suisen {\n    namespace internal::montgomery {\n        template\
     \ <typename Int, typename DInt>\n        struct Montgomery {\n        private:\n\
     \            static constexpr uint32_t bits = std::numeric_limits<Int>::digits;\n\
@@ -206,20 +206,20 @@ data:
     \ return 7;\n        default: assert(false);\n    }\n}\n} // namespace suisen::internal::sieve\n\
     \n\n#line 9 \"library/number/sieve_of_eratosthenes.hpp\"\n\nnamespace suisen {\n\
     \ntemplate <unsigned int N>\nclass SimpleSieve {\n    private:\n        static\
-    \ constexpr unsigned int siz = N / internal::sieve::PROD + 1;\n        static\
-    \ std::uint8_t flag[siz];\n    public:\n        SimpleSieve() {\n            using\
-    \ namespace internal::sieve;\n            flag[0] |= 1;\n            unsigned\
+    \ constexpr unsigned int size = N / internal::sieve::PROD + 1;\n        static\
+    \ std::uint8_t flag[size];\n    public:\n        SimpleSieve() {\n           \
+    \ using namespace internal::sieve;\n            flag[0] |= 1;\n            unsigned\
     \ int k_max = (unsigned int) std::sqrt(N + 2) / PROD;\n            for (unsigned\
     \ int kp = 0; kp <= k_max; ++kp) {\n                for (std::uint8_t bits = ~flag[kp];\
     \ bits; bits &= bits - 1) {\n                    const std::uint8_t mp = mask_to_index(bits\
     \ & -bits), m = RM[mp];\n                    unsigned int kr = kp * (PROD * kp\
     \ + 2 * m) + m * m / PROD;\n                    for (std::uint8_t mq = mp; kr\
-    \ < siz; kr += kp * DR[mq] + DF[mp][mq], ++mq &= 7) {\n                      \
-    \  flag[kr] |= MASK[mp][mq];\n                    }\n                }\n     \
-    \       }\n        }\n        std::vector<int> prime_list(unsigned int max_val\
+    \ < size; kr += kp * DR[mq] + DF[mp][mq], ++mq &= 7) {\n                     \
+    \   flag[kr] |= MASK[mp][mq];\n                    }\n                }\n    \
+    \        }\n        }\n        std::vector<int> prime_list(unsigned int max_val\
     \ = N) const {\n            using namespace internal::sieve;\n            std::vector<int>\
     \ res { 2, 3, 5 };\n            res.reserve(max_val / 25);\n            for (unsigned\
-    \ int i = 0, offset = 0; i < siz and offset < max_val; ++i, offset += PROD) {\n\
+    \ int i = 0, offset = 0; i < size and offset < max_val; ++i, offset += PROD) {\n\
     \                for (uint8_t f = ~flag[i]; f;) {\n                    uint8_t\
     \ g = f & -f;\n                    res.push_back(offset + RM[mask_to_index(g)]);\n\
     \                    f ^= g;\n                }\n            }\n            while\
@@ -237,7 +237,7 @@ data:
     \ return ((flag[p / PROD] >> 6) & 1) == 0;\n                        case RM[7]:\
     \ return ((flag[p / PROD] >> 7) & 1) == 0;\n                        default: return\
     \ false;\n                    }\n            }\n        }\n};\ntemplate <unsigned\
-    \ int N>\nstd::uint8_t SimpleSieve<N>::flag[SimpleSieve<N>::siz];\n\ntemplate\
+    \ int N>\nstd::uint8_t SimpleSieve<N>::flag[SimpleSieve<N>::size];\n\ntemplate\
     \ <unsigned int N>\nclass Sieve {\n    private:\n        static constexpr unsigned\
     \ int base_max = (N + 1) * internal::sieve::K / internal::sieve::PROD;\n     \
     \   static unsigned int pf[base_max + internal::sieve::K];\n\n    public:\n  \
@@ -509,58 +509,58 @@ data:
     \ std::vector<mint>& ri, mint& bi, int& tj, std::vector<mint>& rj, mint& bj) {\n\
     \                if (ti != tj) {\n                    if (ti > tj) std::swap(ti,\
     \ tj), std::swap(ri, rj), std::swap(bi, bj);\n                    return;\n  \
-    \              }\n                const int siz = ri.size();\n               \
-    \ assert(int(rj.size()) == siz);\n\n                const auto T = euclid(ri[ti].val(),\
-    \ rj[tj].val());\n                for (int col = ti; col < siz; ++col) {\n   \
-    \                 apply_euclid(T, ri[col], rj[col]);\n                }\n    \
-    \            apply_euclid(T, bi, bj);\n\n                while (tj < siz and rj[tj]\
-    \ == 0) ++tj;\n            }\n        };\n    }\n\n    struct IndexCalculus {\n\
-    \    private:\n        using mint = atcoder::dynamic_modint<73495793>;\n     \
-    \   using mint2 = atcoder::dynamic_modint<73495794>;\n    public:\n        IndexCalculus()\
-    \ = default;\n        IndexCalculus(const OrderMod<int>& ord) : _p(ord.mod()),\
-    \ _ord(ord) {\n            assert(ord.is_prime());\n        }\n\n        int operator()(int\
-    \ a, int b, int p) {\n            int old_mod = mint::mod(), old_mod2 = mint2::mod();\n\
-    \            mint::set_mod(p), mint2::set_mod(p - 1);\n            int res = discrete_log_impl(a,\
-    \ b, p);\n            mint::set_mod(old_mod), mint2::set_mod(old_mod2);\n    \
-    \        return res;\n        }\n        static int discrete_logarithm(int a,\
-    \ int b, int p) {\n            return IndexCalculus{}(a, b, p);\n        }\n \
-    \   private:\n        static constexpr int MAX_B = 80;\n        static constexpr\
-    \ uint32_t primes[MAX_B]{\n            2, 3, 5, 7, 11, 13, 17, 19, 23, 29,\n \
-    \           31, 37, 41, 43, 47, 53, 59, 61, 67, 71,\n            73, 79, 83, 89,\
-    \ 97, 101, 103, 107, 109, 113,\n            127, 131, 137, 139, 149, 151, 157,\
-    \ 163, 167, 173,\n            179, 181, 191, 193, 197, 199, 211, 223, 227, 229,\n\
-    \            233, 239, 241, 251, 257, 263, 269, 271, 277, 281,\n            283,\
-    \ 293, 307, 311, 313, 317, 331, 337, 347, 349,\n            353, 359, 367, 373,\
-    \ 379, 383, 389, 397, 401, 409,\n        };\n        // inv_primes[i] = ceil(2^32\
-    \ / primes[i])\n        static constexpr uint32_t inv_primes[MAX_B]{\n       \
-    \     2147483648,1431655766, 858993460, 613566757, 390451573, 330382100, 252645136,\
-    \ 226050911, 186737709, 148102321,\n            138547333, 116080198, 104755300,\
-    \ 99882961, 91382283, 81037119, 72796056, 70409300, 64103990, 60492498,\n    \
-    \        58835169, 54366675, 51746594, 48258060, 44278014, 42524429, 41698712,\
-    \ 40139882, 39403370, 38008561,\n            33818641, 32786010, 31350127, 30899046,\
-    \ 28825284, 28443493, 27356480, 26349493, 25718368, 24826401,\n            23994231,\
-    \ 23729102, 22486740, 22253717, 21801865, 21582751, 20355296, 19259944, 18920561,\
-    \ 18755316,\n            18433337, 17970575, 17821442, 17111424, 16711936, 16330675,\
-    \ 15966422, 15848588, 15505298, 15284582,\n            15176563, 14658592, 13990122,\
-    \ 13810185, 13721941, 13548793, 12975733, 12744711, 12377428, 12306497,\n    \
-    \        12167047, 11963698, 11702909, 11514658, 11332368, 11214014, 11041048,\
-    \ 10818558, 10710642, 10501143,\n        };\n\n        int _p = -1;\n        OrderMod<int>\
-    \ _ord;\n        int _a = -1;\n        internal::SystemOfLinearEquations<mint2>\
-    \ _eq;\n\n        static int safe_mod(int a, int p) { return ((a %= p) < 0) ?\
-    \ a + p : a; }\n\n        static int discrete_log_naive(mint a, mint b, int ord_a)\
-    \ {\n            mint pow_a = 1;\n            for (int res = 0; res < ord_a; ++res)\
-    \ {\n                if (pow_a == b) return res;\n                pow_a *= a;\n\
-    \            }\n            return -1;\n        }\n\n        static bool is_smooth(const\
-    \ int B, uint32_t v) {\n            assert(B <= MAX_B);\n            for (int\
-    \ i = 0; i < B; ++i) {\n                const uint32_t m = primes[B - i - 1],\
-    \ im = inv_primes[B - i - 1];\n                if (uint32_t q = (uint64_t(v) *\
-    \ im) >> 32; v == q * m) {\n                    // q = floor(v/m)\n          \
-    \          do v = q, q = (uint64_t(v) * im) >> 32; while (v == q * m);\n     \
-    \           }\n            }\n            return v == 1;\n        }\n\n      \
-    \  static std::optional<std::vector<mint2>> try_factorize(const int B, uint32_t\
-    \ v) {\n            assert(B <= MAX_B);\n            if (not is_smooth(B, v))\
-    \ return std::nullopt;\n            std::vector<mint2> res(B + 1);\n         \
-    \   for (int i = 0; i < B; ++i) {\n                const uint32_t m = primes[B\
+    \              }\n                const int size = ri.size();\n              \
+    \  assert(int(rj.size()) == size);\n\n                const auto T = euclid(ri[ti].val(),\
+    \ rj[tj].val());\n                for (int col = ti; col < size; ++col) {\n  \
+    \                  apply_euclid(T, ri[col], rj[col]);\n                }\n   \
+    \             apply_euclid(T, bi, bj);\n\n                while (tj < size and\
+    \ rj[tj] == 0) ++tj;\n            }\n        };\n    }\n\n    struct IndexCalculus\
+    \ {\n    private:\n        using mint = atcoder::dynamic_modint<73495793>;\n \
+    \       using mint2 = atcoder::dynamic_modint<73495794>;\n    public:\n      \
+    \  IndexCalculus() = default;\n        IndexCalculus(const OrderMod<int>& ord)\
+    \ : _p(ord.mod()), _ord(ord) {\n            assert(ord.is_prime());\n        }\n\
+    \n        int operator()(int a, int b, int p) {\n            int old_mod = mint::mod(),\
+    \ old_mod2 = mint2::mod();\n            mint::set_mod(p), mint2::set_mod(p - 1);\n\
+    \            int res = discrete_log_impl(a, b, p);\n            mint::set_mod(old_mod),\
+    \ mint2::set_mod(old_mod2);\n            return res;\n        }\n        static\
+    \ int discrete_logarithm(int a, int b, int p) {\n            return IndexCalculus{}(a,\
+    \ b, p);\n        }\n    private:\n        static constexpr int MAX_B = 80;\n\
+    \        static constexpr uint32_t primes[MAX_B]{\n            2, 3, 5, 7, 11,\
+    \ 13, 17, 19, 23, 29,\n            31, 37, 41, 43, 47, 53, 59, 61, 67, 71,\n \
+    \           73, 79, 83, 89, 97, 101, 103, 107, 109, 113,\n            127, 131,\
+    \ 137, 139, 149, 151, 157, 163, 167, 173,\n            179, 181, 191, 193, 197,\
+    \ 199, 211, 223, 227, 229,\n            233, 239, 241, 251, 257, 263, 269, 271,\
+    \ 277, 281,\n            283, 293, 307, 311, 313, 317, 331, 337, 347, 349,\n \
+    \           353, 359, 367, 373, 379, 383, 389, 397, 401, 409,\n        };\n  \
+    \      // inv_primes[i] = ceil(2^32 / primes[i])\n        static constexpr uint32_t\
+    \ inv_primes[MAX_B]{\n            2147483648,1431655766, 858993460, 613566757,\
+    \ 390451573, 330382100, 252645136, 226050911, 186737709, 148102321,\n        \
+    \    138547333, 116080198, 104755300, 99882961, 91382283, 81037119, 72796056,\
+    \ 70409300, 64103990, 60492498,\n            58835169, 54366675, 51746594, 48258060,\
+    \ 44278014, 42524429, 41698712, 40139882, 39403370, 38008561,\n            33818641,\
+    \ 32786010, 31350127, 30899046, 28825284, 28443493, 27356480, 26349493, 25718368,\
+    \ 24826401,\n            23994231, 23729102, 22486740, 22253717, 21801865, 21582751,\
+    \ 20355296, 19259944, 18920561, 18755316,\n            18433337, 17970575, 17821442,\
+    \ 17111424, 16711936, 16330675, 15966422, 15848588, 15505298, 15284582,\n    \
+    \        15176563, 14658592, 13990122, 13810185, 13721941, 13548793, 12975733,\
+    \ 12744711, 12377428, 12306497,\n            12167047, 11963698, 11702909, 11514658,\
+    \ 11332368, 11214014, 11041048, 10818558, 10710642, 10501143,\n        };\n\n\
+    \        int _p = -1;\n        OrderMod<int> _ord;\n        int _a = -1;\n   \
+    \     internal::SystemOfLinearEquations<mint2> _eq;\n\n        static int safe_mod(int\
+    \ a, int p) { return ((a %= p) < 0) ? a + p : a; }\n\n        static int discrete_log_naive(mint\
+    \ a, mint b, int ord_a) {\n            mint pow_a = 1;\n            for (int res\
+    \ = 0; res < ord_a; ++res) {\n                if (pow_a == b) return res;\n  \
+    \              pow_a *= a;\n            }\n            return -1;\n        }\n\
+    \n        static bool is_smooth(const int B, uint32_t v) {\n            assert(B\
+    \ <= MAX_B);\n            for (int i = 0; i < B; ++i) {\n                const\
+    \ uint32_t m = primes[B - i - 1], im = inv_primes[B - i - 1];\n              \
+    \  if (uint32_t q = (uint64_t(v) * im) >> 32; v == q * m) {\n                \
+    \    // q = floor(v/m)\n                    do v = q, q = (uint64_t(v) * im) >>\
+    \ 32; while (v == q * m);\n                }\n            }\n            return\
+    \ v == 1;\n        }\n\n        static std::optional<std::vector<mint2>> try_factorize(const\
+    \ int B, uint32_t v) {\n            assert(B <= MAX_B);\n            if (not is_smooth(B,\
+    \ v)) return std::nullopt;\n            std::vector<mint2> res(B + 1);\n     \
+    \       for (int i = 0; i < B; ++i) {\n                const uint32_t m = primes[B\
     \ - i - 1], im = inv_primes[B - i - 1];\n                int c = 0;\n        \
     \        uint32_t q = (uint64_t(v) * im) >> 32;\n                while (v == q\
     \ * m) {\n                    v = q, q = (uint64_t(v) * im) >> 32;\n         \
@@ -693,58 +693,58 @@ data:
     \ std::vector<mint>& ri, mint& bi, int& tj, std::vector<mint>& rj, mint& bj) {\n\
     \                if (ti != tj) {\n                    if (ti > tj) std::swap(ti,\
     \ tj), std::swap(ri, rj), std::swap(bi, bj);\n                    return;\n  \
-    \              }\n                const int siz = ri.size();\n               \
-    \ assert(int(rj.size()) == siz);\n\n                const auto T = euclid(ri[ti].val(),\
-    \ rj[tj].val());\n                for (int col = ti; col < siz; ++col) {\n   \
-    \                 apply_euclid(T, ri[col], rj[col]);\n                }\n    \
-    \            apply_euclid(T, bi, bj);\n\n                while (tj < siz and rj[tj]\
-    \ == 0) ++tj;\n            }\n        };\n    }\n\n    struct IndexCalculus {\n\
-    \    private:\n        using mint = atcoder::dynamic_modint<73495793>;\n     \
-    \   using mint2 = atcoder::dynamic_modint<73495794>;\n    public:\n        IndexCalculus()\
-    \ = default;\n        IndexCalculus(const OrderMod<int>& ord) : _p(ord.mod()),\
-    \ _ord(ord) {\n            assert(ord.is_prime());\n        }\n\n        int operator()(int\
-    \ a, int b, int p) {\n            int old_mod = mint::mod(), old_mod2 = mint2::mod();\n\
-    \            mint::set_mod(p), mint2::set_mod(p - 1);\n            int res = discrete_log_impl(a,\
-    \ b, p);\n            mint::set_mod(old_mod), mint2::set_mod(old_mod2);\n    \
-    \        return res;\n        }\n        static int discrete_logarithm(int a,\
-    \ int b, int p) {\n            return IndexCalculus{}(a, b, p);\n        }\n \
-    \   private:\n        static constexpr int MAX_B = 80;\n        static constexpr\
-    \ uint32_t primes[MAX_B]{\n            2, 3, 5, 7, 11, 13, 17, 19, 23, 29,\n \
-    \           31, 37, 41, 43, 47, 53, 59, 61, 67, 71,\n            73, 79, 83, 89,\
-    \ 97, 101, 103, 107, 109, 113,\n            127, 131, 137, 139, 149, 151, 157,\
-    \ 163, 167, 173,\n            179, 181, 191, 193, 197, 199, 211, 223, 227, 229,\n\
-    \            233, 239, 241, 251, 257, 263, 269, 271, 277, 281,\n            283,\
-    \ 293, 307, 311, 313, 317, 331, 337, 347, 349,\n            353, 359, 367, 373,\
-    \ 379, 383, 389, 397, 401, 409,\n        };\n        // inv_primes[i] = ceil(2^32\
-    \ / primes[i])\n        static constexpr uint32_t inv_primes[MAX_B]{\n       \
-    \     2147483648,1431655766, 858993460, 613566757, 390451573, 330382100, 252645136,\
-    \ 226050911, 186737709, 148102321,\n            138547333, 116080198, 104755300,\
-    \ 99882961, 91382283, 81037119, 72796056, 70409300, 64103990, 60492498,\n    \
-    \        58835169, 54366675, 51746594, 48258060, 44278014, 42524429, 41698712,\
-    \ 40139882, 39403370, 38008561,\n            33818641, 32786010, 31350127, 30899046,\
-    \ 28825284, 28443493, 27356480, 26349493, 25718368, 24826401,\n            23994231,\
-    \ 23729102, 22486740, 22253717, 21801865, 21582751, 20355296, 19259944, 18920561,\
-    \ 18755316,\n            18433337, 17970575, 17821442, 17111424, 16711936, 16330675,\
-    \ 15966422, 15848588, 15505298, 15284582,\n            15176563, 14658592, 13990122,\
-    \ 13810185, 13721941, 13548793, 12975733, 12744711, 12377428, 12306497,\n    \
-    \        12167047, 11963698, 11702909, 11514658, 11332368, 11214014, 11041048,\
-    \ 10818558, 10710642, 10501143,\n        };\n\n        int _p = -1;\n        OrderMod<int>\
-    \ _ord;\n        int _a = -1;\n        internal::SystemOfLinearEquations<mint2>\
-    \ _eq;\n\n        static int safe_mod(int a, int p) { return ((a %= p) < 0) ?\
-    \ a + p : a; }\n\n        static int discrete_log_naive(mint a, mint b, int ord_a)\
-    \ {\n            mint pow_a = 1;\n            for (int res = 0; res < ord_a; ++res)\
-    \ {\n                if (pow_a == b) return res;\n                pow_a *= a;\n\
-    \            }\n            return -1;\n        }\n\n        static bool is_smooth(const\
-    \ int B, uint32_t v) {\n            assert(B <= MAX_B);\n            for (int\
-    \ i = 0; i < B; ++i) {\n                const uint32_t m = primes[B - i - 1],\
-    \ im = inv_primes[B - i - 1];\n                if (uint32_t q = (uint64_t(v) *\
-    \ im) >> 32; v == q * m) {\n                    // q = floor(v/m)\n          \
-    \          do v = q, q = (uint64_t(v) * im) >> 32; while (v == q * m);\n     \
-    \           }\n            }\n            return v == 1;\n        }\n\n      \
-    \  static std::optional<std::vector<mint2>> try_factorize(const int B, uint32_t\
-    \ v) {\n            assert(B <= MAX_B);\n            if (not is_smooth(B, v))\
-    \ return std::nullopt;\n            std::vector<mint2> res(B + 1);\n         \
-    \   for (int i = 0; i < B; ++i) {\n                const uint32_t m = primes[B\
+    \              }\n                const int size = ri.size();\n              \
+    \  assert(int(rj.size()) == size);\n\n                const auto T = euclid(ri[ti].val(),\
+    \ rj[tj].val());\n                for (int col = ti; col < size; ++col) {\n  \
+    \                  apply_euclid(T, ri[col], rj[col]);\n                }\n   \
+    \             apply_euclid(T, bi, bj);\n\n                while (tj < size and\
+    \ rj[tj] == 0) ++tj;\n            }\n        };\n    }\n\n    struct IndexCalculus\
+    \ {\n    private:\n        using mint = atcoder::dynamic_modint<73495793>;\n \
+    \       using mint2 = atcoder::dynamic_modint<73495794>;\n    public:\n      \
+    \  IndexCalculus() = default;\n        IndexCalculus(const OrderMod<int>& ord)\
+    \ : _p(ord.mod()), _ord(ord) {\n            assert(ord.is_prime());\n        }\n\
+    \n        int operator()(int a, int b, int p) {\n            int old_mod = mint::mod(),\
+    \ old_mod2 = mint2::mod();\n            mint::set_mod(p), mint2::set_mod(p - 1);\n\
+    \            int res = discrete_log_impl(a, b, p);\n            mint::set_mod(old_mod),\
+    \ mint2::set_mod(old_mod2);\n            return res;\n        }\n        static\
+    \ int discrete_logarithm(int a, int b, int p) {\n            return IndexCalculus{}(a,\
+    \ b, p);\n        }\n    private:\n        static constexpr int MAX_B = 80;\n\
+    \        static constexpr uint32_t primes[MAX_B]{\n            2, 3, 5, 7, 11,\
+    \ 13, 17, 19, 23, 29,\n            31, 37, 41, 43, 47, 53, 59, 61, 67, 71,\n \
+    \           73, 79, 83, 89, 97, 101, 103, 107, 109, 113,\n            127, 131,\
+    \ 137, 139, 149, 151, 157, 163, 167, 173,\n            179, 181, 191, 193, 197,\
+    \ 199, 211, 223, 227, 229,\n            233, 239, 241, 251, 257, 263, 269, 271,\
+    \ 277, 281,\n            283, 293, 307, 311, 313, 317, 331, 337, 347, 349,\n \
+    \           353, 359, 367, 373, 379, 383, 389, 397, 401, 409,\n        };\n  \
+    \      // inv_primes[i] = ceil(2^32 / primes[i])\n        static constexpr uint32_t\
+    \ inv_primes[MAX_B]{\n            2147483648,1431655766, 858993460, 613566757,\
+    \ 390451573, 330382100, 252645136, 226050911, 186737709, 148102321,\n        \
+    \    138547333, 116080198, 104755300, 99882961, 91382283, 81037119, 72796056,\
+    \ 70409300, 64103990, 60492498,\n            58835169, 54366675, 51746594, 48258060,\
+    \ 44278014, 42524429, 41698712, 40139882, 39403370, 38008561,\n            33818641,\
+    \ 32786010, 31350127, 30899046, 28825284, 28443493, 27356480, 26349493, 25718368,\
+    \ 24826401,\n            23994231, 23729102, 22486740, 22253717, 21801865, 21582751,\
+    \ 20355296, 19259944, 18920561, 18755316,\n            18433337, 17970575, 17821442,\
+    \ 17111424, 16711936, 16330675, 15966422, 15848588, 15505298, 15284582,\n    \
+    \        15176563, 14658592, 13990122, 13810185, 13721941, 13548793, 12975733,\
+    \ 12744711, 12377428, 12306497,\n            12167047, 11963698, 11702909, 11514658,\
+    \ 11332368, 11214014, 11041048, 10818558, 10710642, 10501143,\n        };\n\n\
+    \        int _p = -1;\n        OrderMod<int> _ord;\n        int _a = -1;\n   \
+    \     internal::SystemOfLinearEquations<mint2> _eq;\n\n        static int safe_mod(int\
+    \ a, int p) { return ((a %= p) < 0) ? a + p : a; }\n\n        static int discrete_log_naive(mint\
+    \ a, mint b, int ord_a) {\n            mint pow_a = 1;\n            for (int res\
+    \ = 0; res < ord_a; ++res) {\n                if (pow_a == b) return res;\n  \
+    \              pow_a *= a;\n            }\n            return -1;\n        }\n\
+    \n        static bool is_smooth(const int B, uint32_t v) {\n            assert(B\
+    \ <= MAX_B);\n            for (int i = 0; i < B; ++i) {\n                const\
+    \ uint32_t m = primes[B - i - 1], im = inv_primes[B - i - 1];\n              \
+    \  if (uint32_t q = (uint64_t(v) * im) >> 32; v == q * m) {\n                \
+    \    // q = floor(v/m)\n                    do v = q, q = (uint64_t(v) * im) >>\
+    \ 32; while (v == q * m);\n                }\n            }\n            return\
+    \ v == 1;\n        }\n\n        static std::optional<std::vector<mint2>> try_factorize(const\
+    \ int B, uint32_t v) {\n            assert(B <= MAX_B);\n            if (not is_smooth(B,\
+    \ v)) return std::nullopt;\n            std::vector<mint2> res(B + 1);\n     \
+    \       for (int i = 0; i < B; ++i) {\n                const uint32_t m = primes[B\
     \ - i - 1], im = inv_primes[B - i - 1];\n                int c = 0;\n        \
     \        uint32_t q = (uint64_t(v) * im) >> 32;\n                while (v == q\
     \ * m) {\n                    v = q, q = (uint64_t(v) * im) >> 32;\n         \
@@ -828,7 +828,7 @@ data:
   - library/number/fast_factorize.hpp
   - library/type_traits/type_traits.hpp
   - library/number/deterministic_miller_rabin.hpp
-  - library/number/montogomery.hpp
+  - library/number/montgomery.hpp
   - library/number/sieve_of_eratosthenes.hpp
   - library/number/internal_eratosthenes.hpp
   - library/number/order_Z_mZ.hpp
@@ -836,7 +836,7 @@ data:
   isVerificationFile: false
   path: library/number/fast_discrete_logarithm.hpp
   requiredBy: []
-  timestamp: '2024-01-30 21:04:24+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: library/number/fast_discrete_logarithm.hpp

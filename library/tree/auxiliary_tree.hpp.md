@@ -63,36 +63,37 @@ data:
     \ = std::is_same<std::invoke_result_t<Q, int, int>, T>;\n\n        using Graph\
     \ = std::vector<std::vector<int>>;\n\n        HeavyLightDecomposition() = default;\n\
     \        HeavyLightDecomposition(Graph &g) : n(g.size()), visit(n), leave(n),\
-    \ head(n), ord(n), siz(n), par(n, -1), dep(n, 0) {\n            for (int i = 0;\
-    \ i < n; ++i) if (par[i] < 0) dfs(g, i, -1);\n            int time = 0;\n    \
-    \        for (int i = 0; i < n; ++i) if (par[i] < 0) hld(g, i, -1, time);\n  \
-    \      }\n        HeavyLightDecomposition(Graph &g, const std::vector<int> &roots)\
-    \ : n(g.size()), visit(n), leave(n), head(n), ord(n), siz(n), par(n, -1), dep(n,\
-    \ 0) {\n            for (int i : roots) dfs(g, i, -1);\n            int time =\
-    \ 0;\n            for (int i : roots) hld(g, i, -1, time);\n        }\n      \
-    \  int size() const {\n            return n;\n        }\n        int lca(int u,\
-    \ int v) const {\n            for (;; v = par[head[v]]) {\n                if\
-    \ (visit[u] > visit[v]) std::swap(u, v);\n                if (head[u] == head[v])\
-    \ return u;\n            }\n        }\n        int la(int u, int k, int default_value\
-    \ = -1) const {\n            if (k < 0) return default_value;\n            while\
-    \ (u >= 0) {\n                int h = head[u];\n                if (visit[u] -\
-    \ k >= visit[h]) return ord[visit[u] - k];\n                k -= visit[u] - visit[h]\
-    \ + 1;\n                u = par[h];\n            }\n            return default_value;\n\
-    \        }\n        int jump(int u, int v, int d, int default_value = -1) const\
-    \ {\n            if (d < 0) return default_value;\n            const int w = lca(u,\
-    \ v);\n            int uw = dep[u] - dep[w];\n            if (d <= uw) return\
-    \ la(u, d);\n            int vw = dep[v] - dep[w];\n            return d <= uw\
-    \ + vw ? la(v, (uw + vw) - d) : default_value;\n        }\n        int dist(int\
-    \ u, int v) const {\n            return dep[u] + dep[v] - 2 * dep[lca(u, v)];\n\
-    \        }\n        template <typename T, typename Q, typename F, constraints_t<is_range_fold_query<Q,\
-    \ T>, std::is_invocable_r<T, F, T, T>> = nullptr>\n        T fold_path(int u,\
-    \ int v, T identity, F bin_op, Q fold_query, bool is_edge_query = false) const\
-    \ {\n            T res = identity;\n            for (;; v = par[head[v]]) {\n\
-    \                if (visit[u] > visit[v]) std::swap(u, v);\n                if\
-    \ (head[u] == head[v]) break;\n                res = bin_op(fold_query(visit[head[v]],\
-    \ visit[v] + 1), res);\n            }\n            return bin_op(fold_query(visit[u]\
-    \ + is_edge_query, visit[v] + 1), res);\n        }\n        template <\n     \
-    \       typename T, typename Q1, typename Q2, typename F,\n            constraints_t<is_range_fold_query<Q1,\
+    \ head(n), ord(n), subtree_size(n), par(n, -1), dep(n, 0) {\n            for (int\
+    \ i = 0; i < n; ++i) if (par[i] < 0) dfs(g, i, -1);\n            int time = 0;\n\
+    \            for (int i = 0; i < n; ++i) if (par[i] < 0) hld(g, i, -1, time);\n\
+    \        }\n        HeavyLightDecomposition(Graph &g, const std::vector<int> &roots)\
+    \ : n(g.size()), visit(n), leave(n), head(n), ord(n), subtree_size(n), par(n,\
+    \ -1), dep(n, 0) {\n            for (int i : roots) dfs(g, i, -1);\n         \
+    \   int time = 0;\n            for (int i : roots) hld(g, i, -1, time);\n    \
+    \    }\n        int size() const {\n            return n;\n        }\n       \
+    \ int lca(int u, int v) const {\n            for (;; v = par[head[v]]) {\n   \
+    \             if (visit[u] > visit[v]) std::swap(u, v);\n                if (head[u]\
+    \ == head[v]) return u;\n            }\n        }\n        int la(int u, int k,\
+    \ int default_value = -1) const {\n            if (k < 0) return default_value;\n\
+    \            while (u >= 0) {\n                int h = head[u];\n            \
+    \    if (visit[u] - k >= visit[h]) return ord[visit[u] - k];\n               \
+    \ k -= visit[u] - visit[h] + 1;\n                u = par[h];\n            }\n\
+    \            return default_value;\n        }\n        int jump(int u, int v,\
+    \ int d, int default_value = -1) const {\n            if (d < 0) return default_value;\n\
+    \            const int w = lca(u, v);\n            int uw = dep[u] - dep[w];\n\
+    \            if (d <= uw) return la(u, d);\n            int vw = dep[v] - dep[w];\n\
+    \            return d <= uw + vw ? la(v, (uw + vw) - d) : default_value;\n   \
+    \     }\n        int dist(int u, int v) const {\n            return dep[u] + dep[v]\
+    \ - 2 * dep[lca(u, v)];\n        }\n        template <typename T, typename Q,\
+    \ typename F, constraints_t<is_range_fold_query<Q, T>, std::is_invocable_r<T,\
+    \ F, T, T>> = nullptr>\n        T fold_path(int u, int v, T identity, F bin_op,\
+    \ Q fold_query, bool is_edge_query = false) const {\n            T res = identity;\n\
+    \            for (;; v = par[head[v]]) {\n                if (visit[u] > visit[v])\
+    \ std::swap(u, v);\n                if (head[u] == head[v]) break;\n         \
+    \       res = bin_op(fold_query(visit[head[v]], visit[v] + 1), res);\n       \
+    \     }\n            return bin_op(fold_query(visit[u] + is_edge_query, visit[v]\
+    \ + 1), res);\n        }\n        template <\n            typename T, typename\
+    \ Q1, typename Q2, typename F,\n            constraints_t<is_range_fold_query<Q1,\
     \ T>, is_range_fold_query<Q2, T>, std::is_invocable_r<T, F, T, T>> = nullptr\n\
     \        >\n        T fold_path_noncommutative(int u, int v, T identity, F bin_op,\
     \ Q1 fold_query, Q2 fold_query_rev, bool is_edge_query = false) const {\n    \
@@ -130,37 +131,37 @@ data:
     \     int get_leave_time(int u) const {\n            return leave[u];\n      \
     \  }\n        int get_head(int u) const {\n            return head[u];\n     \
     \   }\n        int get_kth_visited(int k) const {\n            return ord[k];\n\
-    \        }\n        int get_subtree_size(int u) const {\n            return siz[u];\n\
+    \        }\n        int get_subtree_size(int u) const {\n            return subtree_size[u];\n\
     \        }\n        int get_parent(int u) const {\n            return par[u];\n\
     \        }\n        int get_depth(int u) const {\n            return dep[u];\n\
     \        }\n        std::vector<int> get_roots() const {\n            std::vector<int>\
     \ res;\n            for (int i = 0; i < n; ++i) if (par[i] < 0) res.push_back(i);\n\
     \            return res;\n        }\n    private:\n        int n;\n        std::vector<int>\
-    \ visit, leave, head, ord, siz, par, dep;\n        int dfs(Graph &g, int u, int\
-    \ p) {\n            par[u] = p;\n            siz[u] = 1;\n            int max_size\
-    \ = 0;\n            for (int &v : g[u]) {\n                if (v == p) continue;\n\
-    \                dep[v] = dep[u] + 1;\n                siz[u] += dfs(g, v, u);\n\
-    \                if (max_size < siz[v]) {\n                    max_size = siz[v];\n\
-    \                    std::swap(g[u].front(), v);\n                }\n        \
-    \    }\n            return siz[u];\n        }\n        void hld(Graph &g, int\
-    \ u, int p, int &time) {\n            visit[u] = time, ord[time] = u, ++time;\n\
-    \            head[u] = p >= 0 and g[p].front() == u ? head[p] : u;\n         \
-    \   for (int v : g[u]) {\n                if (v != p) hld(g, v, u, time);\n  \
-    \          }\n            leave[u] = time;\n        }\n};\n} // namespace suisen\n\
-    \n\n#line 6 \"library/tree/auxiliary_tree.hpp\"\n\nnamespace suisen {\n    struct\
-    \ AuxiliaryTree {\n        AuxiliaryTree() = default;\n        AuxiliaryTree(const\
-    \ HeavyLightDecomposition& hld) : _n(hld.size()), _aux(_n), _hld(hld) {}\n\n \
-    \       const std::vector<int>& operator[](int u) const {\n            return\
-    \ _aux[u];\n        }\n\n        void build(std::vector<int> vs) {\n         \
-    \   const int k = vs.size();\n            for (int v : _upd) _aux[v].clear();\n\
-    \            _upd.clear();\n\n            std::sort(vs.begin(), vs.end(), [this](int\
-    \ i, int j) { return _hld.get_visit_time(i) < _hld.get_visit_time(j); });\n\n\
-    \            std::copy(vs.begin(), vs.end(), std::back_inserter(_upd));\n\n  \
-    \          std::vector<int> st{ vs[0] };\n            for (int i = 0; i < k -\
-    \ 1; ++i) {\n                const int w = _hld.lca(vs[i], vs[i + 1]);\n\n   \
-    \             if (w != vs[i]) {\n                    _upd.push_back(w);\n    \
-    \                int last = st.back();\n                    st.pop_back();\n \
-    \                   while (st.size() and _hld.get_depth(w) < _hld.get_depth(st.back()))\
+    \ visit, leave, head, ord, subtree_size, par, dep;\n        int dfs(Graph &g,\
+    \ int u, int p) {\n            par[u] = p;\n            subtree_size[u] = 1;\n\
+    \            int max_size = 0;\n            for (int &v : g[u]) {\n          \
+    \      if (v == p) continue;\n                dep[v] = dep[u] + 1;\n         \
+    \       subtree_size[u] += dfs(g, v, u);\n                if (max_size < subtree_size[v])\
+    \ {\n                    max_size = subtree_size[v];\n                    std::swap(g[u].front(),\
+    \ v);\n                }\n            }\n            return subtree_size[u];\n\
+    \        }\n        void hld(Graph &g, int u, int p, int &time) {\n          \
+    \  visit[u] = time, ord[time] = u, ++time;\n            head[u] = p >= 0 and g[p].front()\
+    \ == u ? head[p] : u;\n            for (int v : g[u]) {\n                if (v\
+    \ != p) hld(g, v, u, time);\n            }\n            leave[u] = time;\n   \
+    \     }\n};\n} // namespace suisen\n\n\n#line 6 \"library/tree/auxiliary_tree.hpp\"\
+    \n\nnamespace suisen {\n    struct AuxiliaryTree {\n        AuxiliaryTree() =\
+    \ default;\n        AuxiliaryTree(const HeavyLightDecomposition& hld) : _n(hld.size()),\
+    \ _aux(_n), _hld(hld) {}\n\n        const std::vector<int>& operator[](int u)\
+    \ const {\n            return _aux[u];\n        }\n\n        void build(std::vector<int>\
+    \ vs) {\n            const int k = vs.size();\n            for (int v : _upd)\
+    \ _aux[v].clear();\n            _upd.clear();\n\n            std::sort(vs.begin(),\
+    \ vs.end(), [this](int i, int j) { return _hld.get_visit_time(i) < _hld.get_visit_time(j);\
+    \ });\n\n            std::copy(vs.begin(), vs.end(), std::back_inserter(_upd));\n\
+    \n            std::vector<int> st{ vs[0] };\n            for (int i = 0; i < k\
+    \ - 1; ++i) {\n                const int w = _hld.lca(vs[i], vs[i + 1]);\n\n \
+    \               if (w != vs[i]) {\n                    _upd.push_back(w);\n  \
+    \                  int last = st.back();\n                    st.pop_back();\n\
+    \                    while (st.size() and _hld.get_depth(w) < _hld.get_depth(st.back()))\
     \ {\n                        int u = st.back();\n                        _aux[u].push_back(last);\n\
     \                        _aux[last].push_back(u);\n                        last\
     \ = st.back();\n                        st.pop_back();\n                    }\n\
@@ -170,9 +171,9 @@ data:
     \                    } else {\n                        _aux[w].push_back(last);\n\
     \                        _aux[last].push_back(w);\n                    }\n   \
     \             }\n\n                st.push_back(vs[i + 1]);\n            }\n \
-    \           const int siz = st.size();\n            for (int i = 0; i < siz -\
-    \ 1; ++i) {\n                _aux[st[i]].push_back(st[i + 1]);\n             \
-    \   _aux[st[i + 1]].push_back(st[i]);\n            }\n        }\n\n        const\
+    \           const int size = st.size();\n            for (int i = 0; i < size\
+    \ - 1; ++i) {\n                _aux[st[i]].push_back(st[i + 1]);\n           \
+    \     _aux[st[i + 1]].push_back(st[i]);\n            }\n        }\n\n        const\
     \ HeavyLightDecomposition& get_hld() const {\n            return _hld;\n     \
     \   }\n    private:\n        int _n;\n        std::vector<std::vector<int>> _aux;\n\
     \        HeavyLightDecomposition _hld;\n        std::vector<int> _upd;\n    };\n\
@@ -201,9 +202,9 @@ data:
     \                    } else {\n                        _aux[w].push_back(last);\n\
     \                        _aux[last].push_back(w);\n                    }\n   \
     \             }\n\n                st.push_back(vs[i + 1]);\n            }\n \
-    \           const int siz = st.size();\n            for (int i = 0; i < siz -\
-    \ 1; ++i) {\n                _aux[st[i]].push_back(st[i + 1]);\n             \
-    \   _aux[st[i + 1]].push_back(st[i]);\n            }\n        }\n\n        const\
+    \           const int size = st.size();\n            for (int i = 0; i < size\
+    \ - 1; ++i) {\n                _aux[st[i]].push_back(st[i + 1]);\n           \
+    \     _aux[st[i + 1]].push_back(st[i]);\n            }\n        }\n\n        const\
     \ HeavyLightDecomposition& get_hld() const {\n            return _hld;\n     \
     \   }\n    private:\n        int _n;\n        std::vector<std::vector<int>> _aux;\n\
     \        HeavyLightDecomposition _hld;\n        std::vector<int> _upd;\n    };\n\
@@ -214,7 +215,7 @@ data:
   isVerificationFile: false
   path: library/tree/auxiliary_tree.hpp
   requiredBy: []
-  timestamp: '2024-01-31 02:46:42+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: library/tree/auxiliary_tree.hpp

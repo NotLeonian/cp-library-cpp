@@ -25,9 +25,9 @@ data:
     \ = 6;\n        static constexpr int SEARCH_WIDTH = 1;\n    public:\n        fenwick_tree_set()\
     \ : fenwick_tree_set(0) {}\n        // Construct (an empty / a full) set and set\
     \ the universe as {0,1,...,n-1}\n        explicit fenwick_tree_set(int n, bool\
-    \ fullset = false): _n(n), _wn(std::max((_n + (WORD - 1)) >> LOG_WORD, 1)), _lg(top_setbit(_wn)),\
-    \ _siz(0), _d(_wn + 1), _bs(_wn) {\n            if (fullset) {\n             \
-    \   std::vector<int> values(n);\n                std::iota(values.begin(), values.end(),\
+    \ full_set = false): _n(n), _wn(std::max((_n + (WORD - 1)) >> LOG_WORD, 1)), _lg(top_setbit(_wn)),\
+    \ _size(0), _d(_wn + 1), _bs(_wn) {\n            if (full_set) {\n           \
+    \     std::vector<int> values(n);\n                std::iota(values.begin(), values.end(),\
     \ 0);\n                construct_from_values(values);\n            }\n       \
     \ }\n        // Construct a set containing the values in `values`.\n        template\
     \ <typename Container, std::enable_if_t<is_container<Container>::value, std::nullptr_t>\
@@ -40,7 +40,7 @@ data:
     \            std::vector<int> values;\n            for (int i = 0; i < _n; ++i)\
     \ if (seq01[i] == one) values.push_back(i);\n            construct_from_values(values);\n\
     \        }\n\n        // O(1).\n        // Number of elements.\n        int size()\
-    \ const { return _siz; }\n\n        // O(1).\n        // Check if `v` is contained.\
+    \ const { return _size; }\n\n        // O(1).\n        // Check if `v` is contained.\
     \ `v` may be out of range.\n        bool contains(int v) const {\n           \
     \ if (not (0 <= v and v < _n)) return false;\n            const auto [t, u] =\
     \ index(v);\n            return (_bs[t] >> u) & 1;\n        }\n        // O(log\
@@ -57,18 +57,18 @@ data:
     \ _bs[t] &= ~(uint64_t(1) << u);\n            return true;\n        }\n\n    \
     \    // O(log n).\n        // Count elements < `v`. `v` may be out of range.\n\
     \        int count_lt(int v) const {\n            if (v <= 0) return 0;\n    \
-    \        if (v >= _n) return _siz;\n            auto [t, u] = index(v);\n    \
-    \        int res = __builtin_popcountll(_bs[t] & ((uint64_t(1) << u) - 1));\n\
+    \        if (v >= _n) return _size;\n            auto [t, u] = index(v);\n   \
+    \         int res = __builtin_popcountll(_bs[t] & ((uint64_t(1) << u) - 1));\n\
     \            for (; t; t &= t - 1) res += _d[t];\n            return res;\n  \
     \      }\n        // O(log n).\n        // Count elements <= `v`. `v` may be out\
     \ of range.\n        int count_leq(int v) const { return count_lt(v + 1); }\n\
     \        // O(log n).\n        // Count elements > `v`. `v` may be out of range.\n\
-    \        int count_gt(int v) const { return _siz - count_leq(v); }\n        //\
+    \        int count_gt(int v) const { return _size - count_leq(v); }\n        //\
     \ O(log n).\n        // Count elements >= `v`. `v` may be out of range.\n    \
-    \    int count_geq(int v) const { return _siz - count_lt(v); }\n\n        // O(log\
-    \ n).\n        // `k`-th smallest element or `-1` if `k` is out of range.\n  \
-    \      int kth_element(int k) const {\n            // Out of range\n         \
-    \   if (not (0 <= k and k < _siz)) return -1;\n            // Binary search\n\
+    \    int count_geq(int v) const { return _size - count_lt(v); }\n\n        //\
+    \ O(log n).\n        // `k`-th smallest element or `-1` if `k` is out of range.\n\
+    \        int kth_element(int k) const {\n            // Out of range\n       \
+    \     if (not (0 <= k and k < _size)) return -1;\n            // Binary search\n\
     \            int t = 1 << _lg;\n            // (I) non-leaf node\n           \
     \ //      [   t   ]\n            //      [t-p]    [t+p]\n            for (int\
     \ p = 1 << _lg >> 1; p; p >>= 1) {\n                if (int nk = t <= _wn ? k\
@@ -138,20 +138,20 @@ data:
     \ = iterator::value_type;\n        using pointer = iterator::pointer;\n      \
     \  using reference = iterator::reference;\n\n        // O(1).\n        iterator\
     \ begin() const { return iterator(this, 0); }\n        // O(1).\n        iterator\
-    \ end() const { return iterator(this, _siz); }\n        // O(log n).\n       \
-    \ iterator lower_bound(int v) const { return iterator(this, count_lt(v)); }\n\
+    \ end() const { return iterator(this, _size); }\n        // O(log n).\n      \
+    \  iterator lower_bound(int v) const { return iterator(this, count_lt(v)); }\n\
     \        // O(log n).\n        iterator upper_bound(int v) const { return iterator(this,\
     \ count_leq(v)); }\n        // O(log n) if `v` is a member, O(1) otherwise.\n\
     \        iterator find(int v) const { return contains(v) ? lower_bound(v) : end();\
     \ }\n        // O(log n).\n        iterator erase(iterator it) { return erase(*it),\
-    \ it; }\n    private:\n        int _n, _wn, _lg, _siz;\n        std::vector<int>\
+    \ it; }\n    private:\n        int _n, _wn, _lg, _size;\n        std::vector<int>\
     \ _d;       // Fenwick Tree\n        std::vector<uint64_t> _bs; // Bitset\n\n\
     \        template <typename Container, std::enable_if_t<is_container<Container>::value,\
     \ std::nullptr_t> = nullptr>\n        void construct_from_values(const Container\
     \ &values) {\n            for (int v : values) {\n                assert(0 <=\
     \ v and v < _n);\n                const auto [t, u] = index(v);\n            \
-    \    if ((_bs[t] >> u) & 1) continue;\n                ++_siz;\n             \
-    \   ++_d[t + 1];\n                _bs[t] |= uint64_t(1) << u;\n            }\n\
+    \    if ((_bs[t] >> u) & 1) continue;\n                ++_size;\n            \
+    \    ++_d[t + 1];\n                _bs[t] |= uint64_t(1) << u;\n            }\n\
     \            for (int i = 1; i <= _wn; ++i) {\n                const int p = i\
     \ + (-i & i);\n                if (p <= _wn) _d[p] += _d[i];\n            }\n\
     \        }\n\n        static constexpr int _large(int i) { return i >> LOG_WORD;\
@@ -162,7 +162,7 @@ data:
     \     // Position of k-th set bit\n        __attribute__((target(\"bmi2\")))\n\
     \        static int kth_setbit(uint64_t x, int k) { return __builtin_ctzll(_pdep_u64(uint64_t(1)\
     \ << k, x)); }\n\n        template <int k>\n        void add(int v) {\n      \
-    \      assert(0 <= v and v < _n);\n            _siz += k;\n            for (int\
+    \      assert(0 <= v and v < _n);\n            _size += k;\n            for (int\
     \ t = _large(v) + 1; t <= _wn; t += -t & t) _d[t] += k;\n        }\n    };\n}\
     \ // namespace suisen\n\n\n#line 9 \"library/number/factorial_number.hpp\"\n\n\
     namespace suisen {\n    struct factorial_number {\n        factorial_number():\
@@ -339,7 +339,7 @@ data:
   isVerificationFile: false
   path: library/number/factorial_number.hpp
   requiredBy: []
-  timestamp: '2024-01-30 19:29:32+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: library/number/factorial_number.hpp

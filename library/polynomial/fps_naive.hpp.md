@@ -279,7 +279,7 @@ data:
     \ <typename T> static constexpr bool is_readable_v = is_readable<T>::value;\n\
     } // namespace suisen\n\n#line 11 \"library/polynomial/fps_naive.hpp\"\n\n#line\
     \ 1 \"library/math/modint_extension.hpp\"\n\n\n\n#line 5 \"library/math/modint_extension.hpp\"\
-    \n#include <optional>\n\n/**\n * refernce: https://37zigen.com/tonelli-shanks-algorithm/\n\
+    \n#include <optional>\n\n/**\n * reference: https://37zigen.com/tonelli-shanks-algorithm/\n\
     \ * calculates x s.t. x^2 = a mod p in O((log p)^2).\n */\ntemplate <typename\
     \ mint>\nstd::optional<mint> safe_sqrt(mint a) {\n    static int p = mint::mod();\n\
     \    if (a == 0) return std::make_optional(0);\n    if (p == 2) return std::make_optional(a);\n\
@@ -615,7 +615,7 @@ data:
   - library/polynomial/formal_power_series.hpp
   - library/polynomial/compose_exp.hpp
   - library/polynomial/fps.hpp
-  timestamp: '2023-09-15 20:02:25+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/linear_algebra/hafnian/hafnian_of_matrix.test.cpp

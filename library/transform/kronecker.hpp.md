@@ -47,12 +47,12 @@ data:
     \ &lhs, const StepIterator &rhs) { return lhs._it >  rhs._it; }\n        friend\
     \ bool operator>=(const StepIterator &lhs, const StepIterator &rhs) { return lhs._it\
     \ >= rhs._it; }\n    private:\n        RandomAccessIterator _it;\n        int\
-    \ _step;\n    };\n\n    template <typename RandomAccesibleContainer>\n    struct\
-    \ StepView {\n        using iterator   = typename RandomAccesibleContainer::iterator;\n\
-    \        using value_type = typename RandomAccesibleContainer::value_type;\n \
-    \       using reference  = typename RandomAccesibleContainer::reference;\n   \
-    \     \n        StepView(RandomAccesibleContainer& dat, int start, int step, int\
-    \ size) : _start(dat.begin() + start, step), _size(size) {}\n        std::size_t\
+    \ _step;\n    };\n\n    template <typename RandomAccessibleContainer>\n    struct\
+    \ StepView {\n        using iterator   = typename RandomAccessibleContainer::iterator;\n\
+    \        using value_type = typename RandomAccessibleContainer::value_type;\n\
+    \        using reference  = typename RandomAccessibleContainer::reference;\n \
+    \       \n        StepView(RandomAccessibleContainer& dat, int start, int step,\
+    \ int size) : _start(dat.begin() + start, step), _size(size) {}\n        std::size_t\
     \ size() const { return _size; }\n        reference operator[](std::size_t k)\
     \ const { return _start[k]; }\n    private:\n        StepIterator<iterator> _start;\n\
     \        std::size_t _size;\n    };\n} // namespace suisen\n\n\n\n#line 1 \"library/util/default_operator.hpp\"\
@@ -183,7 +183,7 @@ data:
   isVerificationFile: false
   path: library/transform/kronecker.hpp
   requiredBy: []
-  timestamp: '2023-02-16 15:43:22+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: library/transform/kronecker.hpp

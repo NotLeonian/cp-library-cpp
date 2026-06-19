@@ -52,7 +52,7 @@ data:
     \ = s >> half, lower = s ^ (upper << half);\n                prd[s] = RMQpm1<is_min_query>::op(prd[lower],\
     \ sum[lower] + prd[upper]);\n                sum[s] = sum[lower] + sum[upper];\n\
     \            }\n        } tabs{};\n\n    public:\n        RMQpm1(std::vector<int>&&\
-    \ x) : n(x.size()), m((n + SIZE - 1) >> LOG), a(std::move(x)), b(m, 0), tabl(build())\
+    \ x) : n(x.size()), m((n + SIZE - 1) >> LOG), a(std::move(x)), b(m, 0), table(build())\
     \ {}\n        RMQpm1(const std::vector<int>& x) : RMQpm1(std::vector<int>(x))\
     \ {}\n\n        int operator()(int l, int r) const {\n            if (l >= r)\
     \ return e();\n            static constexpr int MASK = SIZE - 1;\n           \
@@ -60,9 +60,9 @@ data:
     \ >> LOG], l & MASK, ((r - 1) & MASK) + 1)] : e();\n            };\n         \
     \   if (l >> LOG == (r - 1) >> LOG) return f(l, r);\n            int spl = (l\
     \ + SIZE - 1) >> LOG, spr = r >> LOG;\n            return op(op(f(l, spl << LOG),\
-    \ f(spr << LOG, r)), tabl(spl, spr));\n        }\n\n    private:\n        int\
+    \ f(spr << LOG, r)), table(spl, spr));\n        }\n\n    private:\n        int\
     \ n, m;\n        std::vector<int> a;\n        std::vector<std::uint16_t> b;\n\
-    \        SparseTable<int, op, e> tabl;\n\n        std::vector<int> build() {\n\
+    \        SparseTable<int, op, e> table;\n\n        std::vector<int> build() {\n\
     \            std::vector<int> c(m, e());\n            for (int i = 0, p = a[0]\
     \ - 1; i < n; p = a[i++]) {\n                int outer = i >> LOG;\n         \
     \       c[outer] = op(c[outer], a[i]);\n                b[outer] |= comp(a[i],\
@@ -92,7 +92,7 @@ data:
     \ = s >> half, lower = s ^ (upper << half);\n                prd[s] = RMQpm1<is_min_query>::op(prd[lower],\
     \ sum[lower] + prd[upper]);\n                sum[s] = sum[lower] + sum[upper];\n\
     \            }\n        } tabs{};\n\n    public:\n        RMQpm1(std::vector<int>&&\
-    \ x) : n(x.size()), m((n + SIZE - 1) >> LOG), a(std::move(x)), b(m, 0), tabl(build())\
+    \ x) : n(x.size()), m((n + SIZE - 1) >> LOG), a(std::move(x)), b(m, 0), table(build())\
     \ {}\n        RMQpm1(const std::vector<int>& x) : RMQpm1(std::vector<int>(x))\
     \ {}\n\n        int operator()(int l, int r) const {\n            if (l >= r)\
     \ return e();\n            static constexpr int MASK = SIZE - 1;\n           \
@@ -100,9 +100,9 @@ data:
     \ >> LOG], l & MASK, ((r - 1) & MASK) + 1)] : e();\n            };\n         \
     \   if (l >> LOG == (r - 1) >> LOG) return f(l, r);\n            int spl = (l\
     \ + SIZE - 1) >> LOG, spr = r >> LOG;\n            return op(op(f(l, spl << LOG),\
-    \ f(spr << LOG, r)), tabl(spl, spr));\n        }\n\n    private:\n        int\
+    \ f(spr << LOG, r)), table(spl, spr));\n        }\n\n    private:\n        int\
     \ n, m;\n        std::vector<int> a;\n        std::vector<std::uint16_t> b;\n\
-    \        SparseTable<int, op, e> tabl;\n\n        std::vector<int> build() {\n\
+    \        SparseTable<int, op, e> table;\n\n        std::vector<int> build() {\n\
     \            std::vector<int> c(m, e());\n            for (int i = 0, p = a[0]\
     \ - 1; i < n; p = a[i++]) {\n                int outer = i >> LOG;\n         \
     \       c[outer] = op(c[outer], a[i]);\n                b[outer] |= comp(a[i],\
@@ -118,7 +118,7 @@ data:
   isVerificationFile: false
   path: library/algorithm/rmq_pm1.hpp
   requiredBy: []
-  timestamp: '2022-05-29 02:48:02+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: library/algorithm/rmq_pm1.hpp

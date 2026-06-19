@@ -5,8 +5,8 @@ data:
     path: library/number/deterministic_miller_rabin.hpp
     title: Deterministic Miller Rabin
   - icon: ':heavy_check_mark:'
-    path: library/number/montogomery.hpp
-    title: Montogomery
+    path: library/number/montgomery.hpp
+    title: Montgomery
   _extendedRequiredBy: []
   _extendedVerifiedWith: []
   _isVerificationFailed: false
@@ -21,8 +21,8 @@ data:
     \n#define PROBLEM \"https://judge.yosupo.jp/problem/primality_test\"\n\n#include\
     \ <iostream>\n\n#line 1 \"library/number/deterministic_miller_rabin.hpp\"\n\n\n\
     \n#include <array>\n#include <cassert>\n#include <cstdint>\n#include <iterator>\n\
-    #include <tuple>\n#include <type_traits>\n\n#line 1 \"library/number/montogomery.hpp\"\
-    \n\n\n\n#line 6 \"library/number/montogomery.hpp\"\n#include <limits>\n\nnamespace\
+    #include <tuple>\n#include <type_traits>\n\n#line 1 \"library/number/montgomery.hpp\"\
+    \n\n\n\n#line 6 \"library/number/montgomery.hpp\"\n#include <limits>\n\nnamespace\
     \ suisen {\n    namespace internal::montgomery {\n        template <typename Int,\
     \ typename DInt>\n        struct Montgomery {\n        private:\n            static\
     \ constexpr uint32_t bits = std::numeric_limits<Int>::digits;\n            static\
@@ -143,11 +143,11 @@ data:
     \ ? \"Yes\" : \"No\") << '\\n';\n    }\n}"
   dependsOn:
   - library/number/deterministic_miller_rabin.hpp
-  - library/number/montogomery.hpp
+  - library/number/montgomery.hpp
   isVerificationFile: true
   path: test/src/number/deterministic_miller_rabin/primality_test.test.cpp
   requiredBy: []
-  timestamp: '2024-01-31 00:18:18+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/number/deterministic_miller_rabin/primality_test.test.cpp

@@ -90,7 +90,7 @@ data:
     \ <typename T> static constexpr bool is_readable_v = is_readable<T>::value;\n\
     } // namespace suisen\n\n#line 11 \"library/polynomial/fps_naive.hpp\"\n\n#line\
     \ 1 \"library/math/modint_extension.hpp\"\n\n\n\n#line 5 \"library/math/modint_extension.hpp\"\
-    \n#include <optional>\n\n/**\n * refernce: https://37zigen.com/tonelli-shanks-algorithm/\n\
+    \n#include <optional>\n\n/**\n * reference: https://37zigen.com/tonelli-shanks-algorithm/\n\
     \ * calculates x s.t. x^2 = a mod p in O((log p)^2).\n */\ntemplate <typename\
     \ mint>\nstd::optional<mint> safe_sqrt(mint a) {\n    static int p = mint::mod();\n\
     \    if (a == 0) return std::make_optional(0);\n    if (p == 2) return std::make_optional(a);\n\
@@ -492,9 +492,9 @@ data:
     \            P[j][k].concat((P[lv][j] + P[lv][k]) * (P[rv][j] + P[rv][k]) - zPlr[j]\
     \ - zPlr[k]);\n            }\n            P.pop_back(), P.pop_back();\n      \
     \  }\n        SetPowerSeries<T> f = h.mobius_inplace(), g = P[1][0].mobius_inplace();\n\
-    \        T res = 0;\n        for (int i = 0, siz = h.size(); i < siz; ++i) {\n\
-    \            res += f[i] * g[siz - i - 1];\n        }\n        return res;\n \
-    \   }\n} // namespace suisen\n\n\n#line 8 \"test/src/linear_algebra/hafnian/hafnian_of_matrix.test.cpp\"\
+    \        T res = 0;\n        for (int i = 0, size = h.size(); i < size; ++i) {\n\
+    \            res += f[i] * g[size - i - 1];\n        }\n        return res;\n\
+    \    }\n} // namespace suisen\n\n\n#line 8 \"test/src/linear_algebra/hafnian/hafnian_of_matrix.test.cpp\"\
     \n\nusing mint = atcoder::modint998244353;\n\nint main() {\n    int n;\n    std::cin\
     \ >> n;\n    std::vector mat(n, std::vector<int>(n));\n    for (auto &row : mat)\
     \ for (auto &elm : row) std::cin >> elm;\n    std::cout << suisen::hafnian<mint>(mat).val()\
@@ -519,7 +519,7 @@ data:
   isVerificationFile: true
   path: test/src/linear_algebra/hafnian/hafnian_of_matrix.test.cpp
   requiredBy: []
-  timestamp: '2025-12-23 12:59:53+00:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/linear_algebra/hafnian/hafnian_of_matrix.test.cpp

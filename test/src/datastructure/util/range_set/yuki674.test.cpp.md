@@ -19,9 +19,9 @@ data:
     \n#line 1 \"library/datastructure/util/range_set.hpp\"\n\n\n\n#include <map>\n\
     \nnamespace suisen {\n\ntemplate <typename T, bool merge_adjacent_segment = true>\n\
     struct RangeSet : public std::map<T, T> {\n    public:\n        RangeSet() : _size(0)\
-    \ {}\n\n        // returns the number of intergers in this set (not the number\
+    \ {}\n\n        // returns the number of integers in this set (not the number\
     \ of ranges). O(1)\n        T size() const { return number_of_elements(); }\n\
-    \        // returns the number of intergers in this set (not the number of ranges).\
+    \        // returns the number of integers in this set (not the number of ranges).\
     \ O(1)\n        T number_of_elements() const { return _size; }\n        // returns\
     \ the number of ranges in this set (not the number of integers). O(1)\n      \
     \  int number_of_ranges() const { return std::map<T, T>::size(); }\n\n       \
@@ -50,9 +50,9 @@ data:
     \         inserted -= cr - cl + 1;\n            }\n            inserted += r -\
     \ l + 1;\n            (*this)[l] = r;\n            _size += inserted;\n      \
     \      return inserted;\n        }\n\n        // erases the range [x, x] and returns\
-    \ the number of intergers erased from this set. O(log N)\n        T erase(T x)\
+    \ the number of integers erased from this set. O(log N)\n        T erase(T x)\
     \ {\n            return erase(x, x);\n        }\n\n        // erases the range\
-    \ [l, r] and returns the number of intergers erased from this set. amortized O(log\
+    \ [l, r] and returns the number of integers erased from this set. amortized O(log\
     \ N)\n        T erase(T l, T r) {\n            if (l > r) return 0;\n        \
     \    T tl = l, tr = r;\n            auto it = this->upper_bound(l);\n        \
     \    if (it != this->begin() and l <= std::prev(it)->second) {\n             \
@@ -93,7 +93,7 @@ data:
   isVerificationFile: true
   path: test/src/datastructure/util/range_set/yuki674.test.cpp
   requiredBy: []
-  timestamp: '2022-04-10 03:29:54+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/datastructure/util/range_set/yuki674.test.cpp

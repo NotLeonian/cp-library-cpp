@@ -328,7 +328,7 @@ data:
     \ <typename T> static constexpr bool is_readable_v = is_readable<T>::value;\n\
     } // namespace suisen\n\n#line 11 \"library/polynomial/fps_naive.hpp\"\n\n#line\
     \ 1 \"library/math/modint_extension.hpp\"\n\n\n\n#line 6 \"library/math/modint_extension.hpp\"\
-    \n\n/**\n * refernce: https://37zigen.com/tonelli-shanks-algorithm/\n * calculates\
+    \n\n/**\n * reference: https://37zigen.com/tonelli-shanks-algorithm/\n * calculates\
     \ x s.t. x^2 = a mod p in O((log p)^2).\n */\ntemplate <typename mint>\nstd::optional<mint>\
     \ safe_sqrt(mint a) {\n    static int p = mint::mod();\n    if (a == 0) return\
     \ std::make_optional(0);\n    if (p == 2) return std::make_optional(a);\n    if\
@@ -759,7 +759,7 @@ data:
   isVerificationFile: true
   path: test/src/math/set_power_series/abc253_h.test.cpp
   requiredBy: []
-  timestamp: '2026-06-14 12:42:12+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/math/set_power_series/abc253_h.test.cpp

@@ -153,17 +153,17 @@ data:
     \ = std::conditional_t<auto_extend, std::deque<U>, std::vector<U>>;\n\n      \
     \  container_type<value_type> pool;\n        container_type<value_pointer_type>\
     \ stock;\n        decltype(stock.begin()) it;\n\n        ObjectPool() : ObjectPool(0)\
-    \ {}\n        ObjectPool(int siz) : pool(siz), stock(siz) {\n            clear();\n\
+    \ {}\n        ObjectPool(int size) : pool(size), stock(size) {\n            clear();\n\
     \        }\n\n        int capacity() const { return pool.size(); }\n        int\
     \ size() const { return it - stock.begin(); }\n\n        value_pointer_type alloc()\
     \ {\n            if constexpr (auto_extend) ensure();\n            return *it++;\n\
     \        }\n\n        void free(value_pointer_type t) {\n            *--it = t;\n\
-    \        }\n\n        void clear() {\n            int siz = pool.size();\n   \
-    \         it = stock.begin();\n            for (int i = 0; i < siz; i++) stock[i]\
+    \        }\n\n        void clear() {\n            int size = pool.size();\n  \
+    \          it = stock.begin();\n            for (int i = 0; i < size; i++) stock[i]\
     \ = &pool[i];\n        }\n\n        void ensure() {\n            if (it != stock.end())\
-    \ return;\n            int siz = stock.size();\n            for (int i = siz;\
-    \ i <= siz * 2; ++i) {\n                stock.push_back(&pool.emplace_back());\n\
-    \            }\n            it = stock.begin() + siz;\n        }\n    };\n} //\
+    \ return;\n            int size = stock.size();\n            for (int i = size;\
+    \ i <= size * 2; ++i) {\n                stock.push_back(&pool.emplace_back());\n\
+    \            }\n            it = stock.begin() + size;\n        }\n    };\n} //\
     \ namespace suisen\n\n\n"
   code: "#ifndef SUISEN_OBJECT_POOL\n#define SUISEN_OBJECT_POOL\n\n#include <deque>\n\
     #include <vector>\n\nnamespace suisen {\n    template <typename T, bool auto_extend\
@@ -172,17 +172,17 @@ data:
     \ = std::conditional_t<auto_extend, std::deque<U>, std::vector<U>>;\n\n      \
     \  container_type<value_type> pool;\n        container_type<value_pointer_type>\
     \ stock;\n        decltype(stock.begin()) it;\n\n        ObjectPool() : ObjectPool(0)\
-    \ {}\n        ObjectPool(int siz) : pool(siz), stock(siz) {\n            clear();\n\
+    \ {}\n        ObjectPool(int size) : pool(size), stock(size) {\n            clear();\n\
     \        }\n\n        int capacity() const { return pool.size(); }\n        int\
     \ size() const { return it - stock.begin(); }\n\n        value_pointer_type alloc()\
     \ {\n            if constexpr (auto_extend) ensure();\n            return *it++;\n\
     \        }\n\n        void free(value_pointer_type t) {\n            *--it = t;\n\
-    \        }\n\n        void clear() {\n            int siz = pool.size();\n   \
-    \         it = stock.begin();\n            for (int i = 0; i < siz; i++) stock[i]\
+    \        }\n\n        void clear() {\n            int size = pool.size();\n  \
+    \          it = stock.begin();\n            for (int i = 0; i < size; i++) stock[i]\
     \ = &pool[i];\n        }\n\n        void ensure() {\n            if (it != stock.end())\
-    \ return;\n            int siz = stock.size();\n            for (int i = siz;\
-    \ i <= siz * 2; ++i) {\n                stock.push_back(&pool.emplace_back());\n\
-    \            }\n            it = stock.begin() + siz;\n        }\n    };\n} //\
+    \ return;\n            int size = stock.size();\n            for (int i = size;\
+    \ i <= size * 2; ++i) {\n                stock.push_back(&pool.emplace_back());\n\
+    \            }\n            it = stock.begin() + size;\n        }\n    };\n} //\
     \ namespace suisen\n\n#endif // SUISEN_OBJECT_POOL\n"
   dependsOn: []
   isVerificationFile: false
@@ -210,7 +210,7 @@ data:
   - library/datastructure/bbst/red_black_tree.hpp
   - library/datastructure/union_find/persistent_union_find.hpp
   - library/string/dynamic_rolling_hash.hpp
-  timestamp: '2022-02-13 16:56:06+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/tree/link_cut_tree_path_foldable_lazy/dummy1.test.cpp

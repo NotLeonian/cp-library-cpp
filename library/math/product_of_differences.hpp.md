@@ -59,7 +59,7 @@ data:
     \          dq.pop_front();\n            dq.push_back(f * g);\n        }\n    \
     \    auto f = std::move(dq.front());\n        f.diff_inplace();\n        return\
     \ multi_point_eval<FPSType, T>(f, xs);\n    }\n} // namespace suisen\n\n\n\n"
-  code: "#ifndef SUISEN_PRODUCT_OF_DIFFERNCES\n#define SUISEN_PRODUCT_OF_DIFFERNCES\n\
+  code: "#ifndef SUISEN_PRODUCT_OF_DIFFERENCES\n#define SUISEN_PRODUCT_OF_DIFFERENCES\n\
     \n#include <deque>\n#include \"library/polynomial/multi_point_eval.hpp\"\n\nnamespace\
     \ suisen {\n    /**\n     * O(N(logN)^2)\n     * return the vector p of length\
     \ xs.size() s.t. p[i]=\u03A0[j!=i](x[i]-x[j])\n     */\n    template <typename\
@@ -72,7 +72,7 @@ data:
     \            auto g = std::move(dq.front());\n            dq.pop_front();\n  \
     \          dq.push_back(f * g);\n        }\n        auto f = std::move(dq.front());\n\
     \        f.diff_inplace();\n        return multi_point_eval<FPSType, T>(f, xs);\n\
-    \    }\n} // namespace suisen\n\n\n#endif // SUISEN_PRODUCT_OF_DIFFERNCES\n"
+    \    }\n} // namespace suisen\n\n\n#endif // SUISEN_PRODUCT_OF_DIFFERENCES\n"
   dependsOn:
   - library/polynomial/multi_point_eval.hpp
   isVerificationFile: false
@@ -80,7 +80,7 @@ data:
   requiredBy:
   - library/math/sum_i^d_r^i.hpp
   - library/polynomial/lagrange_interpolation.hpp
-  timestamp: '2023-05-11 13:37:15+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/math/sum_i^d_r^i/sum_of_exponential_times_polynomial.test.cpp

@@ -275,7 +275,7 @@ data:
     links:
     - https://37zigen.com/tonelli-shanks-algorithm/
   bundledCode: "#line 1 \"library/math/modint_extension.hpp\"\n\n\n\n#include <cassert>\n\
-    #include <optional>\n\n/**\n * refernce: https://37zigen.com/tonelli-shanks-algorithm/\n\
+    #include <optional>\n\n/**\n * reference: https://37zigen.com/tonelli-shanks-algorithm/\n\
     \ * calculates x s.t. x^2 = a mod p in O((log p)^2).\n */\ntemplate <typename\
     \ mint>\nstd::optional<mint> safe_sqrt(mint a) {\n    static int p = mint::mod();\n\
     \    if (a == 0) return std::make_optional(0);\n    if (p == 2) return std::make_optional(a);\n\
@@ -294,7 +294,7 @@ data:
     \ mint()) {\n    return a.pow(b);\n}\ntemplate <typename mint>\nauto inv(mint\
     \ a) -> decltype(mint::mod(), mint()) {\n    return a.inv();\n}\n\n\n"
   code: "#ifndef SUISEN_MODINT_EXTENSION\n#define SUISEN_MODINT_EXTENSION\n\n#include\
-    \ <cassert>\n#include <optional>\n\n/**\n * refernce: https://37zigen.com/tonelli-shanks-algorithm/\n\
+    \ <cassert>\n#include <optional>\n\n/**\n * reference: https://37zigen.com/tonelli-shanks-algorithm/\n\
     \ * calculates x s.t. x^2 = a mod p in O((log p)^2).\n */\ntemplate <typename\
     \ mint>\nstd::optional<mint> safe_sqrt(mint a) {\n    static int p = mint::mod();\n\
     \    if (a == 0) return std::make_optional(0);\n    if (p == 2) return std::make_optional(a);\n\
@@ -328,7 +328,7 @@ data:
   - library/polynomial/fps.hpp
   - library/polynomial/formal_power_series_relaxed.hpp
   - library/polynomial/array_fps_naive.hpp
-  timestamp: '2022-07-21 04:00:33+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/linear_algebra/hafnian/hafnian_of_matrix.test.cpp

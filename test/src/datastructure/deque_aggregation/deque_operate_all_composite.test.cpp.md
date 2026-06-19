@@ -130,16 +130,16 @@ data:
     \        void push_back(const value_type &val) { _st_r.emplace_back(val, op(prod(_st_r),\
     \ val)); }\n        void push_front(const value_type &val) { _st_l.emplace_back(val,\
     \ op(val, prod(_st_l))); }\n        void pop_back() {\n            if (_st_r.size())\
-    \ return _st_r.pop_back();\n            const int siz = _st_l.size();\n      \
-    \      const int l = siz >> 1, r = siz - l;\n            assert(r); // <=> siz\
-    \ > 0\n            for (int i = r - 1; i > 0; --i) push_back(std::move(_st_l[i].first));\n\
+    \ return _st_r.pop_back();\n            const int size = _st_l.size();\n     \
+    \       const int l = size >> 1, r = size - l;\n            assert(r); // <=>\
+    \ size > 0\n            for (int i = r - 1; i > 0; --i) push_back(std::move(_st_l[i].first));\n\
     \            _st_l.erase(_st_l.begin(), _st_l.begin() + r);\n            if (l\
     \ == 0) return;\n            _st_l[0].second = _st_l[0].first;\n            for\
     \ (int i = 1; i < l; ++i) _st_l[i].second = op(_st_l[i].first, _st_l[i - 1].second);\n\
     \        }\n        void pop_front() {\n            if (_st_l.size()) return _st_l.pop_back();\n\
-    \            const int siz = _st_r.size();\n            const int r = siz >> 1,\
-    \ l = siz - r;\n            assert(l); // <=> siz > 0\n            for (int i\
-    \ = l - 1; i > 0; --i) push_front(std::move(_st_r[i].first));\n            _st_r.erase(_st_r.begin(),\
+    \            const int size = _st_r.size();\n            const int r = size >>\
+    \ 1, l = size - r;\n            assert(l); // <=> size > 0\n            for (int\
+    \ i = l - 1; i > 0; --i) push_front(std::move(_st_r[i].first));\n            _st_r.erase(_st_r.begin(),\
     \ _st_r.begin() + l);\n            if (r == 0) return;\n            _st_r[0].second\
     \ = _st_r[0].first;\n            for (int i = 1; i < r; ++i) _st_r[i].second =\
     \ op(_st_r[i - 1].second, _st_r[i].first);\n        }\n        const value_type&\
@@ -193,7 +193,7 @@ data:
   isVerificationFile: true
   path: test/src/datastructure/deque_aggregation/deque_operate_all_composite.test.cpp
   requiredBy: []
-  timestamp: '2023-02-16 15:44:03+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/datastructure/deque_aggregation/deque_operate_all_composite.test.cpp

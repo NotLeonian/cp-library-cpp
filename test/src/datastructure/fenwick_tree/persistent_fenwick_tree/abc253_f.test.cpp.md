@@ -27,17 +27,17 @@ data:
     \        using container_type = std::conditional_t<auto_extend, std::deque<U>,\
     \ std::vector<U>>;\n\n        container_type<value_type> pool;\n        container_type<value_pointer_type>\
     \ stock;\n        decltype(stock.begin()) it;\n\n        ObjectPool() : ObjectPool(0)\
-    \ {}\n        ObjectPool(int siz) : pool(siz), stock(siz) {\n            clear();\n\
+    \ {}\n        ObjectPool(int size) : pool(size), stock(size) {\n            clear();\n\
     \        }\n\n        int capacity() const { return pool.size(); }\n        int\
     \ size() const { return it - stock.begin(); }\n\n        value_pointer_type alloc()\
     \ {\n            if constexpr (auto_extend) ensure();\n            return *it++;\n\
     \        }\n\n        void free(value_pointer_type t) {\n            *--it = t;\n\
-    \        }\n\n        void clear() {\n            int siz = pool.size();\n   \
-    \         it = stock.begin();\n            for (int i = 0; i < siz; i++) stock[i]\
+    \        }\n\n        void clear() {\n            int size = pool.size();\n  \
+    \          it = stock.begin();\n            for (int i = 0; i < size; i++) stock[i]\
     \ = &pool[i];\n        }\n\n        void ensure() {\n            if (it != stock.end())\
-    \ return;\n            int siz = stock.size();\n            for (int i = siz;\
-    \ i <= siz * 2; ++i) {\n                stock.push_back(&pool.emplace_back());\n\
-    \            }\n            it = stock.begin() + siz;\n        }\n    };\n} //\
+    \ return;\n            int size = stock.size();\n            for (int i = size;\
+    \ i <= size * 2; ++i) {\n                stock.push_back(&pool.emplace_back());\n\
+    \            }\n            it = stock.begin() + size;\n        }\n    };\n} //\
     \ namespace suisen\n\n\n#line 7 \"library/datastructure/fenwick_tree/persistent_fenwick_tree.hpp\"\
     \n\nnamespace suisen {\n    template <typename T>\n    struct PersistentFenwickTree\
     \ {\n        struct Node;\n\n        using value_type = T;\n\n        using node_type\
@@ -79,9 +79,9 @@ data:
     \ : _p(0), _root(nullptr) {}\n        explicit PersistentFenwickTree(int n) :\
     \ PersistentFenwickTree(std::vector<value_type>(n, T{})) {}\n        PersistentFenwickTree(const\
     \ std::vector<value_type>& dat) : _p(floor_pow2(dat.size())), _root(node_type::build(dat,\
-    \ _p)) {}\n\n        static void init_pool(int siz) {\n            node_type::_pool\
-    \ = ObjectPool<node_type>(siz);\n        }\n        static void clear_pool() {\n\
-    \            node_type::_pool.clear();\n        }\n\n        value_type sum(int\
+    \ _p)) {}\n\n        static void init_pool(int size) {\n            node_type::_pool\
+    \ = ObjectPool<node_type>(size);\n        }\n        static void clear_pool()\
+    \ {\n            node_type::_pool.clear();\n        }\n\n        value_type sum(int\
     \ l, int r) {\n            return node_type::sum(_root, _p, l, r);\n        }\n\
     \        PersistentFenwickTree add(int i, const value_type &val) {\n         \
     \   return PersistentFenwickTree(_p, node_type::add(_root, _p, i, val));\n   \
@@ -126,7 +126,7 @@ data:
   isVerificationFile: true
   path: test/src/datastructure/fenwick_tree/persistent_fenwick_tree/abc253_f.test.cpp
   requiredBy: []
-  timestamp: '2022-06-14 00:04:21+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/datastructure/fenwick_tree/persistent_fenwick_tree/abc253_f.test.cpp

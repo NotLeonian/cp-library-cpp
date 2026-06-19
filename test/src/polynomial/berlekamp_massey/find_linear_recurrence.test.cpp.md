@@ -21,7 +21,7 @@ data:
     \n\n\n\n#include <cassert>\n#include <vector>\n\nnamespace suisen {\n    /**\n\
     \     * @brief Find linear recurrence in O(|s|^2) time\n     * @tparam F Arbitrary\
     \ field (operator +, -, *, /, +=, -=, *=, /= must be defined)\n     * @param s\
-    \ Prefix of a linearly reccurent sequence\n     * @return The vector of length\
+    \ Prefix of a linearly recurrent sequence\n     * @return The vector of length\
     \ L+1 c s.t. c_0=1 and s_i=Sum[j=1,L]c_i*s_{i-j} for all i>=L, where L is the\
     \ minimum integer s.t. there exists such c of length L+1.\n     */\n    template\
     \ <typename F>\n    std::vector<F> find_linear_recuurence(const std::vector<F>&\
@@ -60,7 +60,7 @@ data:
   isVerificationFile: true
   path: test/src/polynomial/berlekamp_massey/find_linear_recurrence.test.cpp
   requiredBy: []
-  timestamp: '2024-01-30 20:59:32+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/polynomial/berlekamp_massey/find_linear_recurrence.test.cpp

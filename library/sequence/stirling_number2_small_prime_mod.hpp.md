@@ -80,7 +80,7 @@ data:
     \ suisen\n\n\n#line 1 \"library/sequence/powers.hpp\"\n\n\n\n#include <cstdint>\n\
     #line 1 \"library/number/linear_sieve.hpp\"\n\n\n\n#line 5 \"library/number/linear_sieve.hpp\"\
     \n#include <numeric>\n#line 7 \"library/number/linear_sieve.hpp\"\n\nnamespace\
-    \ suisen {\n// referece: https://37zigen.com/linear-sieve/\nclass LinearSieve\
+    \ suisen {\n// reference: https://37zigen.com/linear-sieve/\nclass LinearSieve\
     \ {\n    public:\n        LinearSieve(const int n) : _n(n), min_prime_factor(std::vector<int>(n\
     \ + 1)) {\n            std::iota(min_prime_factor.begin(), min_prime_factor.end(),\
     \ 0);\n            prime_list.reserve(_n / 20);\n            for (int d = 2; d\
@@ -169,7 +169,7 @@ data:
   isVerificationFile: false
   path: library/sequence/stirling_number2_small_prime_mod.hpp
   requiredBy: []
-  timestamp: '2026-06-14 12:42:12+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/sequence/stirling_number2_small_prime_mod/stirling_number_of_the_second_kind_small_p_large_n.test.cpp

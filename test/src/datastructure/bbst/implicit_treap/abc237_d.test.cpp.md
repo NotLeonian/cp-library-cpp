@@ -88,22 +88,23 @@ data:
     \n            std::vector<node_pointer> nodes(n);\n\n            auto rec = [&](auto\
     \ rec, size_t heap_index, size_t dat_index_offset) -> std::pair<size_t, node_pointer>\
     \ {\n                if (heap_index >= n) return { 0, null };\n              \
-    \  auto [lsiz, lch] = rec(rec, 2 * heap_index + 1, dat_index_offset);\n      \
-    \          dat_index_offset += lsiz;\n                node_pointer root = create_node(std::move(dat[dat_index_offset]));\n\
-    \                nodes[dat_index_offset] = root;\n                set_priority(root,\
-    \ priorities[heap_index]);\n                if (dat_index_offset) {\n        \
-    \            link(nodes[dat_index_offset - 1], root);\n                }\n   \
-    \             dat_index_offset += 1;\n                auto [rsiz, rch] = rec(rec,\
-    \ 2 * heap_index + 2, dat_index_offset);\n                set_child0(root, lch);\n\
-    \                set_child1(root, rch);\n                return { lsiz + 1 + rsiz,\
-    \ node_type::update(root) };\n            };\n            return rec(rec, 0, 0).second;\n\
-    \        }\n\n        static std::pair<node_pointer, node_pointer> split(node_pointer\
-    \ t, size_type k) {\n            if (k == 0) return { null, t };\n           \
-    \ if (k == size(t)) return { t, null };\n\n            static std::vector<node_pointer>\
-    \ lp{}, rp{};\n\n            while (true) {\n                if (const size_type\
-    \ lsiz = safe_size(child0(t)); k <= lsiz) {\n                    if (rp.size())\
+    \  auto [left_size, lch] = rec(rec, 2 * heap_index + 1, dat_index_offset);\n \
+    \               dat_index_offset += left_size;\n                node_pointer root\
+    \ = create_node(std::move(dat[dat_index_offset]));\n                nodes[dat_index_offset]\
+    \ = root;\n                set_priority(root, priorities[heap_index]);\n     \
+    \           if (dat_index_offset) {\n                    link(nodes[dat_index_offset\
+    \ - 1], root);\n                }\n                dat_index_offset += 1;\n  \
+    \              auto [right_size, rch] = rec(rec, 2 * heap_index + 2, dat_index_offset);\n\
+    \                set_child0(root, lch);\n                set_child1(root, rch);\n\
+    \                return { left_size + 1 + right_size, node_type::update(root)\
+    \ };\n            };\n            return rec(rec, 0, 0).second;\n        }\n\n\
+    \        static std::pair<node_pointer, node_pointer> split(node_pointer t, size_type\
+    \ k) {\n            if (k == 0) return { null, t };\n            if (k == size(t))\
+    \ return { t, null };\n\n            static std::vector<node_pointer> lp{}, rp{};\n\
+    \n            while (true) {\n                if (const size_type left_size =\
+    \ safe_size(child0(t)); k <= left_size) {\n                    if (rp.size())\
     \ set_child0(rp.back(), t);\n                    rp.push_back(t);\n          \
-    \          if (k == lsiz) {\n                        if (lp.size()) set_child1(lp.back(),\
+    \          if (k == left_size) {\n                        if (lp.size()) set_child1(lp.back(),\
     \ child0(t));\n\n                        node_pointer lt = set_child0(t, null),\
     \ rt = null;\n\n                        while (lp.size()) node_type::update(lt\
     \ = lp.back()), lp.pop_back();\n                        while (rp.size()) node_type::update(rt\
@@ -111,8 +112,8 @@ data:
     \                    }\n                    t = child0(t);\n                }\
     \ else {\n                    if (lp.size()) set_child1(lp.back(), t);\n     \
     \               lp.push_back(t);\n                    t = child1(t);\n       \
-    \             k -= lsiz + 1;\n                }\n            }\n        }\n  \
-    \      static std::tuple<node_pointer, node_pointer, node_pointer> split(node_pointer\
+    \             k -= left_size + 1;\n                }\n            }\n        }\n\
+    \        static std::tuple<node_pointer, node_pointer, node_pointer> split(node_pointer\
     \ t, size_type l, size_type r) {\n            auto [tlm, tr] = split(t, r);\n\
     \            auto [tl, tm] = split(tlm, l);\n            return { tl, tm, tr };\n\
     \        }\n\n        static node_pointer merge_impl(node_pointer tl, node_pointer\
@@ -142,89 +143,91 @@ data:
     \         }\n                    if (st.size()) {\n                        set_child(st.back(),\
     \ b, t);\n                        do t = node_type::update(st.back()), st.pop_back();\
     \ while (st.size());\n                    }\n                    return t;\n \
-    \               } else {\n                    if (const size_type lsiz = safe_size(child0(t));\
-    \ k <= lsiz) {\n                        if (k == lsiz) link(new_node, t);\n  \
-    \                      st.push_back(t), b = false;\n                        t\
-    \ = child0(t);\n                    } else {\n                        if (k ==\
-    \ lsiz + 1) link(t, new_node);\n                        st.push_back(t), b = true;\n\
-    \                        t = child1(t);\n                        k -= lsiz + 1;\n\
-    \                    }\n                }\n            }\n        }\n        template\
-    \ <typename ...Args>\n        static node_pointer insert(node_pointer t, size_type\
-    \ k, Args &&...args) {\n            return insert_impl(t, k, create_node(std::forward<Args>(args)...));\n\
+    \               } else {\n                    if (const size_type left_size =\
+    \ safe_size(child0(t)); k <= left_size) {\n                        if (k == left_size)\
+    \ link(new_node, t);\n                        st.push_back(t), b = false;\n  \
+    \                      t = child0(t);\n                    } else {\n        \
+    \                if (k == left_size + 1) link(t, new_node);\n                \
+    \        st.push_back(t), b = true;\n                        t = child1(t);\n\
+    \                        k -= left_size + 1;\n                    }\n        \
+    \        }\n            }\n        }\n        template <typename ...Args>\n  \
+    \      static node_pointer insert(node_pointer t, size_type k, Args &&...args)\
+    \ {\n            return insert_impl(t, k, create_node(std::forward<Args>(args)...));\n\
     \        }\n\n        static std::pair<node_pointer, value_type> erase(node_pointer\
-    \ t, size_type k) {\n            if (const size_type lsiz = safe_size(child0(t));\
-    \ k == lsiz) {\n                delete_node(t);\n                return { merge(child0(t),\
-    \ child1(t)), std::move(value(t)) };\n            } else if (k < lsiz) {\n   \
-    \             auto [c0, v] = erase(child0(t), k);\n                set_child0(t,\
-    \ c0);\n                if (is_not_null(c0) and k == lsiz - 1) link(max(c0), t);\n\
-    \                return { node_type::update(t), std::move(v) };\n            }\
-    \ else {\n                auto [c1, v] = erase(child1(t), k - (lsiz + 1));\n \
-    \               set_child1(t, c1);\n                if (is_not_null(c1) and k\
-    \ == lsiz + 1) link(t, min(c1));\n                return { node_type::update(t),\
-    \ std::move(v) };\n            }\n        }\n\n        static node_pointer rotate(node_pointer\
-    \ t, size_type k) {\n            auto [tl, tr] = split(t, k);\n            return\
-    \ merge(tr, tl);\n        }\n        static node_pointer rotate(node_pointer t,\
-    \ size_type l, size_type m, size_type r) {\n            auto [tl, tm, tr] = split(t,\
-    \ l, r);\n            return merge(tl, rotate(tm, m - l), tr);\n        }\n\n\
-    \        template <typename Func>\n        static node_pointer set_update(node_pointer\
-    \ t, size_type k, const Func& f) {\n            if (const size_type lsiz = safe_size(child0(t));\
-    \ k == lsiz) {\n                value_type& val = value(t);\n                val\
-    \ = f(const_cast<const value_type&>(val));\n            } else if (k < lsiz) {\n\
-    \                set_child0(t, set_update(child0(t), k, f));\n            } else\
-    \ {\n                set_child1(t, set_update(child1(t), k - (lsiz + 1), f));\n\
-    \            }\n            return node_type::update(t);\n        }\n\n      \
-    \  static std::vector<value_type> dump(node_pointer t) {\n            std::vector<value_type>\
-    \ res;\n            res.reserve(safe_size(t));\n            auto rec = [&](auto\
-    \ rec, node_pointer t) -> void {\n                if (is_null(t)) return;\n  \
-    \              rec(rec, child0(t));\n                res.push_back(value(t));\n\
-    \                rec(rec, child1(t));\n            };\n            rec(rec, t);\n\
-    \            return res;\n        }\n\n        template <bool reversed_, bool\
-    \ constant_>\n        struct NodeIterator {\n            static constexpr bool\
-    \ constant = constant_;\n            static constexpr bool reversed = reversed_;\n\
-    \n            friend Node;\n            friend Derived;\n\n            using difference_type\
-    \ = Node::difference_type;\n            using value_type = Node::value_type;\n\
-    \            using pointer = std::conditional_t<constant, Node::const_pointer,\
-    \ Node::pointer>;\n            using reference = std::conditional_t<constant,\
-    \ Node::const_reference, Node::reference>;\n            using iterator_category\
-    \ = std::random_access_iterator_tag;\n\n            NodeIterator(): NodeIterator(null)\
-    \ {}\n            explicit NodeIterator(node_pointer root): NodeIterator(root,\
-    \ 0, null) {}\n            NodeIterator(const NodeIterator<reversed, not constant>&\
-    \ it): NodeIterator(it._root, it._index, it._cur) {}\n\n            reference\
-    \ operator*() const {\n                if (is_null(_cur) and _index != safe_size(_root))\
-    \ {\n                    _cur = _root;\n                    for (size_type k =\
-    \ _index;;) {\n                        if (size_type siz = safe_size(child(_cur,\
-    \ reversed)); k == siz) {\n                            break;\n              \
-    \          } else if (k < siz) {\n                            _cur = child(_cur,\
-    \ reversed);\n                        } else {\n                            _cur\
-    \ = child(_cur, not reversed);\n                            k -= siz + 1;\n  \
-    \                      }\n                    }\n                }\n         \
-    \       return value(_cur);\n            }\n            reference operator[](difference_type\
-    \ k) const { return *((*this) + k); }\n\n            NodeIterator& operator++()\
-    \ { return *this += 1; }\n            NodeIterator& operator--() { return *this\
-    \ -= 1; }\n            NodeIterator& operator+=(difference_type k) { return suc(+k),\
-    \ * this; }\n            NodeIterator& operator-=(difference_type k) { return\
-    \ suc(-k), * this; }\n            NodeIterator operator++(int) { NodeIterator\
-    \ res = *this; ++(*this); return res; }\n            NodeIterator operator--(int)\
-    \ { NodeIterator res = *this; --(*this); return res; }\n            friend NodeIterator\
-    \ operator+(NodeIterator it, difference_type k) { return it += k; }\n        \
-    \    friend NodeIterator operator+(difference_type k, NodeIterator it) { return\
-    \ it += k; }\n            friend NodeIterator operator-(NodeIterator it, difference_type\
-    \ k) { return it -= k; }\n\n            friend difference_type operator-(const\
-    \ NodeIterator& lhs, const NodeIterator& rhs) { return lhs._index - rhs._index;\
-    \ }\n\n            friend bool operator==(const NodeIterator& lhs, const NodeIterator&\
-    \ rhs) { return lhs._index == rhs._index; }\n            friend bool operator!=(const\
-    \ NodeIterator& lhs, const NodeIterator& rhs) { return lhs._index != rhs._index;\
-    \ }\n            friend bool operator<(const NodeIterator& lhs, const NodeIterator&\
-    \ rhs) { return lhs._index < rhs._index; }\n            friend bool operator>(const\
-    \ NodeIterator& lhs, const NodeIterator& rhs) { return lhs._index > rhs._index;\
-    \ }\n            friend bool operator<=(const NodeIterator& lhs, const NodeIterator&\
-    \ rhs) { return lhs._index <= rhs._index; }\n            friend bool operator>=(const\
-    \ NodeIterator& lhs, const NodeIterator& rhs) { return lhs._index >= rhs._index;\
-    \ }\n\n            static NodeIterator begin(node_pointer root) { return NodeIterator(root,\
-    \ 0, null); }\n            static NodeIterator end(node_pointer root) { return\
-    \ NodeIterator(root, safe_size(root), null); }\n\n            int size() const\
-    \ { return safe_size(_root); }\n            int index() const { return _index;\
-    \ }\n        private:\n            node_pointer _root;\n            size_type\
+    \ t, size_type k) {\n            if (const size_type left_size = safe_size(child0(t));\
+    \ k == left_size) {\n                delete_node(t);\n                return {\
+    \ merge(child0(t), child1(t)), std::move(value(t)) };\n            } else if (k\
+    \ < left_size) {\n                auto [c0, v] = erase(child0(t), k);\n      \
+    \          set_child0(t, c0);\n                if (is_not_null(c0) and k == left_size\
+    \ - 1) link(max(c0), t);\n                return { node_type::update(t), std::move(v)\
+    \ };\n            } else {\n                auto [c1, v] = erase(child1(t), k\
+    \ - (left_size + 1));\n                set_child1(t, c1);\n                if\
+    \ (is_not_null(c1) and k == left_size + 1) link(t, min(c1));\n               \
+    \ return { node_type::update(t), std::move(v) };\n            }\n        }\n\n\
+    \        static node_pointer rotate(node_pointer t, size_type k) {\n         \
+    \   auto [tl, tr] = split(t, k);\n            return merge(tr, tl);\n        }\n\
+    \        static node_pointer rotate(node_pointer t, size_type l, size_type m,\
+    \ size_type r) {\n            auto [tl, tm, tr] = split(t, l, r);\n          \
+    \  return merge(tl, rotate(tm, m - l), tr);\n        }\n\n        template <typename\
+    \ Func>\n        static node_pointer set_update(node_pointer t, size_type k, const\
+    \ Func& f) {\n            if (const size_type left_size = safe_size(child0(t));\
+    \ k == left_size) {\n                value_type& val = value(t);\n           \
+    \     val = f(const_cast<const value_type&>(val));\n            } else if (k <\
+    \ left_size) {\n                set_child0(t, set_update(child0(t), k, f));\n\
+    \            } else {\n                set_child1(t, set_update(child1(t), k -\
+    \ (left_size + 1), f));\n            }\n            return node_type::update(t);\n\
+    \        }\n\n        static std::vector<value_type> dump(node_pointer t) {\n\
+    \            std::vector<value_type> res;\n            res.reserve(safe_size(t));\n\
+    \            auto rec = [&](auto rec, node_pointer t) -> void {\n            \
+    \    if (is_null(t)) return;\n                rec(rec, child0(t));\n         \
+    \       res.push_back(value(t));\n                rec(rec, child1(t));\n     \
+    \       };\n            rec(rec, t);\n            return res;\n        }\n\n \
+    \       template <bool reversed_, bool constant_>\n        struct NodeIterator\
+    \ {\n            static constexpr bool constant = constant_;\n            static\
+    \ constexpr bool reversed = reversed_;\n\n            friend Node;\n         \
+    \   friend Derived;\n\n            using difference_type = Node::difference_type;\n\
+    \            using value_type = Node::value_type;\n            using pointer =\
+    \ std::conditional_t<constant, Node::const_pointer, Node::pointer>;\n        \
+    \    using reference = std::conditional_t<constant, Node::const_reference, Node::reference>;\n\
+    \            using iterator_category = std::random_access_iterator_tag;\n\n  \
+    \          NodeIterator(): NodeIterator(null) {}\n            explicit NodeIterator(node_pointer\
+    \ root): NodeIterator(root, 0, null) {}\n            NodeIterator(const NodeIterator<reversed,\
+    \ not constant>& it): NodeIterator(it._root, it._index, it._cur) {}\n\n      \
+    \      reference operator*() const {\n                if (is_null(_cur) and _index\
+    \ != safe_size(_root)) {\n                    _cur = _root;\n                \
+    \    for (size_type k = _index;;) {\n                        if (size_type size\
+    \ = safe_size(child(_cur, reversed)); k == size) {\n                         \
+    \   break;\n                        } else if (k < size) {\n                 \
+    \           _cur = child(_cur, reversed);\n                        } else {\n\
+    \                            _cur = child(_cur, not reversed);\n             \
+    \               k -= size + 1;\n                        }\n                  \
+    \  }\n                }\n                return value(_cur);\n            }\n\
+    \            reference operator[](difference_type k) const { return *((*this)\
+    \ + k); }\n\n            NodeIterator& operator++() { return *this += 1; }\n \
+    \           NodeIterator& operator--() { return *this -= 1; }\n            NodeIterator&\
+    \ operator+=(difference_type k) { return suc(+k), * this; }\n            NodeIterator&\
+    \ operator-=(difference_type k) { return suc(-k), * this; }\n            NodeIterator\
+    \ operator++(int) { NodeIterator res = *this; ++(*this); return res; }\n     \
+    \       NodeIterator operator--(int) { NodeIterator res = *this; --(*this); return\
+    \ res; }\n            friend NodeIterator operator+(NodeIterator it, difference_type\
+    \ k) { return it += k; }\n            friend NodeIterator operator+(difference_type\
+    \ k, NodeIterator it) { return it += k; }\n            friend NodeIterator operator-(NodeIterator\
+    \ it, difference_type k) { return it -= k; }\n\n            friend difference_type\
+    \ operator-(const NodeIterator& lhs, const NodeIterator& rhs) { return lhs._index\
+    \ - rhs._index; }\n\n            friend bool operator==(const NodeIterator& lhs,\
+    \ const NodeIterator& rhs) { return lhs._index == rhs._index; }\n            friend\
+    \ bool operator!=(const NodeIterator& lhs, const NodeIterator& rhs) { return lhs._index\
+    \ != rhs._index; }\n            friend bool operator<(const NodeIterator& lhs,\
+    \ const NodeIterator& rhs) { return lhs._index < rhs._index; }\n            friend\
+    \ bool operator>(const NodeIterator& lhs, const NodeIterator& rhs) { return lhs._index\
+    \ > rhs._index; }\n            friend bool operator<=(const NodeIterator& lhs,\
+    \ const NodeIterator& rhs) { return lhs._index <= rhs._index; }\n            friend\
+    \ bool operator>=(const NodeIterator& lhs, const NodeIterator& rhs) { return lhs._index\
+    \ >= rhs._index; }\n\n            static NodeIterator begin(node_pointer root)\
+    \ { return NodeIterator(root, 0, null); }\n            static NodeIterator end(node_pointer\
+    \ root) { return NodeIterator(root, safe_size(root), null); }\n\n            int\
+    \ size() const { return safe_size(_root); }\n            int index() const { return\
+    \ _index; }\n        private:\n            node_pointer _root;\n            size_type\
     \ _index;\n            mutable node_pointer _cur; // it==end() or uninitialized\
     \ (updates only index)\n\n            NodeIterator(node_pointer root, size_type\
     \ index, node_pointer cur): _root(root), _index(index), _cur(cur) {}\n\n     \
@@ -413,7 +416,7 @@ data:
   isVerificationFile: true
   path: test/src/datastructure/bbst/implicit_treap/abc237_d.test.cpp
   requiredBy: []
-  timestamp: '2023-02-04 08:57:06+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/datastructure/bbst/implicit_treap/abc237_d.test.cpp

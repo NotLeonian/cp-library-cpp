@@ -27,17 +27,17 @@ data:
     \        using container_type = std::conditional_t<auto_extend, std::deque<U>,\
     \ std::vector<U>>;\n\n        container_type<value_type> pool;\n        container_type<value_pointer_type>\
     \ stock;\n        decltype(stock.begin()) it;\n\n        ObjectPool() : ObjectPool(0)\
-    \ {}\n        ObjectPool(int siz) : pool(siz), stock(siz) {\n            clear();\n\
+    \ {}\n        ObjectPool(int size) : pool(size), stock(size) {\n            clear();\n\
     \        }\n\n        int capacity() const { return pool.size(); }\n        int\
     \ size() const { return it - stock.begin(); }\n\n        value_pointer_type alloc()\
     \ {\n            if constexpr (auto_extend) ensure();\n            return *it++;\n\
     \        }\n\n        void free(value_pointer_type t) {\n            *--it = t;\n\
-    \        }\n\n        void clear() {\n            int siz = pool.size();\n   \
-    \         it = stock.begin();\n            for (int i = 0; i < siz; i++) stock[i]\
+    \        }\n\n        void clear() {\n            int size = pool.size();\n  \
+    \          it = stock.begin();\n            for (int i = 0; i < size; i++) stock[i]\
     \ = &pool[i];\n        }\n\n        void ensure() {\n            if (it != stock.end())\
-    \ return;\n            int siz = stock.size();\n            for (int i = siz;\
-    \ i <= siz * 2; ++i) {\n                stock.push_back(&pool.emplace_back());\n\
-    \            }\n            it = stock.begin() + siz;\n        }\n    };\n} //\
+    \ return;\n            int size = stock.size();\n            for (int i = size;\
+    \ i <= size * 2; ++i) {\n                stock.push_back(&pool.emplace_back());\n\
+    \            }\n            it = stock.begin() + size;\n        }\n    };\n} //\
     \ namespace suisen\n\n\n#line 7 \"library/datastructure/segment_tree/persistent_lazy_segment_tree.hpp\"\
     \n\nnamespace suisen {\n    template <typename T, T(*op)(T, T), T(*e)(), typename\
     \ F, T(*mapping)(F, T), F(*composition)(F, F), F(*id)()>\n    struct PersistentLazySegmentTree\
@@ -87,10 +87,10 @@ data:
     \ = apply(res->_ch[0], tl, tm, ql, qr, f);\n                res->_ch[1] = apply(res->_ch[1],\
     \ tm, tr, ql, qr, f);\n                update(res);\n                return res;\n\
     \            }\n\n            template <typename Func>\n            static auto\
-    \ update_leaf(node_pointer_type node, int siz, int i, Func &&f) {\n          \
-    \      static std::vector<node_pointer_type> path;\n\n                node_pointer_type\
+    \ update_leaf(node_pointer_type node, int size, int i, Func &&f) {\n         \
+    \       static std::vector<node_pointer_type> path;\n\n                node_pointer_type\
     \ res = clone(node);\n                node_pointer_type cur = res;\n\n       \
-    \         for (int l = 0, r = siz; r - l > 1;) {\n                    path.push_back(cur);\n\
+    \         for (int l = 0, r = size; r - l > 1;) {\n                    path.push_back(cur);\n\
     \                    push</*do_clone = */false>(cur);\n                    int\
     \ m = (l + r) >> 1;\n                    if (i < m) {\n                      \
     \  cur = cur->_ch[0];\n                        r = m;\n                    } else\
@@ -98,8 +98,8 @@ data:
     \                    }\n                }\n                cur->_dat = f(cur->_dat);\n\
     \                while (path.size()) update(path.back()), path.pop_back();\n \
     \               return res;\n            }\n\n            static value_type get(node_pointer_type\
-    \ node, int siz, int i) {\n                operator_type f = id();\n         \
-    \       node_pointer_type cur = node;\n                for (int l = 0, r = siz;\
+    \ node, int size, int i) {\n                operator_type f = id();\n        \
+    \        node_pointer_type cur = node;\n                for (int l = 0, r = size;\
     \ r - l > 1;) {\n                    f = composition(f, cur->_laz);\n        \
     \            int m = (l + r) >> 1;\n                    if (i < m) {\n       \
     \                 cur = cur->_ch[0];\n                        r = m;\n       \
@@ -107,28 +107,28 @@ data:
     \               l = m;\n                    }\n                }\n           \
     \     return mapping(f, cur->_dat);\n            }\n            template <typename\
     \ Func>\n            static node_pointer_type apply(node_pointer_type node, int\
-    \ siz, int i, Func&& f) {\n                return update_leaf(node, siz, i, [&](const\
-    \ value_type &v) { return f(v); });\n            }\n            static node_pointer_type\
-    \ set(node_pointer_type node, int siz, int i, const value_type& dat) {\n     \
-    \           return apply(node, siz, i, [&](const value_type&) { return dat; });\n\
-    \            }\n\n            template <typename Pred>\n            static int\
-    \ max_right(node_pointer_type node, int siz, int l, Pred&& pred) {\n         \
-    \       assert(pred(e()));\n                auto rec = [&](auto rec, node_pointer_type\
-    \ cur, int tl, int tr, value_type& sum, const operator_type &f) -> int {\n   \
-    \                 if (tr <= l) return tr;\n                    if (l <= tl) {\n\
-    \                        value_type nxt_sum = op(sum, mapping(f, cur->_dat));\n\
-    \                        if (pred(nxt_sum)) {\n                            sum\
-    \ = std::move(nxt_sum);\n                            return tr;\n            \
-    \            }\n                        if (tr - tl == 1) return tl;\n       \
-    \             }\n                    int tm = (tl + tr) >> 1;\n              \
-    \      operator_type g = composition(f, cur->_laz);\n                    int res_l\
-    \ = rec(rec, cur->_ch[0], tl, tm, sum, g);\n                    return res_l !=\
-    \ tm ? res_l : rec(rec, cur->_ch[1], tm, tr, sum, g);\n                };\n  \
-    \              value_type sum = e();\n                return rec(rec, node, 0,\
-    \ siz, sum, id());\n            }\n            template <typename Pred>\n    \
-    \        static int min_left(node_pointer_type node, int siz, int r, Pred&& pred)\
-    \ {\n                assert(pred(e()));\n                auto rec = [&](auto rec,\
-    \ node_pointer_type cur, int tl, int tr, value_type& sum, const operator_type\
+    \ size, int i, Func&& f) {\n                return update_leaf(node, size, i,\
+    \ [&](const value_type &v) { return f(v); });\n            }\n            static\
+    \ node_pointer_type set(node_pointer_type node, int size, int i, const value_type&\
+    \ dat) {\n                return apply(node, size, i, [&](const value_type&) {\
+    \ return dat; });\n            }\n\n            template <typename Pred>\n   \
+    \         static int max_right(node_pointer_type node, int size, int l, Pred&&\
+    \ pred) {\n                assert(pred(e()));\n                auto rec = [&](auto\
+    \ rec, node_pointer_type cur, int tl, int tr, value_type& sum, const operator_type\
+    \ &f) -> int {\n                    if (tr <= l) return tr;\n                \
+    \    if (l <= tl) {\n                        value_type nxt_sum = op(sum, mapping(f,\
+    \ cur->_dat));\n                        if (pred(nxt_sum)) {\n               \
+    \             sum = std::move(nxt_sum);\n                            return tr;\n\
+    \                        }\n                        if (tr - tl == 1) return tl;\n\
+    \                    }\n                    int tm = (tl + tr) >> 1;\n       \
+    \             operator_type g = composition(f, cur->_laz);\n                 \
+    \   int res_l = rec(rec, cur->_ch[0], tl, tm, sum, g);\n                    return\
+    \ res_l != tm ? res_l : rec(rec, cur->_ch[1], tm, tr, sum, g);\n             \
+    \   };\n                value_type sum = e();\n                return rec(rec,\
+    \ node, 0, size, sum, id());\n            }\n            template <typename Pred>\n\
+    \            static int min_left(node_pointer_type node, int size, int r, Pred&&\
+    \ pred) {\n                assert(pred(e()));\n                auto rec = [&](auto\
+    \ rec, node_pointer_type cur, int tl, int tr, value_type& sum, const operator_type\
     \ &f) -> int {\n                    if (r <= tl) return tl;\n                \
     \    if (tr <= r) {\n                        value_type nxt_sum = op(mapping(f,\
     \ cur->_dat), sum);\n                        if (pred(nxt_sum)) {\n          \
@@ -139,7 +139,7 @@ data:
     \         int res_r = rec(rec, cur->_ch[1], tm, tr, sum, g);\n               \
     \     return res_r != tm ? res_r : rec(rec, cur->_ch[0], tl, tm, sum, g);\n  \
     \              };\n                value_type sum = e();\n                return\
-    \ rec(rec, node, 0, siz, sum, id());\n            }\n\n            template <typename\
+    \ rec(rec, node, 0, size, sum, id());\n            }\n\n            template <typename\
     \ OutputIterator>\n            static void dump(node_pointer_type node, OutputIterator\
     \ it) {\n                if (not node) return;\n                auto rec = [&](auto\
     \ rec, node_pointer_type cur, const operator_type &f) -> void {\n            \
@@ -154,9 +154,9 @@ data:
     \ : _n(0), _root(nullptr) {}\n        explicit PersistentLazySegmentTree(int n)\
     \ : PersistentLazySegmentTree(std::vector<value_type>(n, e())) {}\n        PersistentLazySegmentTree(const\
     \ std::vector<value_type>& dat) : _n(dat.size()), _root(node_type::build(dat))\
-    \ {}\n\n        static void init_pool(int siz) {\n            node_type::_pool\
-    \ = ObjectPool<node_type>(siz);\n        }\n        static void clear_pool() {\n\
-    \            node_type::_pool.clear();\n        }\n\n        value_type prod_all()\
+    \ {}\n\n        static void init_pool(int size) {\n            node_type::_pool\
+    \ = ObjectPool<node_type>(size);\n        }\n        static void clear_pool()\
+    \ {\n            node_type::_pool.clear();\n        }\n\n        value_type prod_all()\
     \ {\n            return node_type::prod_all(_root);\n        }\n        value_type\
     \ prod(int l, int r) {\n            assert(0 <= l and l <= r and r <= _n);\n \
     \           return node_type::prod(_root, 0, _n, l, r);\n        }\n        value_type\
@@ -343,7 +343,7 @@ data:
   isVerificationFile: true
   path: test/src/datastructure/segment_tree/persistent_lazy_segment_tree/dummy.test.cpp
   requiredBy: []
-  timestamp: '2022-04-05 23:32:24+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/datastructure/segment_tree/persistent_lazy_segment_tree/dummy.test.cpp

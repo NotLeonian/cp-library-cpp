@@ -93,11 +93,11 @@ data:
     \ mp{};\n        int next_id = 0;\n\n        void ensure_mp1(int id) {\n     \
     \       if (id >= int(mp1.size())) mp1.resize(id + 1, None);\n        }\n    public:\n\
     \        IDHandlerNaive() = default;\n\n        int get_id(key_type ch_ids) {\n\
-    \            if (const int siz = ch_ids.size(); siz == 1) {\n                int\
-    \ ch = ch_ids[0];\n                ensure_mp1(ch);\n                return mp1[ch]\
-    \ != None ? mp1[ch] : (mp1[ch] = next_id++);\n            } else {\n         \
-    \       std::sort(ch_ids.begin(), ch_ids.end());\n                TrieNode& node\
-    \ = mp.add(ch_ids);\n                return node.id != None ? node.id : (node.id\
+    \            if (const int size = ch_ids.size(); size == 1) {\n              \
+    \  int ch = ch_ids[0];\n                ensure_mp1(ch);\n                return\
+    \ mp1[ch] != None ? mp1[ch] : (mp1[ch] = next_id++);\n            } else {\n \
+    \               std::sort(ch_ids.begin(), ch_ids.end());\n                TrieNode&\
+    \ node = mp.add(ch_ids);\n                return node.id != None ? node.id : (node.id\
     \ = next_id++);\n            }\n        }\n        void add_child(key_type& key,\
     \ int id) const {\n            key.push_back(id);\n        }\n        void rem_child(key_type&\
     \ key, int id) const {\n            auto it = std::find(key.begin(), key.end(),\
@@ -202,8 +202,8 @@ data:
     \ mp1{};\n        MapTrie<TrieNode> mp{};\n        int next_id = 0;\n\n      \
     \  void ensure_mp1(int id) {\n            if (id >= int(mp1.size())) mp1.resize(id\
     \ + 1, None);\n        }\n    public:\n        IDHandlerNaive() = default;\n\n\
-    \        int get_id(key_type ch_ids) {\n            if (const int siz = ch_ids.size();\
-    \ siz == 1) {\n                int ch = ch_ids[0];\n                ensure_mp1(ch);\n\
+    \        int get_id(key_type ch_ids) {\n            if (const int size = ch_ids.size();\
+    \ size == 1) {\n                int ch = ch_ids[0];\n                ensure_mp1(ch);\n\
     \                return mp1[ch] != None ? mp1[ch] : (mp1[ch] = next_id++);\n \
     \           } else {\n                std::sort(ch_ids.begin(), ch_ids.end());\n\
     \                TrieNode& node = mp.add(ch_ids);\n                return node.id\
@@ -306,7 +306,7 @@ data:
   isVerificationFile: false
   path: library/tree/tree_isomorphism_classification.hpp
   requiredBy: []
-  timestamp: '2022-10-23 23:59:03+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/tree/tree_isomorphism_classification/rooted_tree_isomorphism_classification.test.cpp

@@ -41,22 +41,23 @@ data:
     \      _dat.pop_back();\n            fix_min_heap_down(idx);\n            return\
     \ res;\n        }\n        const auto& data() const { return _dat; }\n       \
     \ auto &data() { return _dat; }\n\n        // for debug\n        void check_heap_property()\
-    \ const {\n            const int siz = size();\n            for (int i = 0; i\
-    \ < siz; ++i) {\n                if (i % 2 == 0) {\n                    int lch\
-    \ = min_heap_child_l(i), rch = min_heap_child_r(i);\n                    if (lch\
-    \ < siz) assert(not _comp(_dat[lch], _dat[i]));\n                    if (rch <\
-    \ siz) assert(not _comp(_dat[rch], _dat[i]));\n                    if (i + 1 <\
-    \ siz) assert(not _comp(_dat[i + 1], _dat[i]));\n                } else {\n  \
-    \                  int lch = max_heap_child_l(i), rch = max_heap_child_r(i);\n\
-    \                    lch -= lch >= siz, rch -= rch >= siz;\n                 \
-    \   if (lch < siz) assert(not _comp(_dat[i], _dat[lch]));\n                  \
-    \  if (rch < siz) assert(not _comp(_dat[i], _dat[rch]));\n                }\n\
-    \            }\n        }\n    private:\n        // even : min_heap, odd : max_heap\n\
-    \        std::vector<value_type> _dat;\n        Comp _comp;\n\n        int min_heap_top_index()\
-    \ const { return 0; }\n        int max_heap_top_index() const { return _dat.size()\
-    \ >= 2; }\n\n        void fix_up(int idx) {\n            if (const int l = idx\
-    \ & ~0b1, r = l | 1; r < int(_dat.size())) {\n                if (_comp(_dat[r],\
-    \ _dat[l])) std::swap(_dat[l], _dat[r]), idx ^= 1;\n                fix_min_heap_up(l),\
+    \ const {\n            const int current_size = size();\n            for (int\
+    \ i = 0; i < current_size; ++i) {\n                if (i % 2 == 0) {\n       \
+    \             int lch = min_heap_child_l(i), rch = min_heap_child_r(i);\n    \
+    \                if (lch < current_size) assert(not _comp(_dat[lch], _dat[i]));\n\
+    \                    if (rch < current_size) assert(not _comp(_dat[rch], _dat[i]));\n\
+    \                    if (i + 1 < current_size) assert(not _comp(_dat[i + 1], _dat[i]));\n\
+    \                } else {\n                    int lch = max_heap_child_l(i),\
+    \ rch = max_heap_child_r(i);\n                    lch -= lch >= current_size,\
+    \ rch -= rch >= current_size;\n                    if (lch < current_size) assert(not\
+    \ _comp(_dat[i], _dat[lch]));\n                    if (rch < current_size) assert(not\
+    \ _comp(_dat[i], _dat[rch]));\n                }\n            }\n        }\n \
+    \   private:\n        // even : min_heap, odd : max_heap\n        std::vector<value_type>\
+    \ _dat;\n        Comp _comp;\n\n        int min_heap_top_index() const { return\
+    \ 0; }\n        int max_heap_top_index() const { return _dat.size() >= 2; }\n\n\
+    \        void fix_up(int idx) {\n            if (const int l = idx & ~0b1, r =\
+    \ l | 1; r < int(_dat.size())) {\n                if (_comp(_dat[r], _dat[l]))\
+    \ std::swap(_dat[l], _dat[r]), idx ^= 1;\n                fix_min_heap_up(l),\
     \ fix_max_heap_up(r);\n            } else {\n                fix_min_heap_up(l),\
     \ fix_max_heap_up(l);\n            }\n        }\n        void fix_min_heap_up(int\
     \ idx) {\n            while (idx >= 2) {\n                if (int par = min_heap_parent(idx);\
@@ -65,18 +66,18 @@ data:
     \ idx) {\n            while (idx >= 2) {\n                if (int par = max_heap_parent(idx);\
     \ _comp(_dat[par], _dat[idx])) std::swap(_dat[std::exchange(idx, par)], _dat[par]);\n\
     \                else return;\n            }\n        }\n        void fix_min_heap_down(int\
-    \ idx) {\n            const int siz = _dat.size();\n            while (true) {\n\
-    \                int lch = min_heap_child_l(idx), rch = min_heap_child_r(idx);\n\
-    \                if (lch >= siz) {\n                    fix_up(idx);\n       \
-    \             break;\n                }\n                int ch = rch < siz and\
-    \ _comp(_dat[rch], _dat[lch]) ? rch : lch;\n                if (_comp(_dat[ch],\
+    \ idx) {\n            const int size = _dat.size();\n            while (true)\
+    \ {\n                int lch = min_heap_child_l(idx), rch = min_heap_child_r(idx);\n\
+    \                if (lch >= size) {\n                    fix_up(idx);\n      \
+    \              break;\n                }\n                int ch = rch < size\
+    \ and _comp(_dat[rch], _dat[lch]) ? rch : lch;\n                if (_comp(_dat[ch],\
     \ _dat[idx])) std::swap(_dat[std::exchange(idx, ch)], _dat[ch]);\n           \
     \     else break;\n            }\n        }\n        void fix_max_heap_down(int\
-    \ idx) {\n            const int siz = _dat.size();\n            while (true) {\n\
-    \                int lch = max_heap_child_l(idx), rch = max_heap_child_r(idx);\n\
-    \                lch -= lch >= siz, rch -= rch >= siz;\n                if (lch\
-    \ >= siz) {\n                    fix_up(idx);\n                    break;\n  \
-    \              }\n                int ch = rch < siz and _comp(_dat[lch], _dat[rch])\
+    \ idx) {\n            const int size = _dat.size();\n            while (true)\
+    \ {\n                int lch = max_heap_child_l(idx), rch = max_heap_child_r(idx);\n\
+    \                lch -= lch >= size, rch -= rch >= size;\n                if (lch\
+    \ >= size) {\n                    fix_up(idx);\n                    break;\n \
+    \               }\n                int ch = rch < size and _comp(_dat[lch], _dat[rch])\
     \ ? rch : lch;\n                if (_comp(_dat[idx], _dat[ch])) std::swap(_dat[std::exchange(idx,\
     \ ch)], _dat[ch]);\n                else break;\n            }\n        }\n\n\
     \        static constexpr int min_heap_parent(int idx) { return (idx - 2) >> 2\
@@ -112,7 +113,7 @@ data:
   isVerificationFile: true
   path: test/src/datastructure/heap/interval_heap/double_ended_priority_queue.test.cpp
   requiredBy: []
-  timestamp: '2023-07-09 04:04:16+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/datastructure/heap/interval_heap/double_ended_priority_queue.test.cpp

@@ -64,13 +64,13 @@ data:
     \ std::invoke_result_t<random_engine>;\n\n        static priority_type random_priority()\
     \ {\n            static random_engine engine{ std::random_device{}() };\n    \
     \        return engine();\n        }\n\n        struct InnerNode {\n         \
-    \   priority_type _priority;\n\n            size_type _siz;\n            key_type\
+    \   priority_type _priority;\n\n            size_type _size;\n            key_type\
     \ _key;\n            key_type _kmin, _kmax;\n\n            value_type _val;\n\
     \            value_type _sum;\n\n            inner_node_pointer _ch[2]{ nullptr,\
     \ nullptr };\n\n            InnerNode(const key_type& key, const value_type& val)\
-    \ : _priority(random_priority()), _siz(1), _key(key), _kmin(key), _kmax(key),\
+    \ : _priority(random_priority()), _size(1), _key(key), _kmin(key), _kmax(key),\
     \ _val(val), _sum(val) {}\n\n            static size_type& size(inner_node_pointer\
-    \ t) { return t->_siz; }\n            static size_type safe_size(inner_node_pointer\
+    \ t) { return t->_size; }\n            static size_type safe_size(inner_node_pointer\
     \ t) { return t ? size(t) : 0; }\n\n            static const key_type& const_key(inner_node_pointer\
     \ t) { return t->_key; }\n            static key_type& key(inner_node_pointer\
     \ t) { return t->_key; }\n            static key_type& min_key(inner_node_pointer\
@@ -105,47 +105,48 @@ data:
     \                dealloc_all(child1(t));\n                dealloc_node(t);\n \
     \           }\n\n            static value_type get_at(inner_node_pointer t, size_type\
     \ k) {\n                assert(0 <= k and k < safe_size(t));\n               \
-    \ while (true) {\n                    if (const size_type lsiz = safe_size(child0(t));\
-    \ k <= lsiz) {\n                        if (k == lsiz) return value(t);\n    \
-    \                    t = child0(t);\n                    } else {\n          \
-    \              t = child1(t);\n                        k -= lsiz + 1;\n      \
-    \              }\n                }\n            }\n            static value_type\
+    \ while (true) {\n                    if (const size_type left_size = safe_size(child0(t));\
+    \ k <= left_size) {\n                        if (k == left_size) return value(t);\n\
+    \                        t = child0(t);\n                    } else {\n      \
+    \                  t = child1(t);\n                        k -= left_size + 1;\n\
+    \                    }\n                }\n            }\n            static value_type\
     \ set_at(inner_node_pointer t, size_type k, const value_type& val) {\n       \
     \         assert(0 <= k and k < safe_size(t));\n                static std::vector<inner_node_pointer>\
     \ stack{};\n                while (true) {\n                    stack.push_back(t);\n\
-    \                    if (const size_type lsiz = safe_size(child0(t)); k <= lsiz)\
-    \ {\n                        if (k == lsiz) {\n                            value_type\
-    \ old_val = value(t);\n                            value(t) = val;\n         \
-    \                   while (stack.size()) update(stack.back()), stack.pop_back();\n\
-    \                            return old_val;\n                        }\n    \
-    \                    t = child0(t);\n                    } else {\n          \
-    \              t = child1(t);\n                        k -= lsiz + 1;\n      \
-    \              }\n                }\n            }\n            static value_type\
-    \ prod_at_range(inner_node_pointer t, size_type l, size_type r) {\n          \
-    \      if (not t) return e();\n                if (l <= 0 and r >= size(t)) return\
-    \ sum(t);\n                size_type lsiz = safe_size(child0(t));\n          \
-    \      if (r <= lsiz) return prod_at_range(child0(t), l, r);\n               \
-    \ if (l > lsiz) return prod_at_range(child1(t), l - (lsiz + 1), r - (lsiz + 1));\n\
-    \                value_type sum_l = prod_at_range(child0(t), l, r);\n        \
-    \        value_type sum_r = prod_at_range(child1(t), l - (lsiz + 1), r - (lsiz\
-    \ + 1));\n                return op(op(sum_l, value(t)), sum_r);\n           \
-    \ }\n\n            static std::pair<inner_node_pointer, inner_node_pointer> split_at(inner_node_pointer\
-    \ t, size_type k) {\n                if (k == 0) return { nullptr, t };\n    \
-    \            if (k == safe_size(t)) return { t, nullptr };\n\n               \
-    \ static std::vector<inner_node_pointer> lp{}, rp{};\n\n                while\
-    \ (true) {\n                    if (const size_type lsiz = safe_size(child0(t));\
-    \ k <= lsiz) {\n                        if (rp.size()) set_child0(rp.back(), t);\n\
-    \                        rp.push_back(t);\n                        if (k == lsiz)\
-    \ {\n                            if (lp.size()) set_child1(lp.back(), child0(t));\n\
-    \n                            inner_node_pointer lt = set_child0(t, nullptr),\
-    \ rt = nullptr;\n\n                            while (lp.size()) update(lt = lp.back()),\
-    \ lp.pop_back();\n                            while (rp.size()) update(rt = rp.back()),\
-    \ rp.pop_back();\n\n                            return { lt, rt };\n         \
-    \               }\n                        t = child0(t);\n                  \
-    \  } else {\n                        if (lp.size()) set_child1(lp.back(), t);\n\
-    \                        lp.push_back(t);\n                        t = child1(t);\n\
-    \                        k -= lsiz + 1;\n                    }\n             \
-    \   }\n            }\n            static std::pair<inner_node_pointer, inner_node_pointer>\
+    \                    if (const size_type left_size = safe_size(child0(t)); k <=\
+    \ left_size) {\n                        if (k == left_size) {\n              \
+    \              value_type old_val = value(t);\n                            value(t)\
+    \ = val;\n                            while (stack.size()) update(stack.back()),\
+    \ stack.pop_back();\n                            return old_val;\n           \
+    \             }\n                        t = child0(t);\n                    }\
+    \ else {\n                        t = child1(t);\n                        k -=\
+    \ left_size + 1;\n                    }\n                }\n            }\n  \
+    \          static value_type prod_at_range(inner_node_pointer t, size_type l,\
+    \ size_type r) {\n                if (not t) return e();\n                if (l\
+    \ <= 0 and r >= size(t)) return sum(t);\n                size_type left_size =\
+    \ safe_size(child0(t));\n                if (r <= left_size) return prod_at_range(child0(t),\
+    \ l, r);\n                if (l > left_size) return prod_at_range(child1(t), l\
+    \ - (left_size + 1), r - (left_size + 1));\n                value_type sum_l =\
+    \ prod_at_range(child0(t), l, r);\n                value_type sum_r = prod_at_range(child1(t),\
+    \ l - (left_size + 1), r - (left_size + 1));\n                return op(op(sum_l,\
+    \ value(t)), sum_r);\n            }\n\n            static std::pair<inner_node_pointer,\
+    \ inner_node_pointer> split_at(inner_node_pointer t, size_type k) {\n        \
+    \        if (k == 0) return { nullptr, t };\n                if (k == safe_size(t))\
+    \ return { t, nullptr };\n\n                static std::vector<inner_node_pointer>\
+    \ lp{}, rp{};\n\n                while (true) {\n                    if (const\
+    \ size_type left_size = safe_size(child0(t)); k <= left_size) {\n            \
+    \            if (rp.size()) set_child0(rp.back(), t);\n                      \
+    \  rp.push_back(t);\n                        if (k == left_size) {\n         \
+    \                   if (lp.size()) set_child1(lp.back(), child0(t));\n\n     \
+    \                       inner_node_pointer lt = set_child0(t, nullptr), rt = nullptr;\n\
+    \n                            while (lp.size()) update(lt = lp.back()), lp.pop_back();\n\
+    \                            while (rp.size()) update(rt = rp.back()), rp.pop_back();\n\
+    \n                            return { lt, rt };\n                        }\n\
+    \                        t = child0(t);\n                    } else {\n      \
+    \                  if (lp.size()) set_child1(lp.back(), t);\n                \
+    \        lp.push_back(t);\n                        t = child1(t);\n          \
+    \              k -= left_size + 1;\n                    }\n                }\n\
+    \            }\n            static std::pair<inner_node_pointer, inner_node_pointer>\
     \ split_key(inner_node_pointer t, key_type k) {\n                if (not t) return\
     \ { nullptr, nullptr };\n                if (k <= min_key(t)) return { nullptr,\
     \ t };\n                if (k > max_key(t)) return { t, nullptr };\n\n       \
@@ -215,14 +216,14 @@ data:
     \            } else {\n                    foreach(child0(t), rev, f), f(const_key(t),\
     \ const_value(t)), foreach(child1(t), rev, f);\n                }\n          \
     \  }\n        };\n\n        struct OuterNode {\n            priority_type _priority;\n\
-    \n            size_type _siz;\n            value_type _sum;\n\n            bool\
+    \n            size_type _size;\n            value_type _sum;\n\n            bool\
     \ _rev;\n            inner_node_pointer _inner_node;\n\n            outer_node_pointer\
     \ _ch[2]{ nullptr, nullptr };\n\n            OuterNode(inner_node_pointer inner_node,\
-    \ bool rev = false) : _priority(random_priority()), _siz(inner_node::size(inner_node)),\
+    \ bool rev = false) : _priority(random_priority()), _size(inner_node::size(inner_node)),\
     \ _sum(inner_node::sum(inner_node)), _rev(rev), _inner_node(inner_node) {\n  \
     \              if (rev) _sum = toggle(std::move(_sum));\n            }\n\n   \
-    \         static size_type& size(outer_node_pointer t) { return t->_siz; }\n \
-    \           static size_type safe_size(outer_node_pointer t) { return t ? size(t)\
+    \         static size_type& size(outer_node_pointer t) { return t->_size; }\n\
+    \            static size_type safe_size(outer_node_pointer t) { return t ? size(t)\
     \ : 0; }\n            static size_type inner_size(outer_node_pointer t) { return\
     \ inner_node::size(inner(t)); }\n\n            static value_type& sum(outer_node_pointer\
     \ t) { return t->_sum; }\n            static value_type safe_sum(outer_node_pointer\
@@ -278,76 +279,79 @@ data:
     \     }\n                return nodes[0];\n            }\n\n            static\
     \ value_type get_at(outer_node_pointer t, size_type k) {\n                assert(0\
     \ <= k and k < safe_size(t));\n                while (true) {\n              \
-    \      if (const size_type lsiz = safe_size(child0(t)), msiz = inner_node::safe_size(inner(t));\
-    \ k < lsiz + msiz) {\n                        if (k >= lsiz) {\n             \
-    \               size_type k_inner = k - lsiz;\n                            return\
-    \ inner_node::get_at(inner(t), reversed(t) ? inner_node::safe_size(inner(t)) -\
-    \ k_inner - 1 : k_inner);\n                        }\n                       \
-    \ t = child0(t);\n                    } else {\n                        t = child1(t);\n\
-    \                        k -= lsiz + msiz;\n                    }\n          \
-    \      }\n            }\n            static value_type set_at(outer_node_pointer\
-    \ t, size_type k, const value_type& val) {\n                assert(0 <= k and\
-    \ k < safe_size(t));\n                static std::vector<outer_node_pointer> stack{};\n\
-    \                while (true) {\n                    stack.push_back(t);\n   \
-    \                 if (const size_type lsiz = safe_size(child0(t)), msiz = inner_node::safe_size(inner(t));\
-    \ k < lsiz + msiz) {\n                        if (k >= lsiz) {\n             \
-    \               size_type k_inner = k - lsiz;\n                            value_type\
-    \ old_val = inner_node::set_at(inner(t), reversed(t) ? inner_node::safe_size(inner(t))\
-    \ - k_inner - 1 : k_inner, val);\n                            while (stack.size())\
-    \ update(stack.back()), stack.pop_back();\n                            return\
-    \ old_val;\n                        }\n                        t = child0(t);\n\
-    \                    } else {\n                        t = child1(t);\n      \
-    \                  k -= lsiz + msiz;\n                    }\n                }\n\
-    \            }\n            static value_type prod(outer_node_pointer t, size_type\
-    \ l, size_type r) {\n                if (not t) return e();\n                if\
-    \ (l <= 0 and r >= size(t)) return sum(t);\n                size_type lsiz = safe_size(child0(t));\n\
-    \                if (r <= lsiz) return prod(child0(t), l, r);\n              \
-    \  size_type msiz = inner_size(t);\n                if (l >= lsiz + msiz) return\
-    \ prod(child1(t), l - (lsiz + msiz), r - (lsiz + msiz));\n                value_type\
-    \ sum_l = prod(child0(t), l, r);\n                value_type sum_r = prod(child1(t),\
-    \ l - (lsiz + msiz), r - (lsiz + msiz));\n                if (reversed(t)) {\n\
-    \                    value_type sum_m = inner_node::prod_at_range(inner(t), msiz\
-    \ - (r - lsiz), msiz - (l - lsiz));\n                    return op(op(sum_l, toggle(sum_m)),\
-    \ sum_r);\n                } else {\n                    value_type sum_m = inner_node::prod_at_range(inner(t),\
-    \ l - lsiz, r - lsiz);\n                    return op(op(sum_l, sum_m), sum_r);\n\
-    \                }\n            }\n\n            static std::pair<outer_node_pointer,\
+    \      if (const size_type left_size = safe_size(child0(t)), middle_size = inner_node::safe_size(inner(t));\
+    \ k < left_size + middle_size) {\n                        if (k >= left_size)\
+    \ {\n                            size_type k_inner = k - left_size;\n        \
+    \                    return inner_node::get_at(inner(t), reversed(t) ? inner_node::safe_size(inner(t))\
+    \ - k_inner - 1 : k_inner);\n                        }\n                     \
+    \   t = child0(t);\n                    } else {\n                        t =\
+    \ child1(t);\n                        k -= left_size + middle_size;\n        \
+    \            }\n                }\n            }\n            static value_type\
+    \ set_at(outer_node_pointer t, size_type k, const value_type& val) {\n       \
+    \         assert(0 <= k and k < safe_size(t));\n                static std::vector<outer_node_pointer>\
+    \ stack{};\n                while (true) {\n                    stack.push_back(t);\n\
+    \                    if (const size_type left_size = safe_size(child0(t)), middle_size\
+    \ = inner_node::safe_size(inner(t)); k < left_size + middle_size) {\n        \
+    \                if (k >= left_size) {\n                            size_type\
+    \ k_inner = k - left_size;\n                            value_type old_val = inner_node::set_at(inner(t),\
+    \ reversed(t) ? inner_node::safe_size(inner(t)) - k_inner - 1 : k_inner, val);\n\
+    \                            while (stack.size()) update(stack.back()), stack.pop_back();\n\
+    \                            return old_val;\n                        }\n    \
+    \                    t = child0(t);\n                    } else {\n          \
+    \              t = child1(t);\n                        k -= left_size + middle_size;\n\
+    \                    }\n                }\n            }\n            static value_type\
+    \ prod(outer_node_pointer t, size_type l, size_type r) {\n                if (not\
+    \ t) return e();\n                if (l <= 0 and r >= size(t)) return sum(t);\n\
+    \                size_type left_size = safe_size(child0(t));\n               \
+    \ if (r <= left_size) return prod(child0(t), l, r);\n                size_type\
+    \ middle_size = inner_size(t);\n                if (l >= left_size + middle_size)\
+    \ return prod(child1(t), l - (left_size + middle_size), r - (left_size + middle_size));\n\
+    \                value_type sum_l = prod(child0(t), l, r);\n                value_type\
+    \ sum_r = prod(child1(t), l - (left_size + middle_size), r - (left_size + middle_size));\n\
+    \                if (reversed(t)) {\n                    value_type sum_m = inner_node::prod_at_range(inner(t),\
+    \ middle_size - (r - left_size), middle_size - (l - left_size));\n           \
+    \         return op(op(sum_l, toggle(sum_m)), sum_r);\n                } else\
+    \ {\n                    value_type sum_m = inner_node::prod_at_range(inner(t),\
+    \ l - left_size, r - left_size);\n                    return op(op(sum_l, sum_m),\
+    \ sum_r);\n                }\n            }\n\n            static std::pair<outer_node_pointer,\
     \ outer_node_pointer> split_at(outer_node_pointer t, size_type k) {\n        \
     \        if (k == 0) return { nullptr, t };\n                if (k == safe_size(t))\
     \ return { t, nullptr };\n\n                static std::vector<outer_node_pointer>\
     \ lp{}, rp{};\n\n                while (true) {\n                    if (const\
-    \ size_type lsiz = safe_size(child0(t)), msiz = inner_node::safe_size(inner(t));\
-    \ k < lsiz + msiz) {\n                        if (k >= lsiz) {\n             \
-    \               outer_node_pointer tl, tr;\n                            if (reversed(t))\
-    \ {\n                                size_type k_inner = inner_node::safe_size(inner(t))\
-    \ - (k - lsiz);\n                                auto [inner_tr, inner_tl] = inner_node::split_at(inner(t),\
-    \ k_inner);\n                                tl = outer_node::alloc_node(inner_tl,\
-    \ true);\n                                tr = outer_node::alloc_node(inner_tr,\
-    \ true);\n                            } else {\n                             \
-    \   size_type k_inner = k - lsiz;\n                                auto [inner_tl,\
-    \ inner_tr] = inner_node::split_at(inner(t), k_inner);\n                     \
-    \           tl = outer_node::alloc_node(inner_tl, false);\n                  \
-    \              tr = outer_node::alloc_node(inner_tr, false);\n               \
-    \             }\n\n                            tl = concat(std::exchange(child0(t),\
-    \ nullptr), tl);\n                            tr = concat(tr, std::exchange(child1(t),\
-    \ nullptr));\n\n                            inner(t) = nullptr;\n            \
-    \                dealloc_node(t);\n\n                            if (rp.size())\
-    \ set_child0(rp.back(), tr);\n                            if (lp.size()) set_child1(lp.back(),\
-    \ tl);\n\n                            outer_node_pointer lt = tl, rt = tr;\n\n\
-    \                            while (lp.size()) update(lt = lp.back()), lp.pop_back();\n\
+    \ size_type left_size = safe_size(child0(t)), middle_size = inner_node::safe_size(inner(t));\
+    \ k < left_size + middle_size) {\n                        if (k >= left_size)\
+    \ {\n                            outer_node_pointer tl, tr;\n                \
+    \            if (reversed(t)) {\n                                size_type k_inner\
+    \ = inner_node::safe_size(inner(t)) - (k - left_size);\n                     \
+    \           auto [inner_tr, inner_tl] = inner_node::split_at(inner(t), k_inner);\n\
+    \                                tl = outer_node::alloc_node(inner_tl, true);\n\
+    \                                tr = outer_node::alloc_node(inner_tr, true);\n\
+    \                            } else {\n                                size_type\
+    \ k_inner = k - left_size;\n                                auto [inner_tl, inner_tr]\
+    \ = inner_node::split_at(inner(t), k_inner);\n                               \
+    \ tl = outer_node::alloc_node(inner_tl, false);\n                            \
+    \    tr = outer_node::alloc_node(inner_tr, false);\n                         \
+    \   }\n\n                            tl = concat(std::exchange(child0(t), nullptr),\
+    \ tl);\n                            tr = concat(tr, std::exchange(child1(t), nullptr));\n\
+    \n                            inner(t) = nullptr;\n                          \
+    \  dealloc_node(t);\n\n                            if (rp.size()) set_child0(rp.back(),\
+    \ tr);\n                            if (lp.size()) set_child1(lp.back(), tl);\n\
+    \n                            outer_node_pointer lt = tl, rt = tr;\n\n       \
+    \                     while (lp.size()) update(lt = lp.back()), lp.pop_back();\n\
     \                            while (rp.size()) update(rt = rp.back()), rp.pop_back();\n\
     \n                            return { lt, rt };\n                        }\n\
     \                        if (rp.size()) set_child0(rp.back(), t);\n          \
     \              rp.push_back(t);\n                        t = child0(t);\n    \
     \                } else {\n                        if (lp.size()) set_child1(lp.back(),\
     \ t);\n                        lp.push_back(t);\n                        t = child1(t);\n\
-    \                        k -= lsiz + msiz;\n                    }\n          \
-    \      }\n            }\n            static std::tuple<outer_node_pointer, outer_node_pointer,\
-    \ outer_node_pointer> split_at_range(outer_node_pointer t, size_type l, size_type\
-    \ r) {\n                auto [tlm, tr] = split_at(t, r);\n                auto\
-    \ [tl, tm] = split_at(tlm, l);\n                return { tl, tm, tr };\n     \
-    \       }\n\n            static outer_node_pointer concat(outer_node_pointer tl,\
-    \ outer_node_pointer tr) {\n                if (not tl) return tr;\n         \
-    \       if (not tr) return tl;\n                if (priority(tl) < priority(tr))\
+    \                        k -= left_size + middle_size;\n                    }\n\
+    \                }\n            }\n            static std::tuple<outer_node_pointer,\
+    \ outer_node_pointer, outer_node_pointer> split_at_range(outer_node_pointer t,\
+    \ size_type l, size_type r) {\n                auto [tlm, tr] = split_at(t, r);\n\
+    \                auto [tl, tm] = split_at(tlm, l);\n                return { tl,\
+    \ tm, tr };\n            }\n\n            static outer_node_pointer concat(outer_node_pointer\
+    \ tl, outer_node_pointer tr) {\n                if (not tl) return tr;\n     \
+    \           if (not tr) return tl;\n                if (priority(tl) < priority(tr))\
     \ {\n                    set_child0(tr, concat(tl, child0(tr)));\n           \
     \         return update(tr);\n                } else {\n                    set_child1(tl,\
     \ concat(child1(tl), tr));\n                    return update(tl);\n         \
@@ -540,7 +544,7 @@ data:
   isVerificationFile: true
   path: test/src/datastructure/segment_tree/sortable_segment_tree/point_set_range_sort_range_composite.test.cpp
   requiredBy: []
-  timestamp: '2023-05-18 22:35:39+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/datastructure/segment_tree/sortable_segment_tree/point_set_range_sort_range_composite.test.cpp

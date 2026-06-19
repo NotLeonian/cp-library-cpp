@@ -82,8 +82,8 @@ data:
     \n        private:\n            const SuffixAutomatonBase *sa;\n            SuffixLinkTree\
     \ t;\n    };\n\n    OccurrenceEnumerator occurrence_enumerator() const & {\n \
     \       return OccurrenceEnumerator(this);\n    }\n    OccurrenceEnumerator occurrence_enumerator()\
-    \ const && = delete;\n\n    class FirstOccurenceSearcher {\n        public:\n\
-    \            FirstOccurenceSearcher(const SuffixAutomatonBase *sa) : sa(sa) {\n\
+    \ const && = delete;\n\n    class FirstOccurrenceSearcher {\n        public:\n\
+    \            FirstOccurrenceSearcher(const SuffixAutomatonBase *sa) : sa(sa) {\n\
     \                const std::vector<Node> &nodes = sa->nodes;\n               \
     \ dp.resize(nodes.size(), std::numeric_limits<int>::max());\n                for\
     \ (const int u : sa->topological_order(/* reversed = */ true)) {\n           \
@@ -95,8 +95,11 @@ data:
     \           const int state = sa->transition(t);\n                if (state ==\
     \ -1) return -1;\n                return dp[state] - t.size();\n            }\n\
     \n        private:\n            const SuffixAutomatonBase *sa;\n            std::vector<int>\
-    \ dp;\n    };\n\n    FirstOccurenceSearcher first_occurence_searcher() const &\
-    \ {\n        return FirstOccurenceSearcher(this);\n    }\n    FirstOccurenceSearcher\
+    \ dp;\n    };\n\n    using FirstOccurenceSearcher = FirstOccurrenceSearcher;\n\
+    \n    FirstOccurrenceSearcher first_occurrence_searcher() const & {\n        return\
+    \ FirstOccurrenceSearcher(this);\n    }\n    FirstOccurrenceSearcher first_occurrence_searcher()\
+    \ const && = delete;\n\n    FirstOccurenceSearcher first_occurence_searcher()\
+    \ const & {\n        return first_occurrence_searcher();\n    }\n    FirstOccurenceSearcher\
     \ first_occurence_searcher() const && = delete;\n\n    // returns { start_s, start_t,\
     \ len } s.t. lcs = s[start_s: start_s+len] t[start_t: start_t+len]\n    std::tuple<int,\
     \ int, int> longest_common_substring(const SequenceType &t) const {\n        if\
@@ -238,7 +241,7 @@ data:
   isVerificationFile: true
   path: test/src/string/substring_set/arc097_a.test.cpp
   requiredBy: []
-  timestamp: '2026-06-01 12:57:11+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/string/substring_set/arc097_a.test.cpp

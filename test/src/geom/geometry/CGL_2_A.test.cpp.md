@@ -93,19 +93,19 @@ data:
     \ ab = b - a, ac = c - a;\n        int s = sgn(det(ab, ac));\n        if (s ==\
     \ Sign::POSITIVE) return ISP::L_CURVE;\n        if (s == Sign::NEGATIVE) return\
     \ ISP::R_CURVE;\n        if (sgn(dot(ab, ac)) == Sign::NEGATIVE) return ISP::BACK;\n\
-    \        Point ba = a - b, bc = c - b;\n        if (sgn(dot(ba, bc)) == Sign::NEGATIVE)\
-    \ return ISP::FRONT;\n        return ISP::MIDDLE;\n    }\n\n    struct Line {\n\
-    \        Point a, b;\n        Line() : Line(ZERO, ZERO) {}\n        Line(const\
-    \ Point &from, const Point &to) : a(from), b(to) {}\n        // coef_x * x + coef_y\
-    \ * y + cnst = 0\n        Line(coordinate_t coef_x, coordinate_t coef_y, coordinate_t\
-    \ cnst) {\n            if (not equals(coef_x, 0.)) {\n                a = { (coef_y\
-    \ - cnst) / coef_x, -1. };\n                b = { (-coef_y - cnst) / coef_x, +1.\
-    \ };\n            } else {\n                a = { -1., (coef_x - cnst) / coef_y\
-    \ };\n                b = { +1., (-coef_x - cnst) / coef_y };\n            }\n\
-    \        }\n\n        template <size_t I> const std::tuple_element_t<I, Line>&\
-    \ get() const {\n            static_assert(I < std::tuple_size_v<Line>);\n   \
-    \         if constexpr (I == 0) return a;\n            else if constexpr (I ==\
-    \ 1) return b;\n        }\n        template <size_t I> std::tuple_element_t<I,\
+    \        Point b_to_a = a - b, b_to_c = c - b;\n        if (sgn(dot(b_to_a, b_to_c))\
+    \ == Sign::NEGATIVE) return ISP::FRONT;\n        return ISP::MIDDLE;\n    }\n\n\
+    \    struct Line {\n        Point a, b;\n        Line() : Line(ZERO, ZERO) {}\n\
+    \        Line(const Point &from, const Point &to) : a(from), b(to) {}\n      \
+    \  // coef_x * x + coef_y * y + cnst = 0\n        Line(coordinate_t coef_x, coordinate_t\
+    \ coef_y, coordinate_t cnst) {\n            if (not equals(coef_x, 0.)) {\n  \
+    \              a = { (coef_y - cnst) / coef_x, -1. };\n                b = { (-coef_y\
+    \ - cnst) / coef_x, +1. };\n            } else {\n                a = { -1., (coef_x\
+    \ - cnst) / coef_y };\n                b = { +1., (-coef_x - cnst) / coef_y };\n\
+    \            }\n        }\n\n        template <size_t I> const std::tuple_element_t<I,\
+    \ Line>& get() const {\n            static_assert(I < std::tuple_size_v<Line>);\n\
+    \            if constexpr (I == 0) return a;\n            else if constexpr (I\
+    \ == 1) return b;\n        }\n        template <size_t I> std::tuple_element_t<I,\
     \ Line>& get() {\n            static_assert(I < std::tuple_size_v<Line>);\n  \
     \          if constexpr (I == 0) return a;\n            else if constexpr (I ==\
     \ 1) return b;\n        }\n    };\n    struct Ray {\n        Point a, b;\n   \
@@ -369,7 +369,7 @@ data:
   isVerificationFile: true
   path: test/src/geom/geometry/CGL_2_A.test.cpp
   requiredBy: []
-  timestamp: '2026-06-01 18:44:32+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/geom/geometry/CGL_2_A.test.cpp

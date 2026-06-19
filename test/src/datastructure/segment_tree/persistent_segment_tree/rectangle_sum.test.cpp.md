@@ -162,17 +162,17 @@ data:
     \        using container_type = std::conditional_t<auto_extend, std::deque<U>,\
     \ std::vector<U>>;\n\n        container_type<value_type> pool;\n        container_type<value_pointer_type>\
     \ stock;\n        decltype(stock.begin()) it;\n\n        ObjectPool() : ObjectPool(0)\
-    \ {}\n        ObjectPool(int siz) : pool(siz), stock(siz) {\n            clear();\n\
+    \ {}\n        ObjectPool(int size) : pool(size), stock(size) {\n            clear();\n\
     \        }\n\n        int capacity() const { return pool.size(); }\n        int\
     \ size() const { return it - stock.begin(); }\n\n        value_pointer_type alloc()\
     \ {\n            if constexpr (auto_extend) ensure();\n            return *it++;\n\
     \        }\n\n        void free(value_pointer_type t) {\n            *--it = t;\n\
-    \        }\n\n        void clear() {\n            int siz = pool.size();\n   \
-    \         it = stock.begin();\n            for (int i = 0; i < siz; i++) stock[i]\
+    \        }\n\n        void clear() {\n            int size = pool.size();\n  \
+    \          it = stock.begin();\n            for (int i = 0; i < size; i++) stock[i]\
     \ = &pool[i];\n        }\n\n        void ensure() {\n            if (it != stock.end())\
-    \ return;\n            int siz = stock.size();\n            for (int i = siz;\
-    \ i <= siz * 2; ++i) {\n                stock.push_back(&pool.emplace_back());\n\
-    \            }\n            it = stock.begin() + siz;\n        }\n    };\n} //\
+    \ return;\n            int size = stock.size();\n            for (int i = size;\
+    \ i <= size * 2; ++i) {\n                stock.push_back(&pool.emplace_back());\n\
+    \            }\n            it = stock.begin() + size;\n        }\n    };\n} //\
     \ namespace suisen\n\n\n#line 7 \"library/datastructure/segment_tree/persistent_segment_tree.hpp\"\
     \n\nnamespace suisen {\n    template <typename T, T(*op)(T, T), T(*e)()>\n   \
     \ struct PersistentSegmentTree {\n        struct Node;\n\n        using value_type\
@@ -200,33 +200,33 @@ data:
     \                int tm = (tl + tr) >> 1;\n                return op(prod(node->_ch[0],\
     \ tl, tm, ql, qr), prod(node->_ch[1], tm, tr, ql, qr));\n            }\n\n   \
     \         template <bool do_update, typename F>\n            static auto search_node(node_pointer_type\
-    \ node, int siz, int i, F &&f) {\n                static std::vector<node_pointer_type>\
+    \ node, int size, int i, F &&f) {\n                static std::vector<node_pointer_type>\
     \ path;\n\n                node_pointer_type res = node;\n                if constexpr\
     \ (do_update) res = clone(res);\n                node_pointer_type cur = res;\n\
-    \n                for (int l = 0, r = siz; r - l > 1;) {\n                   \
-    \ if constexpr (do_update) path.push_back(cur);\n                    int m = (l\
-    \ + r) >> 1;\n                    if (i < m) {\n                        if constexpr\
-    \ (do_update) cur->_ch[0] = clone(cur->_ch[0]);\n                        cur =\
-    \ cur->_ch[0];\n                        r = m;\n                    } else {\n\
-    \                        if constexpr (do_update) cur->_ch[1] = clone(cur->_ch[1]);\n\
+    \n                for (int l = 0, r = size; r - l > 1;) {\n                  \
+    \  if constexpr (do_update) path.push_back(cur);\n                    int m =\
+    \ (l + r) >> 1;\n                    if (i < m) {\n                        if\
+    \ constexpr (do_update) cur->_ch[0] = clone(cur->_ch[0]);\n                  \
+    \      cur = cur->_ch[0];\n                        r = m;\n                  \
+    \  } else {\n                        if constexpr (do_update) cur->_ch[1] = clone(cur->_ch[1]);\n\
     \                        cur = cur->_ch[1];\n                        l = m;\n\
     \                    }\n                }\n                f(cur);\n\n       \
     \         if constexpr (do_update) {\n                    while (path.size())\
     \ update(path.back()), path.pop_back();\n                    return res;\n   \
     \             } else {\n                    return;\n                }\n     \
-    \       }\n\n            static value_type get(node_pointer_type node, int siz,\
+    \       }\n\n            static value_type get(node_pointer_type node, int size,\
     \ int i) {\n                value_type res;\n                search_node</* do_update\
-    \ = */false>(node, siz, i, [&](node_pointer_type i_th_node) { res = i_th_node->_dat;\
+    \ = */false>(node, size, i, [&](node_pointer_type i_th_node) { res = i_th_node->_dat;\
     \ });\n                return res;\n            }\n            template <typename\
-    \ F>\n            static node_pointer_type apply(node_pointer_type node, int siz,\
+    \ F>\n            static node_pointer_type apply(node_pointer_type node, int size,\
     \ int i, F&& f) {\n                return search_node</* do_update = */true>(node,\
-    \ siz, i, [&](node_pointer_type i_th_node) { i_th_node->_dat = f(i_th_node->_dat);\
+    \ size, i, [&](node_pointer_type i_th_node) { i_th_node->_dat = f(i_th_node->_dat);\
     \ });\n            }\n            static node_pointer_type set(node_pointer_type\
-    \ node, int siz, int i, const value_type& dat) {\n                return apply(node,\
-    \ siz, i, [&](const value_type&) { return dat; });\n            }\n\n        \
-    \    template <typename F>\n            static int max_right(node_pointer_type\
-    \ node, int siz, int l, F&& f) {\n                assert(f(e()));\n          \
-    \      auto rec = [&](auto rec, node_pointer_type cur, int tl, int tr, value_type&\
+    \ node, int size, int i, const value_type& dat) {\n                return apply(node,\
+    \ size, i, [&](const value_type&) { return dat; });\n            }\n\n       \
+    \     template <typename F>\n            static int max_right(node_pointer_type\
+    \ node, int size, int l, F&& f) {\n                assert(f(e()));\n         \
+    \       auto rec = [&](auto rec, node_pointer_type cur, int tl, int tr, value_type&\
     \ sum) -> int {\n                    if (tr <= l) return tr;\n               \
     \     if (l <= tl) {\n                        value_type nxt_sum = op(sum, cur->_dat);\n\
     \                        if (f(nxt_sum)) {\n                            sum =\
@@ -236,9 +236,9 @@ data:
     \    int res_l = rec(rec, cur->_ch[0], tl, tm, sum);\n                    return\
     \ res_l != tm ? res_l : rec(rec, cur->_ch[1], tm, tr, sum);\n                };\n\
     \                value_type sum = e();\n                return rec(rec, node,\
-    \ 0, siz, sum);\n            }\n            template <typename F>\n          \
-    \  static int min_left(node_pointer_type node, int siz, int r, F&& f) {\n    \
-    \            assert(f(e()));\n                auto rec = [&](auto rec, node_pointer_type\
+    \ 0, size, sum);\n            }\n            template <typename F>\n         \
+    \   static int min_left(node_pointer_type node, int size, int r, F&& f) {\n  \
+    \              assert(f(e()));\n                auto rec = [&](auto rec, node_pointer_type\
     \ cur, int tl, int tr, value_type& sum) -> int {\n                    if (r <=\
     \ tl) return tl;\n                    if (tr <= r) {\n                       \
     \ value_type nxt_sum = op(cur->_dat, sum);\n                        if (f(nxt_sum))\
@@ -248,8 +248,8 @@ data:
     \ = (tl + tr) >> 1;\n                    int res_r = rec(rec, cur->_ch[1], tm,\
     \ tr, sum);\n                    return res_r != tm ? res_r : rec(rec, cur->_ch[0],\
     \ tl, tm, sum);\n                };\n                value_type sum = e();\n \
-    \               return rec(rec, node, 0, siz, sum);\n            }\n\n       \
-    \     template <typename OutputIterator>\n            static void dump(node_pointer_type\
+    \               return rec(rec, node, 0, size, sum);\n            }\n\n      \
+    \      template <typename OutputIterator>\n            static void dump(node_pointer_type\
     \ node, OutputIterator it) {\n                if (not node) return;\n        \
     \        auto rec = [&](auto rec, node_pointer_type cur) -> void {\n         \
     \           if (is_leaf(cur)) {\n                        *it++ = cur->_dat;\n\
@@ -262,8 +262,8 @@ data:
     \ _root(nullptr) {}\n        explicit PersistentSegmentTree(int n) : PersistentSegmentTree(std::vector<value_type>(n,\
     \ e())) {}\n        PersistentSegmentTree(const std::vector<value_type>& dat)\
     \ : _n(dat.size()), _root(node_type::build(dat)) {}\n\n        static void init_pool(int\
-    \ siz) {\n            node_type::_pool = ObjectPool<node_type>(siz);\n       \
-    \ }\n        static void clear_pool() {\n            node_type::_pool.clear();\n\
+    \ size) {\n            node_type::_pool = ObjectPool<node_type>(size);\n     \
+    \   }\n        static void clear_pool() {\n            node_type::_pool.clear();\n\
     \        }\n\n        value_type prod_all() {\n            return node_type::prod_all(_root);\n\
     \        }\n        value_type prod(int l, int r) {\n            assert(0 <= l\
     \ and l <= r and r <= _n);\n            return node_type::prod(_root, 0, _n, l,\
@@ -340,7 +340,7 @@ data:
   isVerificationFile: true
   path: test/src/datastructure/segment_tree/persistent_segment_tree/rectangle_sum.test.cpp
   requiredBy: []
-  timestamp: '2023-09-15 20:02:25+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/datastructure/segment_tree/persistent_segment_tree/rectangle_sum.test.cpp

@@ -102,20 +102,20 @@ data:
     \ default: assert(false);\n    }\n}\n} // namespace suisen::internal::sieve\n\n\
     \n#line 9 \"library/number/sieve_of_eratosthenes.hpp\"\n\nnamespace suisen {\n\
     \ntemplate <unsigned int N>\nclass SimpleSieve {\n    private:\n        static\
-    \ constexpr unsigned int siz = N / internal::sieve::PROD + 1;\n        static\
-    \ std::uint8_t flag[siz];\n    public:\n        SimpleSieve() {\n            using\
-    \ namespace internal::sieve;\n            flag[0] |= 1;\n            unsigned\
+    \ constexpr unsigned int size = N / internal::sieve::PROD + 1;\n        static\
+    \ std::uint8_t flag[size];\n    public:\n        SimpleSieve() {\n           \
+    \ using namespace internal::sieve;\n            flag[0] |= 1;\n            unsigned\
     \ int k_max = (unsigned int) std::sqrt(N + 2) / PROD;\n            for (unsigned\
     \ int kp = 0; kp <= k_max; ++kp) {\n                for (std::uint8_t bits = ~flag[kp];\
     \ bits; bits &= bits - 1) {\n                    const std::uint8_t mp = mask_to_index(bits\
     \ & -bits), m = RM[mp];\n                    unsigned int kr = kp * (PROD * kp\
     \ + 2 * m) + m * m / PROD;\n                    for (std::uint8_t mq = mp; kr\
-    \ < siz; kr += kp * DR[mq] + DF[mp][mq], ++mq &= 7) {\n                      \
-    \  flag[kr] |= MASK[mp][mq];\n                    }\n                }\n     \
-    \       }\n        }\n        std::vector<int> prime_list(unsigned int max_val\
+    \ < size; kr += kp * DR[mq] + DF[mp][mq], ++mq &= 7) {\n                     \
+    \   flag[kr] |= MASK[mp][mq];\n                    }\n                }\n    \
+    \        }\n        }\n        std::vector<int> prime_list(unsigned int max_val\
     \ = N) const {\n            using namespace internal::sieve;\n            std::vector<int>\
     \ res { 2, 3, 5 };\n            res.reserve(max_val / 25);\n            for (unsigned\
-    \ int i = 0, offset = 0; i < siz and offset < max_val; ++i, offset += PROD) {\n\
+    \ int i = 0, offset = 0; i < size and offset < max_val; ++i, offset += PROD) {\n\
     \                for (uint8_t f = ~flag[i]; f;) {\n                    uint8_t\
     \ g = f & -f;\n                    res.push_back(offset + RM[mask_to_index(g)]);\n\
     \                    f ^= g;\n                }\n            }\n            while\
@@ -133,7 +133,7 @@ data:
     \ return ((flag[p / PROD] >> 6) & 1) == 0;\n                        case RM[7]:\
     \ return ((flag[p / PROD] >> 7) & 1) == 0;\n                        default: return\
     \ false;\n                    }\n            }\n        }\n};\ntemplate <unsigned\
-    \ int N>\nstd::uint8_t SimpleSieve<N>::flag[SimpleSieve<N>::siz];\n\ntemplate\
+    \ int N>\nstd::uint8_t SimpleSieve<N>::flag[SimpleSieve<N>::size];\n\ntemplate\
     \ <unsigned int N>\nclass Sieve {\n    private:\n        static constexpr unsigned\
     \ int base_max = (N + 1) * internal::sieve::K / internal::sieve::PROD;\n     \
     \   static unsigned int pf[base_max + internal::sieve::K];\n\n    public:\n  \
@@ -195,20 +195,20 @@ data:
   code: "#ifndef SUISEN_SIEVE_OF_ERATOSTHENES\n#define SUISEN_SIEVE_OF_ERATOSTHENES\n\
     \n#include <cassert>\n#include <cmath>\n#include <vector>\n\n#include \"library/number/internal_eratosthenes.hpp\"\
     \n\nnamespace suisen {\n\ntemplate <unsigned int N>\nclass SimpleSieve {\n   \
-    \ private:\n        static constexpr unsigned int siz = N / internal::sieve::PROD\
-    \ + 1;\n        static std::uint8_t flag[siz];\n    public:\n        SimpleSieve()\
+    \ private:\n        static constexpr unsigned int size = N / internal::sieve::PROD\
+    \ + 1;\n        static std::uint8_t flag[size];\n    public:\n        SimpleSieve()\
     \ {\n            using namespace internal::sieve;\n            flag[0] |= 1;\n\
     \            unsigned int k_max = (unsigned int) std::sqrt(N + 2) / PROD;\n  \
     \          for (unsigned int kp = 0; kp <= k_max; ++kp) {\n                for\
     \ (std::uint8_t bits = ~flag[kp]; bits; bits &= bits - 1) {\n                \
     \    const std::uint8_t mp = mask_to_index(bits & -bits), m = RM[mp];\n      \
     \              unsigned int kr = kp * (PROD * kp + 2 * m) + m * m / PROD;\n  \
-    \                  for (std::uint8_t mq = mp; kr < siz; kr += kp * DR[mq] + DF[mp][mq],\
+    \                  for (std::uint8_t mq = mp; kr < size; kr += kp * DR[mq] + DF[mp][mq],\
     \ ++mq &= 7) {\n                        flag[kr] |= MASK[mp][mq];\n          \
     \          }\n                }\n            }\n        }\n        std::vector<int>\
     \ prime_list(unsigned int max_val = N) const {\n            using namespace internal::sieve;\n\
     \            std::vector<int> res { 2, 3, 5 };\n            res.reserve(max_val\
-    \ / 25);\n            for (unsigned int i = 0, offset = 0; i < siz and offset\
+    \ / 25);\n            for (unsigned int i = 0, offset = 0; i < size and offset\
     \ < max_val; ++i, offset += PROD) {\n                for (uint8_t f = ~flag[i];\
     \ f;) {\n                    uint8_t g = f & -f;\n                    res.push_back(offset\
     \ + RM[mask_to_index(g)]);\n                    f ^= g;\n                }\n \
@@ -226,7 +226,7 @@ data:
     \                        case RM[6]: return ((flag[p / PROD] >> 6) & 1) == 0;\n\
     \                        case RM[7]: return ((flag[p / PROD] >> 7) & 1) == 0;\n\
     \                        default: return false;\n                    }\n     \
-    \       }\n        }\n};\ntemplate <unsigned int N>\nstd::uint8_t SimpleSieve<N>::flag[SimpleSieve<N>::siz];\n\
+    \       }\n        }\n};\ntemplate <unsigned int N>\nstd::uint8_t SimpleSieve<N>::flag[SimpleSieve<N>::size];\n\
     \ntemplate <unsigned int N>\nclass Sieve {\n    private:\n        static constexpr\
     \ unsigned int base_max = (N + 1) * internal::sieve::K / internal::sieve::PROD;\n\
     \        static unsigned int pf[base_max + internal::sieve::K];\n\n    public:\n\
@@ -297,7 +297,7 @@ data:
   - library/number/tetration_mod.hpp
   - library/convolution/multi_variate_convolution_circular.hpp
   - library/string/dynamic_rolling_hash.hpp
-  timestamp: '2022-02-25 23:20:55+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/number/tetration_mod/tetration_mod.test.cpp

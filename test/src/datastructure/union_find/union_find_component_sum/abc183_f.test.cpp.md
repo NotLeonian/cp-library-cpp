@@ -28,7 +28,7 @@ data:
     \        int root(int x) {\n            static std::vector<int> buf;\n       \
     \     while (_dat[x] >= 0) buf.push_back(x), x = _dat[x];\n            while (buf.size())\
     \ _dat[buf.back()] = x, buf.pop_back();\n            return x;\n        }\n  \
-    \      // Get the root of `x`. euivalent to `root(x)`\n        int operator[](int\
+    \      // Get the root of `x`. equivalent to `root(x)`\n        int operator[](int\
     \ x) {\n            return root(x);\n        }\n        // Merge two vertices\
     \ `x` and `y`.\n        bool merge(int x, int y) {\n            x = root(x), y\
     \ = root(y);\n            if (x == y) return false;\n            if (_dat[x] >\
@@ -36,7 +36,7 @@ data:
     \          return true;\n        }\n        // Check if `x` and `y` belongs to\
     \ the same connected component.\n        bool same(int x, int y) {\n         \
     \   return root(x) == root(y);\n        }\n        // Get the size of connected\
-    \ componet to which `x` belongs.\n        int size(int x) {\n            return\
+    \ component to which `x` belongs.\n        int size(int x) {\n            return\
     \ -_dat[root(x)];\n        }\n        // Get all of connected components.\n  \
     \      std::vector<std::vector<int>> groups() {\n            std::vector<std::vector<int>>\
     \ res(_n);\n            for (int i = 0; i < _n; ++i) res[root(i)].push_back(i);\n\
@@ -94,7 +94,7 @@ data:
   isVerificationFile: true
   path: test/src/datastructure/union_find/union_find_component_sum/abc183_f.test.cpp
   requiredBy: []
-  timestamp: '2023-07-09 04:04:16+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/datastructure/union_find/union_find_component_sum/abc183_f.test.cpp

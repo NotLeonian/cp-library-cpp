@@ -2,8 +2,8 @@
 data:
   _extendedDependsOn:
   - icon: ':heavy_check_mark:'
-    path: library/number/montogomery.hpp
-    title: Montogomery
+    path: library/number/montgomery.hpp
+    title: Montgomery
   _extendedRequiredBy:
   - icon: ':heavy_check_mark:'
     path: library/convolution/multi_variate_convolution_circular.hpp
@@ -56,8 +56,8 @@ data:
     links: []
   bundledCode: "#line 1 \"library/number/deterministic_miller_rabin.hpp\"\n\n\n\n\
     #include <array>\n#include <cassert>\n#include <cstdint>\n#include <iterator>\n\
-    #include <tuple>\n#include <type_traits>\n\n#line 1 \"library/number/montogomery.hpp\"\
-    \n\n\n\n#line 6 \"library/number/montogomery.hpp\"\n#include <limits>\n\nnamespace\
+    #include <tuple>\n#include <type_traits>\n\n#line 1 \"library/number/montgomery.hpp\"\
+    \n\n\n\n#line 6 \"library/number/montgomery.hpp\"\n#include <limits>\n\nnamespace\
     \ suisen {\n    namespace internal::montgomery {\n        template <typename Int,\
     \ typename DInt>\n        struct Montgomery {\n        private:\n            static\
     \ constexpr uint32_t bits = std::numeric_limits<Int>::digits;\n            static\
@@ -155,7 +155,7 @@ data:
     \ 7>(n_unsigned);\n    }\n} // namespace suisen::miller_rabin\n\n\n"
   code: "#ifndef SUISEN_DETERMINISTIC_MILLER_RABIN\n#define SUISEN_DETERMINISTIC_MILLER_RABIN\n\
     \n#include <array>\n#include <cassert>\n#include <cstdint>\n#include <iterator>\n\
-    #include <tuple>\n#include <type_traits>\n\n#include \"library/number/montogomery.hpp\"\
+    #include <tuple>\n#include <type_traits>\n\n#include \"library/number/montgomery.hpp\"\
     \n\nnamespace suisen::miller_rabin {\n    namespace internal {\n        constexpr\
     \ uint64_t THRESHOLD_1 = 341531ULL;\n        constexpr uint64_t BASE_1[]{ 9345883071009581737ULL\
     \ };\n\n        constexpr uint64_t THRESHOLD_2 = 1050535501ULL;\n        constexpr\
@@ -197,7 +197,7 @@ data:
     \ return miller_rabin<BASE_6, 6>(n_unsigned);\n        return miller_rabin<BASE_7,\
     \ 7>(n_unsigned);\n    }\n} // namespace suisen::miller_rabin\n\n#endif // SUISEN_DETERMINISTIC_MILLER_RABIN\n"
   dependsOn:
-  - library/number/montogomery.hpp
+  - library/number/montgomery.hpp
   isVerificationFile: false
   path: library/number/deterministic_miller_rabin.hpp
   requiredBy:
@@ -207,7 +207,7 @@ data:
   - library/number/fast_discrete_logarithm.hpp
   - library/number/tetration_mod.hpp
   - library/convolution/multi_variate_convolution_circular.hpp
-  timestamp: '2023-05-19 09:20:50+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/number/deterministic_miller_rabin/primality_test.test.cpp

@@ -164,14 +164,14 @@ data:
     \ {\n        friend struct DataType;\n        struct DataType {\n            friend\
     \ struct RangeChMinMaxAddRangeSum;\n\n            bool fail = false;\n\n     \
     \       constexpr DataType() : lo(inf), lo2(inf), hi(-inf), hi2(-inf), sum(0),\
-    \ siz(0), num_lo(0), num_hi(0) {}\n            constexpr DataType(T x, int num\
-    \ = 1) : lo(x), lo2(inf), hi(x), hi2(-inf), sum(x * num), siz(num), num_lo(num),\
+    \ size(0), num_lo(0), num_hi(0) {}\n            constexpr DataType(T x, int num\
+    \ = 1) : lo(x), lo2(inf), hi(x), hi2(-inf), sum(x * num), size(num), num_lo(num),\
     \ num_hi(num) {}\n\n            T get_min() const { return lo; }\n           \
     \ T get_max() const { return hi; }\n            T get_second_min() const { return\
     \ lo2; }\n            T get_second_max() const { return hi2; }\n            T\
     \ get_min_num() const { return num_lo; }\n            T get_max_num() const {\
     \ return num_hi; }\n            T get_sum() const { return sum; }\n        private:\n\
-    \            T lo, lo2, hi, hi2, sum;\n            int siz, num_lo, num_hi;\n\
+    \            T lo, lo2, hi, hi2, sum;\n            int size, num_lo, num_hi;\n\
     \        };\n\n        explicit RangeChMinMaxAddRangeSum(const int n = 0) : RangeChMinMaxAddRangeSum(std::vector<T>(n,\
     \ 0)) {}\n        RangeChMinMaxAddRangeSum(const std::vector<T> &init) {\n   \
     \         const int n = init.size();\n            std::vector<DataType> a(n);\n\
@@ -212,29 +212,29 @@ data:
     \            DataType z{};\n            z.lo = std::min(x.lo, y.lo);\n       \
     \     z.hi = std::max(x.hi, y.hi);\n            z.lo2 = second_lo(x.lo, x.lo2,\
     \ y.lo, y.lo2);\n            z.hi2 = second_hi(x.hi, x.hi2, y.hi, y.hi2);\n  \
-    \          z.sum = x.sum + y.sum;\n            z.siz = x.siz + y.siz;\n      \
-    \      z.num_lo = (z.lo == x.lo) * x.num_lo + (z.lo == y.lo) * y.num_lo;\n   \
-    \         z.num_hi = (z.hi == x.hi) * x.num_hi + (z.hi == y.hi) * y.num_hi;\n\
+    \          z.sum = x.sum + y.sum;\n            z.size = x.size + y.size;\n   \
+    \         z.num_lo = (z.lo == x.lo) * x.num_lo + (z.lo == y.lo) * y.num_lo;\n\
+    \            z.num_hi = (z.hi == x.hi) * x.num_hi + (z.hi == y.hi) * y.num_hi;\n\
     \            return z;\n        }\n        static constexpr DataType e() {\n \
     \           return DataType{};\n        }\n    \n        static constexpr DataType\
-    \ mapping(F f, DataType x) {\n            if (x.siz == 0) {\n                return\
-    \ e();\n            } else if (x.lo == x.hi or f.lb == f.ub or f.lb >= x.hi or\
-    \ f.ub <= x.lo) {\n                return DataType { std::clamp(x.lo, f.lb, f.ub)\
-    \ + f.add, x.siz };\n            } else if (x.lo2 == x.hi) { // 2\n          \
-    \      x.lo = x.hi2 = std::max(x.lo, f.lb) + f.add;\n                x.hi = x.lo2\
-    \ = std::min(x.hi, f.ub) + f.add;\n                x.sum = x.lo * x.num_lo + x.hi\
-    \ * x.num_hi;\n                return x;\n            } else if (f.lb < x.lo2\
-    \ and f.ub > x.hi2) { // >= 3\n                T nlo = std::max(x.lo, f.lb);\n\
-    \                T nhi = std::min(x.hi, f.ub);\n                x.sum += (nlo\
-    \ - x.lo) * x.num_lo + (nhi - x.hi) * x.num_hi + f.add * x.siz;\n            \
-    \    x.lo = nlo + f.add;\n                x.hi = nhi + f.add;\n              \
-    \  x.lo2 += f.add;\n                x.hi2 += f.add;\n                return x;\n\
-    \            }\n            x.fail = true;\n            return x;\n        }\n\
-    \        static constexpr F composition(F f, F g) {\n            F h;\n      \
-    \      h.lb = std::clamp(g.lb + g.add, f.lb, f.ub) - g.add;\n            h.ub\
-    \ = std::clamp(g.ub + g.add, f.lb, f.ub) - g.add;\n            h.add = f.add +\
-    \ g.add;\n            return h;\n        }\n        static constexpr F id() {\n\
-    \            return F{};\n        }\n    \n        SegmentTreeBeats<DataType,\
+    \ mapping(F f, DataType x) {\n            if (x.size == 0) {\n               \
+    \ return e();\n            } else if (x.lo == x.hi or f.lb == f.ub or f.lb >=\
+    \ x.hi or f.ub <= x.lo) {\n                return DataType { std::clamp(x.lo,\
+    \ f.lb, f.ub) + f.add, x.size };\n            } else if (x.lo2 == x.hi) { // 2\n\
+    \                x.lo = x.hi2 = std::max(x.lo, f.lb) + f.add;\n              \
+    \  x.hi = x.lo2 = std::min(x.hi, f.ub) + f.add;\n                x.sum = x.lo\
+    \ * x.num_lo + x.hi * x.num_hi;\n                return x;\n            } else\
+    \ if (f.lb < x.lo2 and f.ub > x.hi2) { // >= 3\n                T nlo = std::max(x.lo,\
+    \ f.lb);\n                T nhi = std::min(x.hi, f.ub);\n                x.sum\
+    \ += (nlo - x.lo) * x.num_lo + (nhi - x.hi) * x.num_hi + f.add * x.size;\n   \
+    \             x.lo = nlo + f.add;\n                x.hi = nhi + f.add;\n     \
+    \           x.lo2 += f.add;\n                x.hi2 += f.add;\n               \
+    \ return x;\n            }\n            x.fail = true;\n            return x;\n\
+    \        }\n        static constexpr F composition(F f, F g) {\n            F\
+    \ h;\n            h.lb = std::clamp(g.lb + g.add, f.lb, f.ub) - g.add;\n     \
+    \       h.ub = std::clamp(g.ub + g.add, f.lb, f.ub) - g.add;\n            h.add\
+    \ = f.add + g.add;\n            return h;\n        }\n        static constexpr\
+    \ F id() {\n            return F{};\n        }\n    \n        SegmentTreeBeats<DataType,\
     \ op, e, F, mapping, composition, id> seg;\n    };\n} // namespace suisen\n\n\n\
     \n"
   code: "#ifndef SUISEN_RANGE_CHMIN_CHMAX_ADD_RANGE_SUM\n#define SUISEN_RANGE_CHMIN_CHMAX_ADD_RANGE_SUM\n\
@@ -243,14 +243,14 @@ data:
     \ {\n        friend struct DataType;\n        struct DataType {\n            friend\
     \ struct RangeChMinMaxAddRangeSum;\n\n            bool fail = false;\n\n     \
     \       constexpr DataType() : lo(inf), lo2(inf), hi(-inf), hi2(-inf), sum(0),\
-    \ siz(0), num_lo(0), num_hi(0) {}\n            constexpr DataType(T x, int num\
-    \ = 1) : lo(x), lo2(inf), hi(x), hi2(-inf), sum(x * num), siz(num), num_lo(num),\
+    \ size(0), num_lo(0), num_hi(0) {}\n            constexpr DataType(T x, int num\
+    \ = 1) : lo(x), lo2(inf), hi(x), hi2(-inf), sum(x * num), size(num), num_lo(num),\
     \ num_hi(num) {}\n\n            T get_min() const { return lo; }\n           \
     \ T get_max() const { return hi; }\n            T get_second_min() const { return\
     \ lo2; }\n            T get_second_max() const { return hi2; }\n            T\
     \ get_min_num() const { return num_lo; }\n            T get_max_num() const {\
     \ return num_hi; }\n            T get_sum() const { return sum; }\n        private:\n\
-    \            T lo, lo2, hi, hi2, sum;\n            int siz, num_lo, num_hi;\n\
+    \            T lo, lo2, hi, hi2, sum;\n            int size, num_lo, num_hi;\n\
     \        };\n\n        explicit RangeChMinMaxAddRangeSum(const int n = 0) : RangeChMinMaxAddRangeSum(std::vector<T>(n,\
     \ 0)) {}\n        RangeChMinMaxAddRangeSum(const std::vector<T> &init) {\n   \
     \         const int n = init.size();\n            std::vector<DataType> a(n);\n\
@@ -291,29 +291,29 @@ data:
     \            DataType z{};\n            z.lo = std::min(x.lo, y.lo);\n       \
     \     z.hi = std::max(x.hi, y.hi);\n            z.lo2 = second_lo(x.lo, x.lo2,\
     \ y.lo, y.lo2);\n            z.hi2 = second_hi(x.hi, x.hi2, y.hi, y.hi2);\n  \
-    \          z.sum = x.sum + y.sum;\n            z.siz = x.siz + y.siz;\n      \
-    \      z.num_lo = (z.lo == x.lo) * x.num_lo + (z.lo == y.lo) * y.num_lo;\n   \
-    \         z.num_hi = (z.hi == x.hi) * x.num_hi + (z.hi == y.hi) * y.num_hi;\n\
+    \          z.sum = x.sum + y.sum;\n            z.size = x.size + y.size;\n   \
+    \         z.num_lo = (z.lo == x.lo) * x.num_lo + (z.lo == y.lo) * y.num_lo;\n\
+    \            z.num_hi = (z.hi == x.hi) * x.num_hi + (z.hi == y.hi) * y.num_hi;\n\
     \            return z;\n        }\n        static constexpr DataType e() {\n \
     \           return DataType{};\n        }\n    \n        static constexpr DataType\
-    \ mapping(F f, DataType x) {\n            if (x.siz == 0) {\n                return\
-    \ e();\n            } else if (x.lo == x.hi or f.lb == f.ub or f.lb >= x.hi or\
-    \ f.ub <= x.lo) {\n                return DataType { std::clamp(x.lo, f.lb, f.ub)\
-    \ + f.add, x.siz };\n            } else if (x.lo2 == x.hi) { // 2\n          \
-    \      x.lo = x.hi2 = std::max(x.lo, f.lb) + f.add;\n                x.hi = x.lo2\
-    \ = std::min(x.hi, f.ub) + f.add;\n                x.sum = x.lo * x.num_lo + x.hi\
-    \ * x.num_hi;\n                return x;\n            } else if (f.lb < x.lo2\
-    \ and f.ub > x.hi2) { // >= 3\n                T nlo = std::max(x.lo, f.lb);\n\
-    \                T nhi = std::min(x.hi, f.ub);\n                x.sum += (nlo\
-    \ - x.lo) * x.num_lo + (nhi - x.hi) * x.num_hi + f.add * x.siz;\n            \
-    \    x.lo = nlo + f.add;\n                x.hi = nhi + f.add;\n              \
-    \  x.lo2 += f.add;\n                x.hi2 += f.add;\n                return x;\n\
-    \            }\n            x.fail = true;\n            return x;\n        }\n\
-    \        static constexpr F composition(F f, F g) {\n            F h;\n      \
-    \      h.lb = std::clamp(g.lb + g.add, f.lb, f.ub) - g.add;\n            h.ub\
-    \ = std::clamp(g.ub + g.add, f.lb, f.ub) - g.add;\n            h.add = f.add +\
-    \ g.add;\n            return h;\n        }\n        static constexpr F id() {\n\
-    \            return F{};\n        }\n    \n        SegmentTreeBeats<DataType,\
+    \ mapping(F f, DataType x) {\n            if (x.size == 0) {\n               \
+    \ return e();\n            } else if (x.lo == x.hi or f.lb == f.ub or f.lb >=\
+    \ x.hi or f.ub <= x.lo) {\n                return DataType { std::clamp(x.lo,\
+    \ f.lb, f.ub) + f.add, x.size };\n            } else if (x.lo2 == x.hi) { // 2\n\
+    \                x.lo = x.hi2 = std::max(x.lo, f.lb) + f.add;\n              \
+    \  x.hi = x.lo2 = std::min(x.hi, f.ub) + f.add;\n                x.sum = x.lo\
+    \ * x.num_lo + x.hi * x.num_hi;\n                return x;\n            } else\
+    \ if (f.lb < x.lo2 and f.ub > x.hi2) { // >= 3\n                T nlo = std::max(x.lo,\
+    \ f.lb);\n                T nhi = std::min(x.hi, f.ub);\n                x.sum\
+    \ += (nlo - x.lo) * x.num_lo + (nhi - x.hi) * x.num_hi + f.add * x.size;\n   \
+    \             x.lo = nlo + f.add;\n                x.hi = nhi + f.add;\n     \
+    \           x.lo2 += f.add;\n                x.hi2 += f.add;\n               \
+    \ return x;\n            }\n            x.fail = true;\n            return x;\n\
+    \        }\n        static constexpr F composition(F f, F g) {\n            F\
+    \ h;\n            h.lb = std::clamp(g.lb + g.add, f.lb, f.ub) - g.add;\n     \
+    \       h.ub = std::clamp(g.ub + g.add, f.lb, f.ub) - g.add;\n            h.add\
+    \ = f.add + g.add;\n            return h;\n        }\n        static constexpr\
+    \ F id() {\n            return F{};\n        }\n    \n        SegmentTreeBeats<DataType,\
     \ op, e, F, mapping, composition, id> seg;\n    };\n} // namespace suisen\n\n\n\
     #endif // SUISEN_RANGE_CHMIN_CHMAX_ADD_RANGE_SUM\n"
   dependsOn:
@@ -324,7 +324,7 @@ data:
   isVerificationFile: false
   path: library/range_query/range_chmin_chmax_add_range_sum.hpp
   requiredBy: []
-  timestamp: '2024-01-30 22:07:01+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/range_query/range_chmin_chmax_add_range_sum/range_chmin_chmax_add_range_sum.test.cpp

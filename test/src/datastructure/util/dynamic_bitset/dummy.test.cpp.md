@@ -375,7 +375,7 @@ data:
     \ % 3 == 0;\n        dbs[i] = i % 3 == 0;\n    }\n\n    int i = bs._Find_first(),\
     \ j = dbs.find_first();\n    for (; i < n and j < n; i = bs._Find_next(i), j =\
     \ dbs.find_next(j)) {\n        assert(i == j);\n    }\n    assert(i == n and j\
-    \ == n);\n}\n\nvoid test_has_intersectoin() {\n    DynamicBitSet x(10, true),\
+    \ == n);\n}\n\nvoid test_has_intersection() {\n    DynamicBitSet x(10, true),\
     \ y;\n    assert(not x.has_intersection(y));\n    y.resize(10);\n    y[9] = true;\n\
     \    assert(x.has_intersection(y));\n    y[9] = false;\n    y.resize(123);\n \
     \   y[122] = true;\n    assert(not x.has_intersection(y));\n    x.resize(1230);\n\
@@ -391,7 +391,7 @@ data:
     \ test_get_set();\n    test_range_set();\n    test_range_reset();\n    test_range_flip();\n\
     \    test_range_update();\n    test_range_count();\n    test_all();\n    test_none();\n\
     \    test_any();\n    test_count();\n    test_set();\n    test_reset();\n    test_find();\n\
-    \    test_has_intersectoin();\n    test_is_disjoint();\n}\n\nint main() {\n  \
+    \    test_has_intersection();\n    test_is_disjoint();\n}\n\nint main() {\n  \
     \  test();\n    std::cout << \"Hello World\" << std::endl;\n    return 0;\n}\n"
   code: "#define PROBLEM \"https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=ITP1_1_A\"\
     \n\n#include <bitset>\n#include <iostream>\n\n#include \"library/datastructure/util/dynamic_bitset.hpp\"\
@@ -560,7 +560,7 @@ data:
     \ % 3 == 0;\n        dbs[i] = i % 3 == 0;\n    }\n\n    int i = bs._Find_first(),\
     \ j = dbs.find_first();\n    for (; i < n and j < n; i = bs._Find_next(i), j =\
     \ dbs.find_next(j)) {\n        assert(i == j);\n    }\n    assert(i == n and j\
-    \ == n);\n}\n\nvoid test_has_intersectoin() {\n    DynamicBitSet x(10, true),\
+    \ == n);\n}\n\nvoid test_has_intersection() {\n    DynamicBitSet x(10, true),\
     \ y;\n    assert(not x.has_intersection(y));\n    y.resize(10);\n    y[9] = true;\n\
     \    assert(x.has_intersection(y));\n    y[9] = false;\n    y.resize(123);\n \
     \   y[122] = true;\n    assert(not x.has_intersection(y));\n    x.resize(1230);\n\
@@ -576,14 +576,14 @@ data:
     \ test_get_set();\n    test_range_set();\n    test_range_reset();\n    test_range_flip();\n\
     \    test_range_update();\n    test_range_count();\n    test_all();\n    test_none();\n\
     \    test_any();\n    test_count();\n    test_set();\n    test_reset();\n    test_find();\n\
-    \    test_has_intersectoin();\n    test_is_disjoint();\n}\n\nint main() {\n  \
+    \    test_has_intersection();\n    test_is_disjoint();\n}\n\nint main() {\n  \
     \  test();\n    std::cout << \"Hello World\" << std::endl;\n    return 0;\n}\n"
   dependsOn:
   - library/datastructure/util/dynamic_bitset.hpp
   isVerificationFile: true
   path: test/src/datastructure/util/dynamic_bitset/dummy.test.cpp
   requiredBy: []
-  timestamp: '2022-11-10 03:30:50+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/datastructure/util/dynamic_bitset/dummy.test.cpp

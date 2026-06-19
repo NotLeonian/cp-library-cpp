@@ -18,14 +18,14 @@ data:
     \n#define PROBLEM \"https://judge.yosupo.jp/problem/enumerate_cliques\"\n\n#include\
     \ <iostream>\n#include <atcoder/modint>\n\nusing mint = atcoder::modint998244353;\n\
     \n#line 1 \"library/graph/enumerate_cliques.hpp\"\n\n\n\n#include <algorithm>\n\
-    #include <vector>\n\nnamespace suisen {\n    /**\n     * Type Parameters\n   \
-    \  * - CliqueComsumer : type of consumer function std::vector<int> -> void\n \
-    \    * \n     * Parameters\n     * - std::vector<std::vector<int>> g : simple\
-    \ undirected graph\n     * - CliqueComsumer fun\n     * \n     * Requirements\n\
+    #include <numeric>\n#include <vector>\n\nnamespace suisen {\n    /**\n     * Type\
+    \ Parameters\n     * - CliqueConsumer : type of consumer function std::vector<int>\
+    \ -> void\n     * \n     * Parameters\n     * - std::vector<std::vector<int>>\
+    \ g : simple undirected graph\n     * - CliqueConsumer fun\n     * \n     * Requirements\n\
     \     * - v in g[u] <=> u in g[v]\n     * \n     * Complexity\n     * - time :\
     \ O(2^sqrt(2M) * N + (sum of size of cliques)) = O(2^sqrt(2M) * N * sqrt(2M))\
-    \ ?\n     * - space : O(N + M)\n     */\n    template <typename CliqueComsumer>\n\
-    \    void enumerate_cliques(std::vector<std::vector<int>> g, CliqueComsumer &&fun)\
+    \ ?\n     * - space : O(N + M)\n     */\n    template <typename CliqueConsumer>\n\
+    \    void enumerate_cliques(std::vector<std::vector<int>> g, CliqueConsumer &&fun)\
     \ {\n        const int n = g.size();\n        // sort by degree\n        std::vector<int>\
     \ ord(n), idx(n);\n        std::iota(ord.begin(), ord.end(), 0);\n        std::sort(ord.begin(),\
     \ ord.end(), [&](int i, int j) { return g[i].size() < g[j].size(); });\n     \
@@ -73,7 +73,7 @@ data:
   isVerificationFile: true
   path: test/src/graph/enumerate_cliques/enumerate_cliques.test.cpp
   requiredBy: []
-  timestamp: '2022-08-21 18:24:56+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/graph/enumerate_cliques/enumerate_cliques.test.cpp

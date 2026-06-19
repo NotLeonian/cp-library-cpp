@@ -89,7 +89,7 @@ data:
     \ _f_fft, _g_fft;\n\n        void ensure(std::size_t n) {\n            if (_h.size()\
     \ < n) _h.resize(n);\n        }\n    };\n} // namespace suisen\n\n\n\n#line 1\
     \ \"library/math/modint_extension.hpp\"\n\n\n\n#include <cassert>\n#include <optional>\n\
-    \n/**\n * refernce: https://37zigen.com/tonelli-shanks-algorithm/\n * calculates\
+    \n/**\n * reference: https://37zigen.com/tonelli-shanks-algorithm/\n * calculates\
     \ x s.t. x^2 = a mod p in O((log p)^2).\n */\ntemplate <typename mint>\nstd::optional<mint>\
     \ safe_sqrt(mint a) {\n    static int p = mint::mod();\n    if (a == 0) return\
     \ std::make_optional(0);\n    if (p == 2) return std::make_optional(a);\n    if\
@@ -185,7 +185,7 @@ data:
   isVerificationFile: true
   path: test/src/polynomial/formal_power_series_relaxed/exp_of_formal_power_series.test.cpp
   requiredBy: []
-  timestamp: '2023-07-09 04:04:16+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/polynomial/formal_power_series_relaxed/exp_of_formal_power_series.test.cpp

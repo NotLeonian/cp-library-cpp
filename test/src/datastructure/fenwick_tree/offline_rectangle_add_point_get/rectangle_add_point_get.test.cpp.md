@@ -63,12 +63,12 @@ data:
     \ - 1].begin(), ps_asc_y[r - 1].end(), comp_key);\n                }\n       \
     \         int num_y = 0;\n                {\n                    std::vector<Key>\
     \ mixed_asc_y(es_asc_y.begin() + 2 * l, es_asc_y.begin() + 2 * r);\n         \
-    \           const int mid_siz = mixed_asc_y.size(), siz = mid_siz + point_num;\n\
-    \                    mixed_asc_y.reserve(siz);\n                    for (const\
+    \           const int mid_size = mixed_asc_y.size(), size = mid_size + point_num;\n\
+    \                    mixed_asc_y.reserve(size);\n                    for (const\
     \ auto& [y, pid] : ps_asc_y[r - 1]) mixed_asc_y.emplace_back(y, ~pid);\n     \
     \               std::inplace_merge(mixed_asc_y.begin(), mixed_asc_y.begin() +\
-    \ mid_siz, mixed_asc_y.end(), comp_key);\n                    for (int t = 0;\
-    \ t < siz; ++t) {\n                        const Key pkey = t ? mixed_asc_y[t\
+    \ mid_size, mixed_asc_y.end(), comp_key);\n                    for (int t = 0;\
+    \ t < size; ++t) {\n                        const Key pkey = t ? mixed_asc_y[t\
     \ - 1] : Key{ 0, 0 }, key = mixed_asc_y[t];\n                        num_y +=\
     \ t and comp_key(pkey, key) and (pkey.second < 0) and (key.second >= 0);\n   \
     \                     const int i = key.second;\n                        (i >=\
@@ -122,7 +122,7 @@ data:
   isVerificationFile: true
   path: test/src/datastructure/fenwick_tree/offline_rectangle_add_point_get/rectangle_add_point_get.test.cpp
   requiredBy: []
-  timestamp: '2024-01-30 19:37:06+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/datastructure/fenwick_tree/offline_rectangle_add_point_get/rectangle_add_point_get.test.cpp

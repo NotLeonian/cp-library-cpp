@@ -64,14 +64,14 @@ data:
     } // namespace suisen\n\n#line 10 \"library/datastructure/dynamic_sequence.hpp\"\
     \n\nnamespace suisen {\n\nnamespace internal::dynamic_sequence {\n\ntemplate <typename\
     \ T, typename Derived>\nstruct DynamicSequenceNodeBase {\n    using node_ptr_t\
-    \ = Derived *;\n\n    T val;\n    int siz;\n    bool rev;\n    node_ptr_t ch[2]\
-    \ {nullptr, nullptr};\n\n    DynamicSequenceNodeBase() : val(), siz(1), rev(false)\
-    \ {}\n    DynamicSequenceNodeBase(const T &val) : val(val), siz(1), rev(false)\
+    \ = Derived *;\n\n    T val;\n    int size_;\n    bool rev;\n    node_ptr_t ch[2]\
+    \ {nullptr, nullptr};\n\n    DynamicSequenceNodeBase() : val(), size_(1), rev(false)\
+    \ {}\n    DynamicSequenceNodeBase(const T &val) : val(val), size_(1), rev(false)\
     \ {}\n\n    ~DynamicSequenceNodeBase() {\n        delete ch[0];\n        delete\
-    \ ch[1];\n    }\n\n    void update() {\n        siz = 1 + size(ch[0]) + size(ch[1]);\n\
+    \ ch[1];\n    }\n\n    void update() {\n        size_ = 1 + size(ch[0]) + size(ch[1]);\n\
     \    }\n    void push() {\n        reverse_all(this->ch[0], rev), reverse_all(this->ch[1],\
     \ rev);\n        rev = false;\n    }\n    static int size(node_ptr_t node) {\n\
-    \        return node == nullptr ? 0 : node->siz;\n    }\n\n    static node_ptr_t\
+    \        return node == nullptr ? 0 : node->size_;\n    }\n\n    static node_ptr_t\
     \ rotate(node_ptr_t node, bool is_right) {\n        node_ptr_t root = node->ch[is_right\
     \ ^ true];\n        node->ch[is_right ^ true] = root->ch[is_right];\n        root->ch[is_right]\
     \ = node;\n        node->update(), root->update();\n        return root;\n   \
@@ -143,8 +143,8 @@ data:
     \     int size() const {\n            return SplayNode::size(root);\n        }\n\
     \        void reverse(int l, int r) {\n            range_bounds_check(l, r, size());\n\
     \            root = SplayNode::reverse(root, l, r);\n        }\n        void reverse_all()\
-    \ {\n            SplayNode::reverese_all(root);\n        }\n    protected:\n \
-    \       mutable node_ptr_t root;\n\n        DynamicSequenceBase(node_ptr_t root)\
+    \ {\n            SplayNode::reverse_all(root);\n        }\n    protected:\n  \
+    \      mutable node_ptr_t root;\n\n        DynamicSequenceBase(node_ptr_t root)\
     \ : root(root) {}\n    \n        static void index_bounds_check(unsigned int k,\
     \ unsigned int n) {\n            assert(k < n);\n        }\n        static void\
     \ range_bounds_check(unsigned int l, unsigned int r, unsigned int n) {\n     \
@@ -181,27 +181,27 @@ data:
     \ <cstddef>\n#include <cassert>\n#include <tuple>\n#include <vector>\n\n#include\
     \ \"library/type_traits/type_traits.hpp\"\n\nnamespace suisen {\n\nnamespace internal::dynamic_sequence\
     \ {\n\ntemplate <typename T, typename Derived>\nstruct DynamicSequenceNodeBase\
-    \ {\n    using node_ptr_t = Derived *;\n\n    T val;\n    int siz;\n    bool rev;\n\
-    \    node_ptr_t ch[2] {nullptr, nullptr};\n\n    DynamicSequenceNodeBase() : val(),\
-    \ siz(1), rev(false) {}\n    DynamicSequenceNodeBase(const T &val) : val(val),\
-    \ siz(1), rev(false) {}\n\n    ~DynamicSequenceNodeBase() {\n        delete ch[0];\n\
-    \        delete ch[1];\n    }\n\n    void update() {\n        siz = 1 + size(ch[0])\
-    \ + size(ch[1]);\n    }\n    void push() {\n        reverse_all(this->ch[0], rev),\
-    \ reverse_all(this->ch[1], rev);\n        rev = false;\n    }\n    static int\
-    \ size(node_ptr_t node) {\n        return node == nullptr ? 0 : node->siz;\n \
-    \   }\n\n    static node_ptr_t rotate(node_ptr_t node, bool is_right) {\n    \
-    \    node_ptr_t root = node->ch[is_right ^ true];\n        node->ch[is_right ^\
-    \ true] = root->ch[is_right];\n        root->ch[is_right] = node;\n        node->update(),\
-    \ root->update();\n        return root;\n    }\n\n    static node_ptr_t splay(node_ptr_t\
-    \ node, int index) {\n        std::vector<node_ptr_t> path;\n        node_ptr_t\
-    \ work_root = new Derived();\n        node_ptr_t work_leaf[2] { work_root, work_root\
-    \ };\n        while (true) {\n            node->push();\n            int size_l\
-    \ = size(node->ch[0]);\n            bool is_right = index > size_l;\n        \
-    \    node_ptr_t next_node = node->ch[is_right];\n            if (index == size_l\
-    \ or next_node == nullptr) { // found the target node\n                break;\n\
-    \            }\n            if (is_right) {\n                index -= size_l +\
-    \ 1;\n            }\n            int size_l_ch = size(next_node->ch[0]);\n   \
-    \         if (index != size_l_ch) {\n                bool is_right_ch = index\
+    \ {\n    using node_ptr_t = Derived *;\n\n    T val;\n    int size_;\n    bool\
+    \ rev;\n    node_ptr_t ch[2] {nullptr, nullptr};\n\n    DynamicSequenceNodeBase()\
+    \ : val(), size_(1), rev(false) {}\n    DynamicSequenceNodeBase(const T &val)\
+    \ : val(val), size_(1), rev(false) {}\n\n    ~DynamicSequenceNodeBase() {\n  \
+    \      delete ch[0];\n        delete ch[1];\n    }\n\n    void update() {\n  \
+    \      size_ = 1 + size(ch[0]) + size(ch[1]);\n    }\n    void push() {\n    \
+    \    reverse_all(this->ch[0], rev), reverse_all(this->ch[1], rev);\n        rev\
+    \ = false;\n    }\n    static int size(node_ptr_t node) {\n        return node\
+    \ == nullptr ? 0 : node->size_;\n    }\n\n    static node_ptr_t rotate(node_ptr_t\
+    \ node, bool is_right) {\n        node_ptr_t root = node->ch[is_right ^ true];\n\
+    \        node->ch[is_right ^ true] = root->ch[is_right];\n        root->ch[is_right]\
+    \ = node;\n        node->update(), root->update();\n        return root;\n   \
+    \ }\n\n    static node_ptr_t splay(node_ptr_t node, int index) {\n        std::vector<node_ptr_t>\
+    \ path;\n        node_ptr_t work_root = new Derived();\n        node_ptr_t work_leaf[2]\
+    \ { work_root, work_root };\n        while (true) {\n            node->push();\n\
+    \            int size_l = size(node->ch[0]);\n            bool is_right = index\
+    \ > size_l;\n            node_ptr_t next_node = node->ch[is_right];\n        \
+    \    if (index == size_l or next_node == nullptr) { // found the target node\n\
+    \                break;\n            }\n            if (is_right) {\n        \
+    \        index -= size_l + 1;\n            }\n            int size_l_ch = size(next_node->ch[0]);\n\
+    \            if (index != size_l_ch) {\n                bool is_right_ch = index\
     \ > size_l_ch;\n                if (is_right_ch == is_right) { // zig-zig\n  \
     \                  if (is_right_ch) {\n                        index -= size_l_ch\
     \ + 1;\n                    }\n                    next_node->push();\n      \
@@ -261,8 +261,8 @@ data:
     \     int size() const {\n            return SplayNode::size(root);\n        }\n\
     \        void reverse(int l, int r) {\n            range_bounds_check(l, r, size());\n\
     \            root = SplayNode::reverse(root, l, r);\n        }\n        void reverse_all()\
-    \ {\n            SplayNode::reverese_all(root);\n        }\n    protected:\n \
-    \       mutable node_ptr_t root;\n\n        DynamicSequenceBase(node_ptr_t root)\
+    \ {\n            SplayNode::reverse_all(root);\n        }\n    protected:\n  \
+    \      mutable node_ptr_t root;\n\n        DynamicSequenceBase(node_ptr_t root)\
     \ : root(root) {}\n    \n        static void index_bounds_check(unsigned int k,\
     \ unsigned int n) {\n            assert(k < n);\n        }\n        static void\
     \ range_bounds_check(unsigned int l, unsigned int r, unsigned int n) {\n     \
@@ -302,7 +302,7 @@ data:
   requiredBy:
   - library/datastructure/range_foldable_dynamic_sequence.hpp
   - library/datastructure/lazy_eval_dynamic_sequence.hpp
-  timestamp: '2023-09-15 20:02:25+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/datastructure/lazy_eval_dynamic_sequence/dynamic_sequence_range_affine_range_sum.test.cpp

@@ -40,9 +40,9 @@ data:
     \            return pool.emplace_back(dat), res;\n        }\n    public:\n   \
     \     SparseLazySegmentTree() : SparseLazySegmentTree(0) {}\n        explicit\
     \ SparseLazySegmentTree(IndexType n) : n(n), root(new_node(init(0, n))) {}\n\n\
-    \        static void reserve(int siz) {\n            pool.reserve(siz);\n    \
-    \    }\n\n        value_type get(index_type i) const {\n            assert(0 <=\
-    \ i and i < n);\n            operator_type f = id();\n            pool_index_type\
+    \        static void reserve(int size) {\n            pool.reserve(size);\n  \
+    \      }\n\n        value_type get(index_type i) const {\n            assert(0\
+    \ <= i and i < n);\n            operator_type f = id();\n            pool_index_type\
     \ cur = root;\n            for (std::array<index_type, 2> lr { 0, n }; cur and\
     \ lr[1] - lr[0] > 1;) {\n                index_type m = (lr[0] + lr[1]) >> 1;\n\
     \                bool b = i >= m;\n                f = composition(f, pool[cur].laz);\n\
@@ -134,7 +134,7 @@ data:
   isVerificationFile: true
   path: test/src/datastructure/segment_tree/sparse_lazy_segment_tree/abc255_Ex.test.cpp
   requiredBy: []
-  timestamp: '2026-05-19 23:18:05+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/datastructure/segment_tree/sparse_lazy_segment_tree/abc255_Ex.test.cpp

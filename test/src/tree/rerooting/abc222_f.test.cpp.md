@@ -85,13 +85,13 @@ data:
     \                dp[0] = add_root_(dp[0], _w[0]);\n\n                [dfs = [&,\
     \ this](auto dfs, int u, int p, const DP& sum_p) -> void {\n                 \
     \   auto get_sum = [&](int v) {\n                        return v == p ? sum_p\
-    \ : dp[v];\n                    };\n\n                    const int siz = g[u].size();\n\
-    \                    std::vector<DP> sum_r(siz + 1, e());\n                  \
-    \  for (int i = siz - 1; i >= 0; --i) {\n                        const auto& [v,\
-    \ w] = g[u][i];\n                        sum_r[i] = op(sum_r[i + 1], add_subtree_root_(get_sum(v),\
+    \ : dp[v];\n                    };\n\n                    const int size = g[u].size();\n\
+    \                    std::vector<DP> sum_r(size + 1, e());\n                 \
+    \   for (int i = size - 1; i >= 0; --i) {\n                        const auto&\
+    \ [v, w] = g[u][i];\n                        sum_r[i] = op(sum_r[i + 1], add_subtree_root_(get_sum(v),\
     \ _w[v], w));\n                    }\n\n                    DP sum_l = e();\n\
-    \                    for (int i = 0; i < siz; ++i) {\n                       \
-    \ const auto& [v, w] = g[u][i];\n                        DP nxt_sum_l = op(sum_l,\
+    \                    for (int i = 0; i < size; ++i) {\n                      \
+    \  const auto& [v, w] = g[u][i];\n                        DP nxt_sum_l = op(sum_l,\
     \ add_subtree_root_(get_sum(v), _w[v], w));\n                        if (v !=\
     \ p) {\n                            DP sum_lr = op(sum_l, sum_r[i + 1]);\n   \
     \                         DP sum_v = op(dp[v], add_subtree_root_(sum_lr, _w[u],\
@@ -164,7 +164,7 @@ data:
   isVerificationFile: true
   path: test/src/tree/rerooting/abc222_f.test.cpp
   requiredBy: []
-  timestamp: '2023-05-11 13:28:20+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/tree/rerooting/abc222_f.test.cpp

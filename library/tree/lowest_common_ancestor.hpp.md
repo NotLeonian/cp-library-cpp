@@ -71,7 +71,7 @@ data:
     \        prd[s] = sum[lower] + prd[upper];\n                    arg[s] = half\
     \ + arg[upper];\n                }\n                sum[s] = sum[lower] + sum[upper];\n\
     \            }\n        } tabs{};\n\n    public:\n        RMQpm1WithIndex(std::vector<int>&&\
-    \ x) : n(x.size()), m((n + SIZE - 1) >> LOG), a(std::move(x)), b(m, 0), tabl(build())\
+    \ x) : n(x.size()), m((n + SIZE - 1) >> LOG), a(std::move(x)), b(m, 0), table(build())\
     \ {}\n        RMQpm1WithIndex(const std::vector<int>& x) : RMQpm1WithIndex(std::vector<int>(x))\
     \ {}\n\n        std::pair<int, int> operator()(int l, int r) const {\n       \
     \     if (l >= r) return e();\n            static constexpr int MASK = SIZE -\
@@ -80,11 +80,11 @@ data:
     \ l & MASK, ((r - 1) & MASK) + 1);\n                return { a[l] + tabs.prd[idx],\
     \ l + tabs.arg[idx] };\n            };\n            if (l >> LOG == (r - 1) >>\
     \ LOG) return f(l, r);\n            int spl = (l + SIZE - 1) >> LOG, spr = r >>\
-    \ LOG;\n            return op(op(f(l, spl << LOG), f(spr << LOG, r)), tabl(spl,\
+    \ LOG;\n            return op(op(f(l, spl << LOG), f(spr << LOG, r)), table(spl,\
     \ spr));\n        }\n\n    private:\n        int n, m;\n        std::vector<int>\
     \ a;\n        std::vector<std::uint16_t> b;\n        SparseTable<std::pair<int,\
-    \ int>, op, e> tabl;\n\n        std::vector<std::pair<int, int>> build() {\n \
-    \           std::vector<std::pair<int, int>> c(m, e());\n            if (n ==\
+    \ int>, op, e> table;\n\n        std::vector<std::pair<int, int>> build() {\n\
+    \            std::vector<std::pair<int, int>> c(m, e());\n            if (n ==\
     \ 0) return c;\n            std::pair<int, int> p{ a[0] - 1, -1 };\n         \
     \   for (int i = 0; i < n; p = { a[i], i }, ++i) {\n                std::pair<int,\
     \ int> q{ a[i], i };\n                int outer = i >> LOG;\n                c[outer]\
@@ -132,7 +132,7 @@ data:
   isVerificationFile: false
   path: library/tree/lowest_common_ancestor.hpp
   requiredBy: []
-  timestamp: '2022-05-29 02:48:02+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/tree/lowest_common_anceestor/lowest_common_anceestor.test.cpp

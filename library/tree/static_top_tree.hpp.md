@@ -34,17 +34,17 @@ data:
     \ root) : _n(g.size()), _g(g), _par(_n, -1), _sub(_n), _idx(_n) {\n          \
     \  [&, dfs = [&](auto dfs, int u, int p) -> void {\n                _par[u] =\
     \ p;\n                int max_sub = -1;\n                _sub[u] = 1;\n      \
-    \          for (int i = 0, siz = _g[u].size(); i < siz; ++i) {\n             \
-    \       const int v = _g[u][i];\n                    if (v == p) {\n         \
-    \               std::swap(_g[u][i], _g[u].back());\n                        _g[u].pop_back();\n\
-    \                        --i, --siz;\n                    } else {\n         \
-    \               dfs(dfs, v, u);\n                        _sub[u] += _sub[v];\n\
-    \                        if (_sub[v] > max_sub) {\n                          \
-    \  // heavy path\n                            std::swap(_g[u].front(), _g[u][i]);\n\
-    \                            max_sub = _sub[v];\n                        }\n \
-    \                   }\n                }\n            }]{ dfs(dfs, root, -1);\
-    \ }();\n\n            _toptree_root = _merge_paths(_heavy_path(root));\n     \
-    \   }\n\n        /**\n         * Path: with root\n         * Subtree: without\
+    \          for (int i = 0, size = _g[u].size(); i < size; ++i) {\n           \
+    \         const int v = _g[u][i];\n                    if (v == p) {\n       \
+    \                 std::swap(_g[u][i], _g[u].back());\n                       \
+    \ _g[u].pop_back();\n                        --i, --size;\n                  \
+    \  } else {\n                        dfs(dfs, v, u);\n                       \
+    \ _sub[u] += _sub[v];\n                        if (_sub[v] > max_sub) {\n    \
+    \                        // heavy path\n                            std::swap(_g[u].front(),\
+    \ _g[u][i]);\n                            max_sub = _sub[v];\n               \
+    \         }\n                    }\n                }\n            }]{ dfs(dfs,\
+    \ root, -1); }();\n\n            _toptree_root = _merge_paths(_heavy_path(root));\n\
+    \        }\n\n        /**\n         * Path: with root\n         * Subtree: without\
     \ root\n         * vertex: vertex -> Path\n         * add_edge: Path, root, par[root]\
     \ -> Subtree\n         * merge_subtrees: Subtree, Subtree -> Subtree\n       \
     \  * add_root: Subtree, root -> Path\n         * merge_paths: Path (hi), Path\
@@ -150,17 +150,17 @@ data:
     \ root) : _n(g.size()), _g(g), _par(_n, -1), _sub(_n), _idx(_n) {\n          \
     \  [&, dfs = [&](auto dfs, int u, int p) -> void {\n                _par[u] =\
     \ p;\n                int max_sub = -1;\n                _sub[u] = 1;\n      \
-    \          for (int i = 0, siz = _g[u].size(); i < siz; ++i) {\n             \
-    \       const int v = _g[u][i];\n                    if (v == p) {\n         \
-    \               std::swap(_g[u][i], _g[u].back());\n                        _g[u].pop_back();\n\
-    \                        --i, --siz;\n                    } else {\n         \
-    \               dfs(dfs, v, u);\n                        _sub[u] += _sub[v];\n\
-    \                        if (_sub[v] > max_sub) {\n                          \
-    \  // heavy path\n                            std::swap(_g[u].front(), _g[u][i]);\n\
-    \                            max_sub = _sub[v];\n                        }\n \
-    \                   }\n                }\n            }]{ dfs(dfs, root, -1);\
-    \ }();\n\n            _toptree_root = _merge_paths(_heavy_path(root));\n     \
-    \   }\n\n        /**\n         * Path: with root\n         * Subtree: without\
+    \          for (int i = 0, size = _g[u].size(); i < size; ++i) {\n           \
+    \         const int v = _g[u][i];\n                    if (v == p) {\n       \
+    \                 std::swap(_g[u][i], _g[u].back());\n                       \
+    \ _g[u].pop_back();\n                        --i, --size;\n                  \
+    \  } else {\n                        dfs(dfs, v, u);\n                       \
+    \ _sub[u] += _sub[v];\n                        if (_sub[v] > max_sub) {\n    \
+    \                        // heavy path\n                            std::swap(_g[u].front(),\
+    \ _g[u][i]);\n                            max_sub = _sub[v];\n               \
+    \         }\n                    }\n                }\n            }]{ dfs(dfs,\
+    \ root, -1); }();\n\n            _toptree_root = _merge_paths(_heavy_path(root));\n\
+    \        }\n\n        /**\n         * Path: with root\n         * Subtree: without\
     \ root\n         * vertex: vertex -> Path\n         * add_edge: Path, root, par[root]\
     \ -> Subtree\n         * merge_subtrees: Subtree, Subtree -> Subtree\n       \
     \  * add_root: Subtree, root -> Path\n         * merge_paths: Path (hi), Path\
@@ -244,7 +244,7 @@ data:
   isVerificationFile: false
   path: library/tree/static_top_tree.hpp
   requiredBy: []
-  timestamp: '2024-05-07 01:25:25+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: library/tree/static_top_tree.hpp

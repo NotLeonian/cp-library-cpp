@@ -11,8 +11,8 @@ data:
     path: library/number/internal_eratosthenes.hpp
     title: Internal Eratosthenes
   - icon: ':heavy_check_mark:'
-    path: library/number/montogomery.hpp
-    title: Montogomery
+    path: library/number/montgomery.hpp
+    title: Montgomery
   - icon: ':heavy_check_mark:'
     path: library/number/order_Z_mZ.hpp
     title: Order of $x \in (\mathbb{Z}/m\mathbb{Z}) ^ \ast$
@@ -86,7 +86,7 @@ data:
     } // namespace suisen\n\n#line 11 \"library/number/fast_factorize.hpp\"\n\n#line\
     \ 1 \"library/number/deterministic_miller_rabin.hpp\"\n\n\n\n#include <array>\n\
     #include <cassert>\n#include <cstdint>\n#include <iterator>\n#line 10 \"library/number/deterministic_miller_rabin.hpp\"\
-    \n\n#line 1 \"library/number/montogomery.hpp\"\n\n\n\n#line 7 \"library/number/montogomery.hpp\"\
+    \n\n#line 1 \"library/number/montgomery.hpp\"\n\n\n\n#line 7 \"library/number/montgomery.hpp\"\
     \n\nnamespace suisen {\n    namespace internal::montgomery {\n        template\
     \ <typename Int, typename DInt>\n        struct Montgomery {\n        private:\n\
     \            static constexpr uint32_t bits = std::numeric_limits<Int>::digits;\n\
@@ -214,20 +214,20 @@ data:
     \ return 7;\n        default: assert(false);\n    }\n}\n} // namespace suisen::internal::sieve\n\
     \n\n#line 9 \"library/number/sieve_of_eratosthenes.hpp\"\n\nnamespace suisen {\n\
     \ntemplate <unsigned int N>\nclass SimpleSieve {\n    private:\n        static\
-    \ constexpr unsigned int siz = N / internal::sieve::PROD + 1;\n        static\
-    \ std::uint8_t flag[siz];\n    public:\n        SimpleSieve() {\n            using\
-    \ namespace internal::sieve;\n            flag[0] |= 1;\n            unsigned\
+    \ constexpr unsigned int size = N / internal::sieve::PROD + 1;\n        static\
+    \ std::uint8_t flag[size];\n    public:\n        SimpleSieve() {\n           \
+    \ using namespace internal::sieve;\n            flag[0] |= 1;\n            unsigned\
     \ int k_max = (unsigned int) std::sqrt(N + 2) / PROD;\n            for (unsigned\
     \ int kp = 0; kp <= k_max; ++kp) {\n                for (std::uint8_t bits = ~flag[kp];\
     \ bits; bits &= bits - 1) {\n                    const std::uint8_t mp = mask_to_index(bits\
     \ & -bits), m = RM[mp];\n                    unsigned int kr = kp * (PROD * kp\
     \ + 2 * m) + m * m / PROD;\n                    for (std::uint8_t mq = mp; kr\
-    \ < siz; kr += kp * DR[mq] + DF[mp][mq], ++mq &= 7) {\n                      \
-    \  flag[kr] |= MASK[mp][mq];\n                    }\n                }\n     \
-    \       }\n        }\n        std::vector<int> prime_list(unsigned int max_val\
+    \ < size; kr += kp * DR[mq] + DF[mp][mq], ++mq &= 7) {\n                     \
+    \   flag[kr] |= MASK[mp][mq];\n                    }\n                }\n    \
+    \        }\n        }\n        std::vector<int> prime_list(unsigned int max_val\
     \ = N) const {\n            using namespace internal::sieve;\n            std::vector<int>\
     \ res { 2, 3, 5 };\n            res.reserve(max_val / 25);\n            for (unsigned\
-    \ int i = 0, offset = 0; i < siz and offset < max_val; ++i, offset += PROD) {\n\
+    \ int i = 0, offset = 0; i < size and offset < max_val; ++i, offset += PROD) {\n\
     \                for (uint8_t f = ~flag[i]; f;) {\n                    uint8_t\
     \ g = f & -f;\n                    res.push_back(offset + RM[mask_to_index(g)]);\n\
     \                    f ^= g;\n                }\n            }\n            while\
@@ -245,7 +245,7 @@ data:
     \ return ((flag[p / PROD] >> 6) & 1) == 0;\n                        case RM[7]:\
     \ return ((flag[p / PROD] >> 7) & 1) == 0;\n                        default: return\
     \ false;\n                    }\n            }\n        }\n};\ntemplate <unsigned\
-    \ int N>\nstd::uint8_t SimpleSieve<N>::flag[SimpleSieve<N>::siz];\n\ntemplate\
+    \ int N>\nstd::uint8_t SimpleSieve<N>::flag[SimpleSieve<N>::size];\n\ntemplate\
     \ <unsigned int N>\nclass Sieve {\n    private:\n        static constexpr unsigned\
     \ int base_max = (N + 1) * internal::sieve::K / internal::sieve::PROD;\n     \
     \   static unsigned int pf[base_max + internal::sieve::K];\n\n    public:\n  \
@@ -460,18 +460,18 @@ data:
     \    */\n    template <typename T, std::enable_if_t<std::is_integral_v<T>, std::nullptr_t>\
     \ = nullptr>\n    std::vector<std::pair<T, int>> factorize(T n) {\n        static\
     \ constexpr std::array primes{ 2, 3, 5, 7, 11, 13 };\n        static constexpr\
-    \ int next_prime = 17;\n        static constexpr int siz = std::array{ 1, 2, 8,\
-    \ 48, 480, 5760, 92160 } [primes.size() - 1] ;\n        static constexpr int period\
-    \ = [] {\n            int res = 1;\n            for (auto e : primes) res *= e;\n\
-    \            return res;\n            }();\n        static constexpr struct S\
-    \ : public std::array<int, siz> {\n            constexpr S() {\n             \
-    \   for (int i = next_prime, j = 0; i < period + next_prime; i += 2) {\n     \
-    \               bool ok = true;\n                    for (int p : primes) ok &=\
-    \ i % p > 0;\n                    if (ok) (*this)[j++] = i - next_prime;\n   \
-    \             }\n            }\n        } s{};\n\n        assert(n > 0);\n   \
-    \     std::vector<std::pair<T, int>> res;\n        auto f = [&res, &n](int p)\
-    \ {\n            if (n % p) return;\n            int cnt = 0;\n            do\
-    \ n /= p, ++cnt; while (n % p == 0);\n            res.emplace_back(p, cnt);\n\
+    \ int next_prime = 17;\n        static constexpr int size = std::array{ 1, 2,\
+    \ 8, 48, 480, 5760, 92160 } [primes.size() - 1] ;\n        static constexpr int\
+    \ period = [] {\n            int res = 1;\n            for (auto e : primes) res\
+    \ *= e;\n            return res;\n            }();\n        static constexpr struct\
+    \ S : public std::array<int, size> {\n            constexpr S() {\n          \
+    \      for (int i = next_prime, j = 0; i < period + next_prime; i += 2) {\n  \
+    \                  bool ok = true;\n                    for (int p : primes) ok\
+    \ &= i % p > 0;\n                    if (ok) (*this)[j++] = i - next_prime;\n\
+    \                }\n            }\n        } s{};\n\n        assert(n > 0);\n\
+    \        std::vector<std::pair<T, int>> res;\n        auto f = [&res, &n](int\
+    \ p) {\n            if (n % p) return;\n            int cnt = 0;\n           \
+    \ do n /= p, ++cnt; while (n % p == 0);\n            res.emplace_back(p, cnt);\n\
     \            };\n        for (int p : primes) f(p);\n        for (T b = next_prime;\
     \ b * b <= n; b += period) {\n            for (int offset : s) f(b + offset);\n\
     \        }\n        if (n != 1) res.emplace_back(n, 1);\n        return res;\n\
@@ -557,14 +557,14 @@ data:
   - library/number/fast_factorize.hpp
   - library/type_traits/type_traits.hpp
   - library/number/deterministic_miller_rabin.hpp
-  - library/number/montogomery.hpp
+  - library/number/montgomery.hpp
   - library/number/sieve_of_eratosthenes.hpp
   - library/number/internal_eratosthenes.hpp
   - library/number/util.hpp
   isVerificationFile: true
   path: test/src/number/primitive_root/dummy.test.cpp
   requiredBy: []
-  timestamp: '2025-01-26 15:55:04+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/number/primitive_root/dummy.test.cpp

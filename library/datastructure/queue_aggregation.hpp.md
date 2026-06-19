@@ -68,9 +68,9 @@ data:
     \ prod() const {\n            return merge(prod(_st_l), prod(_st_r));\n      \
     \  }\n        void push_back(const value_type& val) { _st_r.emplace_back(val,\
     \ append(prod(_st_r), val)); }\n        void pop_front() {\n            if (_st_l.size())\
-    \ return _st_l.pop_back();\n            const int siz = _st_r.size();\n      \
-    \      assert(siz);\n            for (int i = siz - 1; i > 0; --i) {\n       \
-    \         value_type v = std::move(_st_r[i].first);\n                _st_l.emplace_back(v,\
+    \ return _st_l.pop_back();\n            const int size = _st_r.size();\n     \
+    \       assert(size);\n            for (int i = size - 1; i > 0; --i) {\n    \
+    \            value_type v = std::move(_st_r[i].first);\n                _st_l.emplace_back(v,\
     \ append(prod(_st_l), v));\n            }\n            _st_r.clear();\n      \
     \  }\n        const value_type& front() const { return _st_l.size() ? _st_l.back().first\
     \ : _st_r.front().first; }\n        const value_type& back() const { return _st_r.size()\
@@ -147,9 +147,9 @@ data:
     \ prod() const {\n            return merge(prod(_st_l), prod(_st_r));\n      \
     \  }\n        void push_back(const value_type& val) { _st_r.emplace_back(val,\
     \ append(prod(_st_r), val)); }\n        void pop_front() {\n            if (_st_l.size())\
-    \ return _st_l.pop_back();\n            const int siz = _st_r.size();\n      \
-    \      assert(siz);\n            for (int i = siz - 1; i > 0; --i) {\n       \
-    \         value_type v = std::move(_st_r[i].first);\n                _st_l.emplace_back(v,\
+    \ return _st_l.pop_back();\n            const int size = _st_r.size();\n     \
+    \       assert(size);\n            for (int i = size - 1; i > 0; --i) {\n    \
+    \            value_type v = std::move(_st_r[i].first);\n                _st_l.emplace_back(v,\
     \ append(prod(_st_l), v));\n            }\n            _st_r.clear();\n      \
     \  }\n        const value_type& front() const { return _st_l.size() ? _st_l.back().first\
     \ : _st_r.front().first; }\n        const value_type& back() const { return _st_r.size()\
@@ -170,7 +170,7 @@ data:
   isVerificationFile: false
   path: library/datastructure/queue_aggregation.hpp
   requiredBy: []
-  timestamp: '2023-05-11 13:19:19+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_NO_TESTS
   verifiedWith: []
 documentation_of: library/datastructure/queue_aggregation.hpp

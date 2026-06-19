@@ -45,57 +45,58 @@ data:
     \ std::vector<value_type>::const_iterator;\n            using reverse_iterator\
     \ = typename std::vector<value_type>::reverse_iterator;\n            using const_reverse_iterator\
     \ = typename std::vector<value_type>::const_reverse_iterator;\n\n            AdjacentList()\
-    \ = default;\n\n            int size() const { return _siz; }\n            bool\
-    \ empty() const { return _siz == 0; }\n            int capacity() const { return\
+    \ = default;\n\n            int size() const { return _size; }\n            bool\
+    \ empty() const { return _size == 0; }\n            int capacity() const { return\
     \ _cap; }\n\n            value_type& operator[](int i) { return *(begin() + i);\
     \ }\n            const value_type& operator[](int i) const { return *(cbegin()\
-    \ + i); }\n            value_type& at(uint32_t i) { assert(i < _siz); return *(begin()\
-    \ + i); }\n            const value_type& at(uint32_t i) const { assert(i < _siz);\
-    \ return *(cbegin() + i); }\n\n            value_type* data() { return _g->_edges.data()\
-    \ + _offset; }\n            const value_type* data() const { return _g->_edges.data()\
-    \ + _offset; }\n\n            iterator begin() const { return _g->_edges.begin()\
-    \ + _offset; }\n            iterator end() const { return begin() + _siz; }\n\
-    \            const_iterator cbegin() const { return _g->_edges.cbegin() + _offset;\
-    \ }\n            const_iterator cend() const { return cbegin() + _siz; }\n   \
-    \         reverse_iterator rbegin() const { return _g->_edges.rbegin() + (_g->_edges.size()\
-    \ - (_offset + _siz)); }\n            reverse_iterator rend() const { return rbegin()\
-    \ + _siz; }\n            const_reverse_iterator crbegin() const { return _g->_edges.crbegin()\
-    \ + (_g->_edges.size() - (_offset + _siz)); }\n            const_reverse_iterator\
-    \ crend() const { return crbegin() + _siz; }\n\n            void erase(const_iterator\
-    \ pos) {\n                erase(pos, std::next(pos));\n            }\n       \
-    \     void erase(const_iterator first, const_iterator last) {\n              \
-    \  const int num = last - first, k = first - cbegin();\n                assert(num\
-    \ >= 0);\n                if (num == 0) return;\n                assert(0 <= k\
-    \ and k <= _siz - num);\n                std::move(begin() + k + num, end(), begin()\
-    \ + k);\n                _siz -= num;\n            }\n            void pop_back()\
-    \ {\n                assert(_siz);\n                --_siz;\n            }\n \
-    \           void clear() { _siz = 0; }\n\n            const value_type& back()\
-    \ const { return *--cend(); }\n            value_type& back() { return *--end();\
-    \ }\n            const value_type& front() const { return *cbegin(); }\n     \
-    \       value_type& front() { return *begin(); }\n\n            void push_back(const\
-    \ value_type& x) {\n                ++_siz;\n                assert(_siz <= _cap);\n\
-    \                back() = x;\n            }\n            template <typename ...Args>\n\
-    \            void emplace_back(Args &&...args) {\n                ++_siz;\n  \
-    \              assert(_siz <= _cap);\n                back() = value_type(std::forward<Args>(args)...);\n\
+    \ + i); }\n            value_type& at(uint32_t i) { assert(i < _size); return\
+    \ *(begin() + i); }\n            const value_type& at(uint32_t i) const { assert(i\
+    \ < _size); return *(cbegin() + i); }\n\n            value_type* data() { return\
+    \ _g->_edges.data() + _offset; }\n            const value_type* data() const {\
+    \ return _g->_edges.data() + _offset; }\n\n            iterator begin() const\
+    \ { return _g->_edges.begin() + _offset; }\n            iterator end() const {\
+    \ return begin() + _size; }\n            const_iterator cbegin() const { return\
+    \ _g->_edges.cbegin() + _offset; }\n            const_iterator cend() const {\
+    \ return cbegin() + _size; }\n            reverse_iterator rbegin() const { return\
+    \ _g->_edges.rbegin() + (_g->_edges.size() - (_offset + _size)); }\n         \
+    \   reverse_iterator rend() const { return rbegin() + _size; }\n            const_reverse_iterator\
+    \ crbegin() const { return _g->_edges.crbegin() + (_g->_edges.size() - (_offset\
+    \ + _size)); }\n            const_reverse_iterator crend() const { return crbegin()\
+    \ + _size; }\n\n            void erase(const_iterator pos) {\n               \
+    \ erase(pos, std::next(pos));\n            }\n            void erase(const_iterator\
+    \ first, const_iterator last) {\n                const int num = last - first,\
+    \ k = first - cbegin();\n                assert(num >= 0);\n                if\
+    \ (num == 0) return;\n                assert(0 <= k and k <= _size - num);\n \
+    \               std::move(begin() + k + num, end(), begin() + k);\n          \
+    \      _size -= num;\n            }\n            void pop_back() {\n         \
+    \       assert(_size);\n                --_size;\n            }\n            void\
+    \ clear() { _size = 0; }\n\n            const value_type& back() const { return\
+    \ *--cend(); }\n            value_type& back() { return *--end(); }\n        \
+    \    const value_type& front() const { return *cbegin(); }\n            value_type&\
+    \ front() { return *begin(); }\n\n            void push_back(const value_type&\
+    \ x) {\n                ++_size;\n                assert(_size <= _cap);\n   \
+    \             back() = x;\n            }\n            template <typename ...Args>\n\
+    \            void emplace_back(Args &&...args) {\n                ++_size;\n \
+    \               assert(_size <= _cap);\n                back() = value_type(std::forward<Args>(args)...);\n\
     \            }\n\n            void insert(const_iterator pos, const value_type&\
     \ x) {\n                emplace(pos, x);\n            }\n            void insert(const_iterator\
     \ pos, int num, const value_type& x) {\n                const int k = pos - cbegin();\n\
-    \                assert(0 <= k and k <= _siz);\n                std::fill(begin()\
+    \                assert(0 <= k and k <= _size);\n                std::fill(begin()\
     \ + k, shift_back(begin() + k, num), x);\n            }\n            template\
     \ <class RandomAccessIterator>\n            auto insert(const_iterator pos, RandomAccessIterator\
     \ first, RandomAccessIterator last) -> decltype(*first++, last - first, void())\
     \ {\n                const int num = last - first, k = pos - cbegin();\n     \
-    \           assert(0 <= k and k <= _siz);\n                shift_back(begin()\
+    \           assert(0 <= k and k <= _size);\n                shift_back(begin()\
     \ + k, num);\n                std::copy(first, last, begin() + k);\n         \
     \   }\n            void insert(const_iterator pos, std::initializer_list<value_type>\
     \ il) { insert(pos, il.begin(), il.end()); }\n            template <typename ...Args>\n\
     \            void emplace(const_iterator pos, Args &&...args) {\n            \
-    \    const int k = pos - cbegin();\n                assert(0 <= k and k <= _siz);\n\
+    \    const int k = pos - cbegin();\n                assert(0 <= k and k <= _size);\n\
     \                *--shift_back(begin() + k) = value_type(std::forward<Args>(args)...);\n\
     \            }\n        private:\n            mutable Graph* _g;\n           \
-    \ int _cap;\n            int _offset;\n            int _siz;\n\n            iterator\
-    \ shift_back(iterator pos, int num = 1) {\n                _siz += num;\n    \
-    \            assert(_siz <= _cap);\n                return std::move_backward(pos,\
+    \ int _cap;\n            int _offset;\n            int _size;\n\n            iterator\
+    \ shift_back(iterator pos, int num = 1) {\n                _size += num;\n   \
+    \             assert(_size <= _cap);\n                return std::move_backward(pos,\
     \ end() - num, end());\n            }\n        };\n    public:\n        using\
     \ adjacent_list = AdjacentList;\n\n        Graph() = default;\n\n        template\
     \ <typename GraphTag, std::enable_if_t<is_graph_tag_v<GraphTag>, std::nullptr_t>\
@@ -103,14 +104,14 @@ data:
     \ GraphTag, std::vector<int> cap = {}) : _n(n), _adj(_n) {\n            static\
     \ constexpr bool undirected = std::is_same_v<undirected_graph_tag, GraphTag>;\n\
     \n            for (const auto& e : edges) {\n                const int u = std::get<0>(e);\n\
-    \                ++_adj[u]._siz;\n                if constexpr (undirected) {\n\
-    \                    const int v = std::get<1>(e);\n                    ++_adj[v]._siz;\n\
+    \                ++_adj[u]._size;\n                if constexpr (undirected) {\n\
+    \                    const int v = std::get<1>(e);\n                    ++_adj[v]._size;\n\
     \                }\n            }\n            if (cap.empty()) cap.resize(_n,\
     \ std::numeric_limits<int>::max());\n            int edge_num = 0;\n         \
     \   for (int i = 0; i < _n; ++i) {\n                _adj[i]._g = this;\n     \
-    \           _adj[i]._cap = std::min(_adj[i]._siz, cap[i]);\n                _adj[i]._offset\
-    \ = edge_num;\n                edge_num += _adj[i]._siz;\n            }\n    \
-    \        _edges.resize(edge_num);\n            std::vector<typename std::vector<edge_type>::iterator>\
+    \           _adj[i]._cap = std::min(_adj[i]._size, cap[i]);\n                _adj[i]._offset\
+    \ = edge_num;\n                edge_num += _adj[i]._size;\n            }\n   \
+    \         _edges.resize(edge_num);\n            std::vector<typename std::vector<edge_type>::iterator>\
     \ ptr(_n);\n            for (int i = 0; i < _n; ++i) ptr[i] = _adj[i].begin();\n\
     \            for (const auto& e : edges) {\n                const int u = std::get<0>(e);\n\
     \                const int v = std::get<1>(e);\n                if constexpr (weighted)\
@@ -135,7 +136,7 @@ data:
     \ = new_edges.begin();\n            for (int i = 0; i < _n; ++i) {\n         \
     \       int nl = it - new_edges.begin();\n                it = std::move(_adj[i].begin(),\
     \ _adj[i].end(), it);\n                _adj[i]._offset = nl;\n               \
-    \ _adj[i]._cap = _adj[i]._siz;\n            }\n            _edges.swap(new_edges);\n\
+    \ _adj[i]._cap = _adj[i]._size;\n            }\n            _edges.swap(new_edges);\n\
     \        }\n\n        static weight_type_or_1 get_weight(const edge_type& edge)\
     \ {\n            if constexpr (weighted) return std::get<1>(edge);\n         \
     \   else return 1;\n        }\n\n        Graph reversed(const std::vector<int>&\
@@ -230,36 +231,38 @@ data:
     \            friend struct CentroidDecompositionWeighted;\n\n            using\
     \ graph_type = Graph<WeightType>;\n            using weight_type = WeightType;\n\
     \n            CentroidDecomposition(const graph_type& g) : graph_type(g), n(this->size()),\
-    \ cpar(n, -1), cdep(n, std::numeric_limits<int>::max()), csiz(n) {\n         \
-    \       build();\n            }\n\n            int dct_parent(int i) const { return\
-    \ cpar[i]; }\n            int dct_depth(int i) const { return cdep[i]; }\n   \
-    \         int dct_size(int i) const { return csiz[i]; }\n\n        private:\n\
-    \            int n;\n            std::vector<int> cpar;\n            std::vector<int>\
-    \ cdep;\n            std::vector<int> csiz;\n\n            void build() {\n  \
-    \              std::vector<int> eid(n, 0);\n\n                cpar[0] = -1, csiz[0]\
-    \ = n;\n                std::deque<std::tuple<int, int>> dq{ { 0, 0 } };\n\n \
-    \               while (dq.size()) {\n                    const auto [r, dep] =\
-    \ dq.front();\n                    const int siz = csiz[r], prev_ctr = cpar[r];\n\
-    \                    dq.pop_front();\n\n                    int c = -1;\n    \
-    \                eid[r] = 0, csiz[r] = 1, cpar[r] = -1;\n                    for\
-    \ (int cur = r;;) {\n                        for (const int edge_num = int((*this)[cur].size());;)\
-    \ {\n                            if (eid[cur] == edge_num) {\n               \
-    \                 if (csiz[cur] * 2 > siz) {\n                               \
+    \ cpar(n, -1), cdep(n, std::numeric_limits<int>::max()), component_size(n) {\n\
+    \                build();\n            }\n\n            int dct_parent(int i)\
+    \ const { return cpar[i]; }\n            int dct_depth(int i) const { return cdep[i];\
+    \ }\n            int dct_size(int i) const { return component_size[i]; }\n\n \
+    \       private:\n            int n;\n            std::vector<int> cpar;\n   \
+    \         std::vector<int> cdep;\n            std::vector<int> component_size;\n\
+    \n            void build() {\n                std::vector<int> eid(n, 0);\n\n\
+    \                cpar[0] = -1, component_size[0] = n;\n                std::deque<std::tuple<int,\
+    \ int>> dq{ { 0, 0 } };\n\n                while (dq.size()) {\n             \
+    \       const auto [r, dep] = dq.front();\n                    const int size\
+    \ = component_size[r], prev_ctr = cpar[r];\n                    dq.pop_front();\n\
+    \n                    int c = -1;\n                    eid[r] = 0, component_size[r]\
+    \ = 1, cpar[r] = -1;\n                    for (int cur = r;;) {\n            \
+    \            for (const int edge_num = int((*this)[cur].size());;) {\n       \
+    \                     if (eid[cur] == edge_num) {\n                          \
+    \      if (component_size[cur] * 2 > size) {\n                               \
     \     c = cur;\n                                } else {\n                   \
     \                 const int nxt = cpar[cur];\n                               \
-    \     csiz[nxt] += csiz[cur];\n                                    cur = nxt;\n\
-    \                                }\n                                break;\n \
-    \                           }\n                            const int nxt = (*this)[cur][eid[cur]++];\n\
-    \                            if (cdep[nxt] >= dep and nxt != cpar[cur]) {\n  \
-    \                              eid[nxt] = 0, csiz[nxt] = 1, cpar[nxt] = cur;\n\
-    \                                cur = nxt;\n                                break;\n\
-    \                            }\n                        }\n                  \
-    \      if (c >= 0) break;\n                    }\n                    for (int\
-    \ v : (*this)[c]) if (cdep[v] >= dep) {\n                        if (cpar[c] ==\
-    \ v) cpar[v] = c, csiz[v] = siz - csiz[c];\n                        dq.emplace_back(v,\
-    \ dep + 1);\n                    }\n                    cpar[c] = prev_ctr, cdep[c]\
-    \ = dep, csiz[c] = siz;\n                }\n            }\n        };\n\n    \
-    \    struct CentroidDecompositionUnweighted : internal::CentroidDecomposition<void>\
+    \     component_size[nxt] += component_size[cur];\n                          \
+    \          cur = nxt;\n                                }\n                   \
+    \             break;\n                            }\n                        \
+    \    const int nxt = (*this)[cur][eid[cur]++];\n                            if\
+    \ (cdep[nxt] >= dep and nxt != cpar[cur]) {\n                                eid[nxt]\
+    \ = 0, component_size[nxt] = 1, cpar[nxt] = cur;\n                           \
+    \     cur = nxt;\n                                break;\n                   \
+    \         }\n                        }\n                        if (c >= 0) break;\n\
+    \                    }\n                    for (int v : (*this)[c]) if (cdep[v]\
+    \ >= dep) {\n                        if (cpar[c] == v) cpar[v] = c, component_size[v]\
+    \ = size - component_size[c];\n                        dq.emplace_back(v, dep\
+    \ + 1);\n                    }\n                    cpar[c] = prev_ctr, cdep[c]\
+    \ = dep, component_size[c] = size;\n                }\n            }\n       \
+    \ };\n\n        struct CentroidDecompositionUnweighted : internal::CentroidDecomposition<void>\
     \ {\n            using base_type = internal::CentroidDecomposition<void>;\n  \
     \          using base_type::base_type;\n\n            std::vector<std::vector<std::pair<int,\
     \ int>>> collect(int root, int root_val = 0) const {\n                std::vector<std::vector<std::pair<int,\
@@ -306,37 +309,38 @@ data:
     \ void>, std::nullptr_t>>\n            friend struct CentroidDecompositionWeighted;\n\
     \n            using graph_type = Graph<WeightType>;\n            using weight_type\
     \ = WeightType;\n\n            CentroidDecomposition(const graph_type& g) : graph_type(g),\
-    \ n(this->size()), cpar(n, -1), cdep(n, std::numeric_limits<int>::max()), csiz(n)\
+    \ n(this->size()), cpar(n, -1), cdep(n, std::numeric_limits<int>::max()), component_size(n)\
     \ {\n                build();\n            }\n\n            int dct_parent(int\
     \ i) const { return cpar[i]; }\n            int dct_depth(int i) const { return\
-    \ cdep[i]; }\n            int dct_size(int i) const { return csiz[i]; }\n\n  \
-    \      private:\n            int n;\n            std::vector<int> cpar;\n    \
-    \        std::vector<int> cdep;\n            std::vector<int> csiz;\n\n      \
-    \      void build() {\n                std::vector<int> eid(n, 0);\n\n       \
-    \         cpar[0] = -1, csiz[0] = n;\n                std::deque<std::tuple<int,\
+    \ cdep[i]; }\n            int dct_size(int i) const { return component_size[i];\
+    \ }\n\n        private:\n            int n;\n            std::vector<int> cpar;\n\
+    \            std::vector<int> cdep;\n            std::vector<int> component_size;\n\
+    \n            void build() {\n                std::vector<int> eid(n, 0);\n\n\
+    \                cpar[0] = -1, component_size[0] = n;\n                std::deque<std::tuple<int,\
     \ int>> dq{ { 0, 0 } };\n\n                while (dq.size()) {\n             \
-    \       const auto [r, dep] = dq.front();\n                    const int siz =\
-    \ csiz[r], prev_ctr = cpar[r];\n                    dq.pop_front();\n\n      \
-    \              int c = -1;\n                    eid[r] = 0, csiz[r] = 1, cpar[r]\
-    \ = -1;\n                    for (int cur = r;;) {\n                        for\
-    \ (const int edge_num = int((*this)[cur].size());;) {\n                      \
-    \      if (eid[cur] == edge_num) {\n                                if (csiz[cur]\
-    \ * 2 > siz) {\n                                    c = cur;\n               \
-    \                 } else {\n                                    const int nxt\
-    \ = cpar[cur];\n                                    csiz[nxt] += csiz[cur];\n\
-    \                                    cur = nxt;\n                            \
-    \    }\n                                break;\n                            }\n\
-    \                            const int nxt = (*this)[cur][eid[cur]++];\n     \
-    \                       if (cdep[nxt] >= dep and nxt != cpar[cur]) {\n       \
-    \                         eid[nxt] = 0, csiz[nxt] = 1, cpar[nxt] = cur;\n    \
-    \                            cur = nxt;\n                                break;\n\
-    \                            }\n                        }\n                  \
-    \      if (c >= 0) break;\n                    }\n                    for (int\
-    \ v : (*this)[c]) if (cdep[v] >= dep) {\n                        if (cpar[c] ==\
-    \ v) cpar[v] = c, csiz[v] = siz - csiz[c];\n                        dq.emplace_back(v,\
-    \ dep + 1);\n                    }\n                    cpar[c] = prev_ctr, cdep[c]\
-    \ = dep, csiz[c] = siz;\n                }\n            }\n        };\n\n    \
-    \    struct CentroidDecompositionUnweighted : internal::CentroidDecomposition<void>\
+    \       const auto [r, dep] = dq.front();\n                    const int size\
+    \ = component_size[r], prev_ctr = cpar[r];\n                    dq.pop_front();\n\
+    \n                    int c = -1;\n                    eid[r] = 0, component_size[r]\
+    \ = 1, cpar[r] = -1;\n                    for (int cur = r;;) {\n            \
+    \            for (const int edge_num = int((*this)[cur].size());;) {\n       \
+    \                     if (eid[cur] == edge_num) {\n                          \
+    \      if (component_size[cur] * 2 > size) {\n                               \
+    \     c = cur;\n                                } else {\n                   \
+    \                 const int nxt = cpar[cur];\n                               \
+    \     component_size[nxt] += component_size[cur];\n                          \
+    \          cur = nxt;\n                                }\n                   \
+    \             break;\n                            }\n                        \
+    \    const int nxt = (*this)[cur][eid[cur]++];\n                            if\
+    \ (cdep[nxt] >= dep and nxt != cpar[cur]) {\n                                eid[nxt]\
+    \ = 0, component_size[nxt] = 1, cpar[nxt] = cur;\n                           \
+    \     cur = nxt;\n                                break;\n                   \
+    \         }\n                        }\n                        if (c >= 0) break;\n\
+    \                    }\n                    for (int v : (*this)[c]) if (cdep[v]\
+    \ >= dep) {\n                        if (cpar[c] == v) cpar[v] = c, component_size[v]\
+    \ = size - component_size[c];\n                        dq.emplace_back(v, dep\
+    \ + 1);\n                    }\n                    cpar[c] = prev_ctr, cdep[c]\
+    \ = dep, component_size[c] = size;\n                }\n            }\n       \
+    \ };\n\n        struct CentroidDecompositionUnweighted : internal::CentroidDecomposition<void>\
     \ {\n            using base_type = internal::CentroidDecomposition<void>;\n  \
     \          using base_type::base_type;\n\n            std::vector<std::vector<std::pair<int,\
     \ int>>> collect(int root, int root_val = 0) const {\n                std::vector<std::vector<std::pair<int,\
@@ -380,7 +384,7 @@ data:
   path: library/tree/centroid_decomposition.hpp
   requiredBy:
   - library/tree/frequency_table_of_tree_distance.hpp
-  timestamp: '2026-06-01 16:32:36+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/tree/frequency_table_of_tree_distance/frequency_table_of_tree_distance.test.cpp

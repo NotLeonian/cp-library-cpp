@@ -134,7 +134,7 @@ data:
   path: library/polynomial/lagrange_interpolation.hpp
   requiredBy:
   - library/math/sum_i^d_r^i.hpp
-  timestamp: '2023-05-11 13:37:15+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/math/sum_i^d_r^i/sum_of_exponential_times_polynomial.test.cpp

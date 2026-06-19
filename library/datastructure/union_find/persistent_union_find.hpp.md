@@ -26,17 +26,17 @@ data:
     \ = std::conditional_t<auto_extend, std::deque<U>, std::vector<U>>;\n\n      \
     \  container_type<value_type> pool;\n        container_type<value_pointer_type>\
     \ stock;\n        decltype(stock.begin()) it;\n\n        ObjectPool() : ObjectPool(0)\
-    \ {}\n        ObjectPool(int siz) : pool(siz), stock(siz) {\n            clear();\n\
+    \ {}\n        ObjectPool(int size) : pool(size), stock(size) {\n            clear();\n\
     \        }\n\n        int capacity() const { return pool.size(); }\n        int\
     \ size() const { return it - stock.begin(); }\n\n        value_pointer_type alloc()\
     \ {\n            if constexpr (auto_extend) ensure();\n            return *it++;\n\
     \        }\n\n        void free(value_pointer_type t) {\n            *--it = t;\n\
-    \        }\n\n        void clear() {\n            int siz = pool.size();\n   \
-    \         it = stock.begin();\n            for (int i = 0; i < siz; i++) stock[i]\
+    \        }\n\n        void clear() {\n            int size = pool.size();\n  \
+    \          it = stock.begin();\n            for (int i = 0; i < size; i++) stock[i]\
     \ = &pool[i];\n        }\n\n        void ensure() {\n            if (it != stock.end())\
-    \ return;\n            int siz = stock.size();\n            for (int i = siz;\
-    \ i <= siz * 2; ++i) {\n                stock.push_back(&pool.emplace_back());\n\
-    \            }\n            it = stock.begin() + siz;\n        }\n    };\n} //\
+    \ return;\n            int size = stock.size();\n            for (int i = size;\
+    \ i <= size * 2; ++i) {\n                stock.push_back(&pool.emplace_back());\n\
+    \            }\n            it = stock.begin() + size;\n        }\n    };\n} //\
     \ namespace suisen\n\n\n#line 6 \"library/datastructure/persistent_array.hpp\"\
     \n\nnamespace suisen {\n    template <typename T, int lg_ary = 4>\n    struct\
     \ PersistentArray {\n        struct Node;\n        using node_type = Node;\n \
@@ -104,7 +104,7 @@ data:
     \     while (true) {\n                if (int r = _dat.get(x); r >= 0) buf.push_back(std::exchange(x,\
     \ r));\n                else break;\n            }\n            while (buf.size())\
     \ _dat.mut_set(buf.back(), x), buf.pop_back();\n            return x;\n      \
-    \  }\n        // Get the root of `x`. euivalent to `root(x)`\n        int operator[](int\
+    \  }\n        // Get the root of `x`. equivalent to `root(x)`\n        int operator[](int\
     \ x) {\n            return root(x);\n        }\n        // Merge two vertices\
     \ `x` and `y`.\n        std::pair<PersistentUnionFind, bool> merge(int x, int\
     \ y) {\n            x = root(x), y = root(y);\n            if (x == y) return\
@@ -114,7 +114,7 @@ data:
     \  new_dat = new_dat.set(y, x);\n            return { PersistentUnionFind(new_dat),\
     \ true };\n        }\n        // Check if `x` and `y` belongs to the same connected\
     \ component.\n        bool same(int x, int y) {\n            return root(x) ==\
-    \ root(y);\n        }\n        // Get the size of connected componet to which\
+    \ root(y);\n        }\n        // Get the size of connected component to which\
     \ `x` belongs.\n        int size(int x) {\n            return -_dat.get(root(x));\n\
     \        }\n        // Get all of connected components.\n        std::vector<std::vector<int>>\
     \ groups() {\n            std::vector<std::vector<int>> res(_n);\n           \
@@ -135,7 +135,7 @@ data:
     \     while (true) {\n                if (int r = _dat.get(x); r >= 0) buf.push_back(std::exchange(x,\
     \ r));\n                else break;\n            }\n            while (buf.size())\
     \ _dat.mut_set(buf.back(), x), buf.pop_back();\n            return x;\n      \
-    \  }\n        // Get the root of `x`. euivalent to `root(x)`\n        int operator[](int\
+    \  }\n        // Get the root of `x`. equivalent to `root(x)`\n        int operator[](int\
     \ x) {\n            return root(x);\n        }\n        // Merge two vertices\
     \ `x` and `y`.\n        std::pair<PersistentUnionFind, bool> merge(int x, int\
     \ y) {\n            x = root(x), y = root(y);\n            if (x == y) return\
@@ -145,7 +145,7 @@ data:
     \  new_dat = new_dat.set(y, x);\n            return { PersistentUnionFind(new_dat),\
     \ true };\n        }\n        // Check if `x` and `y` belongs to the same connected\
     \ component.\n        bool same(int x, int y) {\n            return root(x) ==\
-    \ root(y);\n        }\n        // Get the size of connected componet to which\
+    \ root(y);\n        }\n        // Get the size of connected component to which\
     \ `x` belongs.\n        int size(int x) {\n            return -_dat.get(root(x));\n\
     \        }\n        // Get all of connected components.\n        std::vector<std::vector<int>>\
     \ groups() {\n            std::vector<std::vector<int>> res(_n);\n           \
@@ -161,7 +161,7 @@ data:
   isVerificationFile: false
   path: library/datastructure/union_find/persistent_union_find.hpp
   requiredBy: []
-  timestamp: '2023-07-09 04:04:16+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/datastructure/union_find/persistent_union_find/persistent_unionfind.test.cpp

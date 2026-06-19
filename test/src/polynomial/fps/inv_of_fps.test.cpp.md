@@ -73,7 +73,7 @@ data:
     \ <typename T> static constexpr bool is_readable_v = is_readable<T>::value;\n\
     } // namespace suisen\n\n#line 11 \"library/polynomial/fps_naive.hpp\"\n\n#line\
     \ 1 \"library/math/modint_extension.hpp\"\n\n\n\n#line 5 \"library/math/modint_extension.hpp\"\
-    \n#include <optional>\n\n/**\n * refernce: https://37zigen.com/tonelli-shanks-algorithm/\n\
+    \n#include <optional>\n\n/**\n * reference: https://37zigen.com/tonelli-shanks-algorithm/\n\
     \ * calculates x s.t. x^2 = a mod p in O((log p)^2).\n */\ntemplate <typename\
     \ mint>\nstd::optional<mint> safe_sqrt(mint a) {\n    static int p = mint::mod();\n\
     \    if (a == 0) return std::make_optional(0);\n    if (p == 2) return std::make_optional(a);\n\
@@ -402,81 +402,81 @@ data:
     \ v);\n            if (int(res.size()) > max_size) return std::nullopt;\n    \
     \        return res;\n        }\n\n    protected:\n        static convolution_t<mint>\
     \ mult;\n\n        static FPS div_fps_sparse(const FPS& f, const std::vector<std::pair<int,\
-    \ value_type>>& g, int n) {\n            const int siz = g.size();\n         \
-    \   assert(siz and g[0].first == 0);\n            const value_type inv_g0 = g[0].second.inv();\n\
-    \            FPS h(n);\n            for (int i = 0; i < n; ++i) {\n          \
-    \      value_type v = f.safe_get(i);\n                for (int idx = 1; idx <\
-    \ siz; ++idx) {\n                    const auto& [j, gj] = g[idx];\n         \
-    \           if (j > i) break;\n                    v -= gj * h[i - j];\n     \
-    \           }\n                h[i] = v * inv_g0;\n            }\n           \
-    \ return h;\n        }\n        static FPS inv_sparse(const std::vector<std::pair<int,\
+    \ value_type>>& g, int n) {\n            const int size = g.size();\n        \
+    \    assert(size and g[0].first == 0);\n            const value_type inv_g0 =\
+    \ g[0].second.inv();\n            FPS h(n);\n            for (int i = 0; i < n;\
+    \ ++i) {\n                value_type v = f.safe_get(i);\n                for (int\
+    \ idx = 1; idx < size; ++idx) {\n                    const auto& [j, gj] = g[idx];\n\
+    \                    if (j > i) break;\n                    v -= gj * h[i - j];\n\
+    \                }\n                h[i] = v * inv_g0;\n            }\n      \
+    \      return h;\n        }\n        static FPS inv_sparse(const std::vector<std::pair<int,\
     \ value_type>>& g, const int n) {\n            return div_fps_sparse(FPS{ 1 },\
     \ g, n);\n        }\n        static FPS exp_sparse(const std::vector<std::pair<int,\
-    \ value_type>>& f, const int n) {\n            const int siz = f.size();\n   \
-    \         assert(not siz or f[0].first != 0);\n            FPS g(n);\n       \
-    \     g[0] = 1;\n            inv_mods<value_type> invs(n);\n            for (int\
-    \ i = 1; i < n; ++i) {\n                value_type v = 0;\n                for\
-    \ (const auto& [j, fj] : f) {\n                    if (j > i) break;\n       \
-    \             v += j * fj * g[i - j];\n                }\n                v *=\
-    \ invs[i];\n                g[i] = v;\n            }\n            return g;\n\
-    \        }\n        static FPS log_sparse(const std::vector<std::pair<int, value_type>>&\
-    \ f, const int n) {\n            const int siz = f.size();\n            assert(siz\
-    \ and f[0].first == 0 and f[0].second == 1);\n            FPS g(n);\n        \
-    \    for (int idx = 1; idx < siz; ++idx) {\n                const auto& [j, fj]\
-    \ = f[idx];\n                if (j >= n) break;\n                g[j] = j * fj;\n\
-    \            }\n            inv_mods<value_type> invs(n);\n            for (int\
-    \ i = 1; i < n; ++i) {\n                value_type v = g[i];\n               \
-    \ for (int idx = 1; idx < siz; ++idx) {\n                    const auto& [j, fj]\
-    \ = f[idx];\n                    if (j > i) break;\n                    v -= fj\
-    \ * g[i - j] * (i - j);\n                }\n                v *= invs[i];\n  \
-    \              g[i] = v;\n            }\n            return g;\n        }\n  \
-    \      static FPS pow_sparse(const std::vector<std::pair<int, value_type>>& f,\
-    \ const long long k, const int n) {\n            if (k == 0) {\n             \
-    \   FPS res(n, 0);\n                res[0] = 1;\n                return res;\n\
-    \            }\n            const int siz = f.size();\n            if (not siz)\
+    \ value_type>>& f, const int n) {\n            const int size = f.size();\n  \
+    \          assert(not size or f[0].first != 0);\n            FPS g(n);\n     \
+    \       g[0] = 1;\n            inv_mods<value_type> invs(n);\n            for\
+    \ (int i = 1; i < n; ++i) {\n                value_type v = 0;\n             \
+    \   for (const auto& [j, fj] : f) {\n                    if (j > i) break;\n \
+    \                   v += j * fj * g[i - j];\n                }\n             \
+    \   v *= invs[i];\n                g[i] = v;\n            }\n            return\
+    \ g;\n        }\n        static FPS log_sparse(const std::vector<std::pair<int,\
+    \ value_type>>& f, const int n) {\n            const int size = f.size();\n  \
+    \          assert(size and f[0].first == 0 and f[0].second == 1);\n          \
+    \  FPS g(n);\n            for (int idx = 1; idx < size; ++idx) {\n           \
+    \     const auto& [j, fj] = f[idx];\n                if (j >= n) break;\n    \
+    \            g[j] = j * fj;\n            }\n            inv_mods<value_type> invs(n);\n\
+    \            for (int i = 1; i < n; ++i) {\n                value_type v = g[i];\n\
+    \                for (int idx = 1; idx < size; ++idx) {\n                    const\
+    \ auto& [j, fj] = f[idx];\n                    if (j > i) break;\n           \
+    \         v -= fj * g[i - j] * (i - j);\n                }\n                v\
+    \ *= invs[i];\n                g[i] = v;\n            }\n            return g;\n\
+    \        }\n        static FPS pow_sparse(const std::vector<std::pair<int, value_type>>&\
+    \ f, const long long k, const int n) {\n            if (k == 0) {\n          \
+    \      FPS res(n, 0);\n                res[0] = 1;\n                return res;\n\
+    \            }\n            const int size = f.size();\n            if (not size)\
     \ return FPS(n, 0);\n            const int p = f[0].first;\n            if (p\
     \ > (n - 1) / k) return FPS(n, 0);\n            const value_type inv_f0 = f[0].second.inv();\n\
     \            const int lz = p * k;\n            FPS g(n);\n            g[lz] =\
     \ f[0].second.pow(k);\n            inv_mods<value_type> invs(n);\n           \
     \ for (int i = 1; lz + i < n; ++i) {\n                value_type v = 0;\n    \
-    \            for (int idx = 1; idx < siz; ++idx) {\n                    auto [j,\
-    \ fj] = f[idx];\n                    j -= p;\n                    if (j > i) break;\n\
-    \                    v += fj * g[lz + i - j] * (value_type(k) * j - (i - j));\n\
-    \                }\n                v *= invs[i] * inv_f0;\n                g[lz\
-    \ + i] = v;\n            }\n            return g;\n        }\n        static std::optional<FPS>\
-    \ safe_sqrt_sparse(const std::vector<std::pair<int, value_type>>& f, const int\
-    \ n) {\n            const int siz = f.size();\n            if (not siz) return\
-    \ FPS(n, 0);\n            const int p = f[0].first;\n            if (p % 2 ==\
-    \ 1) return std::nullopt;\n            if (p / 2 >= n) return FPS(n, 0);\n   \
-    \         const value_type inv_f0 = f[0].second.inv();\n            const int\
-    \ lz = p / 2;\n            FPS g(n);\n            auto opt_g0 = ::safe_sqrt(f[0].second);\n\
-    \            if (not opt_g0.has_value()) return std::nullopt;\n            g[lz]\
-    \ = *opt_g0;\n            value_type k = mint(2).inv();\n            inv_mods<value_type>\
-    \ invs(n);\n            for (int i = 1; lz + i < n; ++i) {\n                value_type\
-    \ v = 0;\n                for (int idx = 1; idx < siz; ++idx) {\n            \
-    \        auto [j, fj] = f[idx];\n                    j -= p;\n               \
-    \     if (j > i) break;\n                    v += fj * g[lz + i - j] * (k * j\
+    \            for (int idx = 1; idx < size; ++idx) {\n                    auto\
+    \ [j, fj] = f[idx];\n                    j -= p;\n                    if (j >\
+    \ i) break;\n                    v += fj * g[lz + i - j] * (value_type(k) * j\
     \ - (i - j));\n                }\n                v *= invs[i] * inv_f0;\n   \
     \             g[lz + i] = v;\n            }\n            return g;\n        }\n\
-    \        static FPS sqrt_sparse(const std::vector<std::pair<int, value_type>>&\
-    \ f, const int n) {\n            return *safe_sqrt(f, n);\n        }\n    };\n\
-    \n    template <typename mint>\n    convolution_t<mint> FPS<mint>::mult = [](const\
-    \ auto&, const auto&) {\n        std::cerr << \"convolution function is not available.\"\
-    \ << std::endl;\n        assert(false);\n        return std::vector<mint>{};\n\
-    \    };\n\n} // namespace suisen\n\ntemplate <typename mint>\nsuisen::FPS<mint>\
-    \ sqrt(suisen::FPS<mint> a) {\n    return a.sqrt();\n}\ntemplate <typename mint>\n\
-    suisen::FPS<mint> log(suisen::FPS<mint> a) {\n    return a.log();\n}\ntemplate\
-    \ <typename mint>\nsuisen::FPS<mint> exp(suisen::FPS<mint> a) {\n    return a.exp();\n\
-    }\ntemplate <typename mint, typename T>\nsuisen::FPS<mint> pow(suisen::FPS<mint>\
-    \ a, T b) {\n    return a.pow(b);\n}\ntemplate <typename mint>\nsuisen::FPS<mint>\
-    \ inv(suisen::FPS<mint> a) {\n    return a.inv();\n}\n\n\n#line 10 \"test/src/polynomial/fps/inv_of_fps.test.cpp\"\
-    \n\nusing mint = atcoder::modint998244353;\n\nint main() {\n    suisen::FPS<mint>::set_multiplication([](const\
-    \ auto &a, const auto &b) { return atcoder::convolution(a, b); });\n\n    int\
-    \ n;\n    std::cin >> n;\n    suisen::FPS<mint> f(n);\n    for (int i = 0; i <\
-    \ n; ++i) {\n        int coef;\n        std::cin >> coef;\n        f[i] = coef;\n\
-    \    }\n    auto inv_f = f.inv();\n    for (int i = 0; i < n; ++i) {\n       \
-    \ std::cout << inv_f[i].val() << \" \\n\"[i == n - 1];\n    }\n    return 0;\n\
-    }\n"
+    \        static std::optional<FPS> safe_sqrt_sparse(const std::vector<std::pair<int,\
+    \ value_type>>& f, const int n) {\n            const int size = f.size();\n  \
+    \          if (not size) return FPS(n, 0);\n            const int p = f[0].first;\n\
+    \            if (p % 2 == 1) return std::nullopt;\n            if (p / 2 >= n)\
+    \ return FPS(n, 0);\n            const value_type inv_f0 = f[0].second.inv();\n\
+    \            const int lz = p / 2;\n            FPS g(n);\n            auto opt_g0\
+    \ = ::safe_sqrt(f[0].second);\n            if (not opt_g0.has_value()) return\
+    \ std::nullopt;\n            g[lz] = *opt_g0;\n            value_type k = mint(2).inv();\n\
+    \            inv_mods<value_type> invs(n);\n            for (int i = 1; lz + i\
+    \ < n; ++i) {\n                value_type v = 0;\n                for (int idx\
+    \ = 1; idx < size; ++idx) {\n                    auto [j, fj] = f[idx];\n    \
+    \                j -= p;\n                    if (j > i) break;\n            \
+    \        v += fj * g[lz + i - j] * (k * j - (i - j));\n                }\n   \
+    \             v *= invs[i] * inv_f0;\n                g[lz + i] = v;\n       \
+    \     }\n            return g;\n        }\n        static FPS sqrt_sparse(const\
+    \ std::vector<std::pair<int, value_type>>& f, const int n) {\n            return\
+    \ *safe_sqrt(f, n);\n        }\n    };\n\n    template <typename mint>\n    convolution_t<mint>\
+    \ FPS<mint>::mult = [](const auto&, const auto&) {\n        std::cerr << \"convolution\
+    \ function is not available.\" << std::endl;\n        assert(false);\n       \
+    \ return std::vector<mint>{};\n    };\n\n} // namespace suisen\n\ntemplate <typename\
+    \ mint>\nsuisen::FPS<mint> sqrt(suisen::FPS<mint> a) {\n    return a.sqrt();\n\
+    }\ntemplate <typename mint>\nsuisen::FPS<mint> log(suisen::FPS<mint> a) {\n  \
+    \  return a.log();\n}\ntemplate <typename mint>\nsuisen::FPS<mint> exp(suisen::FPS<mint>\
+    \ a) {\n    return a.exp();\n}\ntemplate <typename mint, typename T>\nsuisen::FPS<mint>\
+    \ pow(suisen::FPS<mint> a, T b) {\n    return a.pow(b);\n}\ntemplate <typename\
+    \ mint>\nsuisen::FPS<mint> inv(suisen::FPS<mint> a) {\n    return a.inv();\n}\n\
+    \n\n#line 10 \"test/src/polynomial/fps/inv_of_fps.test.cpp\"\n\nusing mint = atcoder::modint998244353;\n\
+    \nint main() {\n    suisen::FPS<mint>::set_multiplication([](const auto &a, const\
+    \ auto &b) { return atcoder::convolution(a, b); });\n\n    int n;\n    std::cin\
+    \ >> n;\n    suisen::FPS<mint> f(n);\n    for (int i = 0; i < n; ++i) {\n    \
+    \    int coef;\n        std::cin >> coef;\n        f[i] = coef;\n    }\n    auto\
+    \ inv_f = f.inv();\n    for (int i = 0; i < n; ++i) {\n        std::cout << inv_f[i].val()\
+    \ << \" \\n\"[i == n - 1];\n    }\n    return 0;\n}\n"
   code: "#define PROBLEM \"https://judge.yosupo.jp/problem/inv_of_formal_power_series\"\
     \n\n#include <iostream>\n#include <vector>\n\n#include <atcoder/modint>\n#include\
     \ <atcoder/convolution>\n\n#include \"library/polynomial/fps.hpp\"\n\nusing mint\
@@ -496,7 +496,7 @@ data:
   isVerificationFile: true
   path: test/src/polynomial/fps/inv_of_fps.test.cpp
   requiredBy: []
-  timestamp: '2023-09-15 20:02:25+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/polynomial/fps/inv_of_fps.test.cpp

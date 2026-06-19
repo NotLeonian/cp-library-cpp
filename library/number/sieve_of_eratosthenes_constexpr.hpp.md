@@ -50,8 +50,8 @@ data:
     \n\n#line 7 \"library/number/sieve_of_eratosthenes_constexpr.hpp\"\n\nnamespace\
     \ suisen {\n\nconstexpr unsigned int CONSTEXPR_SIMPLE_SIEVE_MAX = 1200000;\n\n\
     template <unsigned int N = CONSTEXPR_SIMPLE_SIEVE_MAX>\nclass SimpleSieveConstexpr\
-    \ {\n    private:\n        static constexpr unsigned int siz = N / internal::sieve::PROD\
-    \ + 1;\n        std::uint8_t flag[siz];\n    public:\n        static_assert(N\
+    \ {\n    private:\n        static constexpr unsigned int size = N / internal::sieve::PROD\
+    \ + 1;\n        std::uint8_t flag[size];\n    public:\n        static_assert(N\
     \ <= CONSTEXPR_SIMPLE_SIEVE_MAX, \"compile-time operation limit\");\n        constexpr\
     \ SimpleSieveConstexpr() : flag() {\n            using namespace internal::sieve;\n\
     \            flag[0] |= 1;\n            unsigned int k_max = (unsigned int) std::sqrt(N\
@@ -59,7 +59,7 @@ data:
     \               for (std::uint8_t bits = ~flag[kp]; bits; bits &= bits - 1) {\n\
     \                    const std::uint8_t mp = mask_to_index(bits & -bits), m =\
     \ RM[mp];\n                    unsigned int kr = kp * (PROD * kp + 2 * m) + m\
-    \ * m / PROD;\n                    for (std::uint8_t mq = mp; kr < siz; kr +=\
+    \ * m / PROD;\n                    for (std::uint8_t mq = mp; kr < size; kr +=\
     \ kp * DR[mq] + DF[mp][mq], ++mq &= 7) {\n                        flag[kr] |=\
     \ MASK[mp][mq];\n                    }\n                }\n            }\n   \
     \     }\n        constexpr bool is_prime(const unsigned int p) const {\n     \
@@ -124,8 +124,8 @@ data:
     \n#include <cmath>\n\n#include \"library/number/internal_eratosthenes.hpp\"\n\n\
     namespace suisen {\n\nconstexpr unsigned int CONSTEXPR_SIMPLE_SIEVE_MAX = 1200000;\n\
     \ntemplate <unsigned int N = CONSTEXPR_SIMPLE_SIEVE_MAX>\nclass SimpleSieveConstexpr\
-    \ {\n    private:\n        static constexpr unsigned int siz = N / internal::sieve::PROD\
-    \ + 1;\n        std::uint8_t flag[siz];\n    public:\n        static_assert(N\
+    \ {\n    private:\n        static constexpr unsigned int size = N / internal::sieve::PROD\
+    \ + 1;\n        std::uint8_t flag[size];\n    public:\n        static_assert(N\
     \ <= CONSTEXPR_SIMPLE_SIEVE_MAX, \"compile-time operation limit\");\n        constexpr\
     \ SimpleSieveConstexpr() : flag() {\n            using namespace internal::sieve;\n\
     \            flag[0] |= 1;\n            unsigned int k_max = (unsigned int) std::sqrt(N\
@@ -133,7 +133,7 @@ data:
     \               for (std::uint8_t bits = ~flag[kp]; bits; bits &= bits - 1) {\n\
     \                    const std::uint8_t mp = mask_to_index(bits & -bits), m =\
     \ RM[mp];\n                    unsigned int kr = kp * (PROD * kp + 2 * m) + m\
-    \ * m / PROD;\n                    for (std::uint8_t mq = mp; kr < siz; kr +=\
+    \ * m / PROD;\n                    for (std::uint8_t mq = mp; kr < size; kr +=\
     \ kp * DR[mq] + DF[mp][mq], ++mq &= 7) {\n                        flag[kr] |=\
     \ MASK[mp][mq];\n                    }\n                }\n            }\n   \
     \     }\n        constexpr bool is_prime(const unsigned int p) const {\n     \
@@ -199,7 +199,7 @@ data:
   isVerificationFile: false
   path: library/number/sieve_of_eratosthenes_constexpr.hpp
   requiredBy: []
-  timestamp: '2021-07-22 14:46:39+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/number/sieve_of_eratosthenes_constexpr/next_prime.test.cpp

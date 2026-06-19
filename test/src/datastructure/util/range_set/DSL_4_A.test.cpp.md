@@ -153,9 +153,9 @@ data:
     };\n\n} // namespace suisen\n\n\n#line 1 \"library/datastructure/util/range_set.hpp\"\
     \n\n\n\n#include <map>\n\nnamespace suisen {\n\ntemplate <typename T, bool merge_adjacent_segment\
     \ = true>\nstruct RangeSet : public std::map<T, T> {\n    public:\n        RangeSet()\
-    \ : _size(0) {}\n\n        // returns the number of intergers in this set (not\
+    \ : _size(0) {}\n\n        // returns the number of integers in this set (not\
     \ the number of ranges). O(1)\n        T size() const { return number_of_elements();\
-    \ }\n        // returns the number of intergers in this set (not the number of\
+    \ }\n        // returns the number of integers in this set (not the number of\
     \ ranges). O(1)\n        T number_of_elements() const { return _size; }\n    \
     \    // returns the number of ranges in this set (not the number of integers).\
     \ O(1)\n        int number_of_ranges() const { return std::map<T, T>::size();\
@@ -184,9 +184,9 @@ data:
     \         inserted -= cr - cl + 1;\n            }\n            inserted += r -\
     \ l + 1;\n            (*this)[l] = r;\n            _size += inserted;\n      \
     \      return inserted;\n        }\n\n        // erases the range [x, x] and returns\
-    \ the number of intergers erased from this set. O(log N)\n        T erase(T x)\
+    \ the number of integers erased from this set. O(log N)\n        T erase(T x)\
     \ {\n            return erase(x, x);\n        }\n\n        // erases the range\
-    \ [l, r] and returns the number of intergers erased from this set. amortized O(log\
+    \ [l, r] and returns the number of integers erased from this set. amortized O(log\
     \ N)\n        T erase(T l, T r) {\n            if (l > r) return 0;\n        \
     \    T tl = l, tr = r;\n            auto it = this->upper_bound(l);\n        \
     \    if (it != this->begin() and l <= std::prev(it)->second) {\n             \
@@ -219,8 +219,8 @@ data:
     \   for (const auto &[xl, yl, xr, yr] : rectangles) {\n        int cyl = comp_y[yl],\
     \ cyr = comp_y[yr];\n        for (int i = cyl; i < cyr; ++i) {\n            sets[i].insert(xl,\
     \ xr - 1);\n        }\n    }\n    long long ans = 0;\n    for (int i = 0; i <\
-    \ m - 1; ++i) {\n        long long hight = comp_y.decomp(i + 1) -comp_y.decomp(i);\n\
-    \        ans += hight * sets[i].size();\n    }\n    std::cout << ans << std::endl;\n\
+    \ m - 1; ++i) {\n        long long height = comp_y.decomp(i + 1) -comp_y.decomp(i);\n\
+    \        ans += height * sets[i].size();\n    }\n    std::cout << ans << std::endl;\n\
     \    return 0;\n}\n"
   code: "#define PROBLEM \"https://onlinejudge.u-aizu.ac.jp/problems/DSL_4_A\"\n\n\
     #include <iostream>\n#include <tuple>\n\n#include \"library/util/coordinate_compressor.hpp\"\
@@ -235,8 +235,8 @@ data:
     \ long>> sets(m);\n    for (const auto &[xl, yl, xr, yr] : rectangles) {\n   \
     \     int cyl = comp_y[yl], cyr = comp_y[yr];\n        for (int i = cyl; i < cyr;\
     \ ++i) {\n            sets[i].insert(xl, xr - 1);\n        }\n    }\n    long\
-    \ long ans = 0;\n    for (int i = 0; i < m - 1; ++i) {\n        long long hight\
-    \ = comp_y.decomp(i + 1) -comp_y.decomp(i);\n        ans += hight * sets[i].size();\n\
+    \ long ans = 0;\n    for (int i = 0; i < m - 1; ++i) {\n        long long height\
+    \ = comp_y.decomp(i + 1) -comp_y.decomp(i);\n        ans += height * sets[i].size();\n\
     \    }\n    std::cout << ans << std::endl;\n    return 0;\n}"
   dependsOn:
   - library/util/coordinate_compressor.hpp
@@ -245,7 +245,7 @@ data:
   isVerificationFile: true
   path: test/src/datastructure/util/range_set/DSL_4_A.test.cpp
   requiredBy: []
-  timestamp: '2023-09-15 20:02:25+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/datastructure/util/range_set/DSL_4_A.test.cpp

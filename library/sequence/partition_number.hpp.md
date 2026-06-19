@@ -23,7 +23,7 @@ data:
     \ (i & 1) --inv[k];\n            else ++inv[k];\n        }\n        inv.inv_inplace(n\
     \ + 1), inv.resize(n + 1);\n        return inv;\n    }\n} // namespace suisen\n\
     \n\n"
-  code: "#ifndef SUISEN_PARTITON_NUMBER\n#define SUISEN_PARTITON_NUMBER\n\n#include\
+  code: "#ifndef SUISEN_PARTITION_NUMBER\n#define SUISEN_PARTITION_NUMBER\n\n#include\
     \ <vector>\n\nnamespace suisen {\n    template <typename FPSType>\n    std::vector<typename\
     \ FPSType::value_type> partition_number(int n) {\n        FPSType inv(n + 1);\n\
     \        inv[0] = 1;\n        for (int i = 1, k = 1; k <= n; k += 3 * i + 1, i++)\
@@ -31,12 +31,12 @@ data:
     \        for (int i = 1, k = 2; k <= n; k += 3 * i + 2, i++) {\n            if\
     \ (i & 1) --inv[k];\n            else ++inv[k];\n        }\n        inv.inv_inplace(n\
     \ + 1), inv.resize(n + 1);\n        return inv;\n    }\n} // namespace suisen\n\
-    \n#endif // SUISEN_PARTITON_NUMBER\n"
+    \n#endif // SUISEN_PARTITION_NUMBER\n"
   dependsOn: []
   isVerificationFile: false
   path: library/sequence/partition_number.hpp
   requiredBy: []
-  timestamp: '2022-07-21 04:00:33+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/sequence/partition_number/partition_function.test.cpp

@@ -43,7 +43,7 @@ data:
     \n\n#include <iostream>\n#include <atcoder/modint>\n\n#line 1 \"library/math/sum_i^d_r^i.hpp\"\
     \n\n\n\n#line 1 \"library/sequence/powers.hpp\"\n\n\n\n#include <cstdint>\n#line\
     \ 1 \"library/number/linear_sieve.hpp\"\n\n\n\n#include <cassert>\n#include <numeric>\n\
-    #include <vector>\n\nnamespace suisen {\n// referece: https://37zigen.com/linear-sieve/\n\
+    #include <vector>\n\nnamespace suisen {\n// reference: https://37zigen.com/linear-sieve/\n\
     class LinearSieve {\n    public:\n        LinearSieve(const int n) : _n(n), min_prime_factor(std::vector<int>(n\
     \ + 1)) {\n            std::iota(min_prime_factor.begin(), min_prime_factor.end(),\
     \ 0);\n            prime_list.reserve(_n / 20);\n            for (int d = 2; d\
@@ -275,7 +275,7 @@ data:
   isVerificationFile: true
   path: test/src/math/sum_i^d_r^i/sum_of_exponential_times_polynomial.test.cpp
   requiredBy: []
-  timestamp: '2026-06-14 12:42:12+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/math/sum_i^d_r^i/sum_of_exponential_times_polynomial.test.cpp

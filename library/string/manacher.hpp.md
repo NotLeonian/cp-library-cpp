@@ -21,8 +21,8 @@ data:
     \ odd_length(int i) const { return _r[2 * i + 1]; }\n        int even_length(int\
     \ i) const { return _r[2 * i]; }\n    private:\n        int _n;\n        std::vector<int>\
     \ _r;\n\n        template <typename T>\n        void build(const std::vector<T>&\
-    \ v) {\n            for (int i = 0, j = 0, siz = v.size(); i < siz;) {\n     \
-    \           while (i - j >= 0 and i + j < siz and v[i - j] == v[i + j]) ++j;\n\
+    \ v) {\n            for (int i = 0, j = 0, size = v.size(); i < size;) {\n   \
+    \             while (i - j >= 0 and i + j < size and v[i - j] == v[i + j]) ++j;\n\
     \                _r[i] = j;\n                int k = 1;\n                while\
     \ (i - k >= 0 and k + _r[i - k] < j) _r[i + k] = _r[i - k], ++k;\n           \
     \     i += k, j -= k;\n            }\n            for (int& r : _r) --r;\n   \
@@ -37,8 +37,8 @@ data:
     \ odd_length(int i) const { return _r[2 * i + 1]; }\n        int even_length(int\
     \ i) const { return _r[2 * i]; }\n    private:\n        int _n;\n        std::vector<int>\
     \ _r;\n\n        template <typename T>\n        void build(const std::vector<T>&\
-    \ v) {\n            for (int i = 0, j = 0, siz = v.size(); i < siz;) {\n     \
-    \           while (i - j >= 0 and i + j < siz and v[i - j] == v[i + j]) ++j;\n\
+    \ v) {\n            for (int i = 0, j = 0, size = v.size(); i < size;) {\n   \
+    \             while (i - j >= 0 and i + j < size and v[i - j] == v[i + j]) ++j;\n\
     \                _r[i] = j;\n                int k = 1;\n                while\
     \ (i - k >= 0 and k + _r[i - k] < j) _r[i + k] = _r[i - k], ++k;\n           \
     \     i += k, j -= k;\n            }\n            for (int& r : _r) --r;\n   \
@@ -47,7 +47,7 @@ data:
   isVerificationFile: false
   path: library/string/manacher.hpp
   requiredBy: []
-  timestamp: '2023-07-09 04:04:16+09:00'
+  timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/string/manacher/enumerate_palindromes.test.cpp

@@ -667,8 +667,11 @@ data:
       path: library/math/factorial.hpp
       title: "\u968E\u4E57\u30C6\u30FC\u30D6\u30EB"
     - icon: ':warning:'
+      path: library/math/factorial_embedded.hpp
+      title: Factorial Embedded
+    - icon: ':warning:'
       path: library/math/factorial_embeded.hpp
-      title: Factorial Embeded
+      title: library/math/factorial_embeded.hpp
     - icon: ':heavy_check_mark:'
       path: library/math/factorial_large.hpp
       title: Factorial Large
@@ -766,8 +769,11 @@ data:
       path: library/number/modint_2^61m1.hpp
       title: Modint 2^61m1
     - icon: ':heavy_check_mark:'
+      path: library/number/montgomery.hpp
+      title: Montgomery
+    - icon: ':warning:'
       path: library/number/montogomery.hpp
-      title: Montogomery
+      title: library/number/montogomery.hpp
     - icon: ':heavy_check_mark:'
       path: library/number/order_Z_mZ.hpp
       title: Order of $x \in (\mathbb{Z}/m\mathbb{Z}) ^ \ast$
@@ -910,6 +916,9 @@ data:
     - icon: ':heavy_check_mark:'
       path: library/sequence/binomial_coefficient.hpp
       title: Binomial Coefficient
+    - icon: ':warning:'
+      path: library/sequence/binomial_coefficient_enumeration.hpp
+      title: Binomial Coefficient Enumeration
     - icon: ':heavy_check_mark:'
       path: library/sequence/binomial_coefficient_small_prime_mod.hpp
       title: Binomial Coefficient Small Prime Mod
@@ -918,7 +927,7 @@ data:
       title: Binomial Coefficient Small R Offline
     - icon: ':warning:'
       path: library/sequence/binomial_coefficitnt_enumeration.hpp
-      title: Binomial Coefficitnt Enumeration
+      title: library/sequence/binomial_coefficitnt_enumeration.hpp
     - icon: ':heavy_check_mark:'
       path: library/sequence/eulerian_number.hpp
       title: Eulerian Number
