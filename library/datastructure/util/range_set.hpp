@@ -10,9 +10,9 @@ struct RangeSet : public std::map<T, T> {
     public:
         RangeSet() : _size(0) {}
 
-        // returns the number of intergers in this set (not the number of ranges). O(1)
+        // returns the number of integers in this set (not the number of ranges). O(1)
         T size() const { return number_of_elements(); }
-        // returns the number of intergers in this set (not the number of ranges). O(1)
+        // returns the number of integers in this set (not the number of ranges). O(1)
         T number_of_elements() const { return _size; }
         // returns the number of ranges in this set (not the number of integers). O(1)
         int number_of_ranges() const { return std::map<T, T>::size(); }
@@ -64,12 +64,12 @@ struct RangeSet : public std::map<T, T> {
             return inserted;
         }
 
-        // erases the range [x, x] and returns the number of intergers erased from this set. O(log N)
+        // erases the range [x, x] and returns the number of integers erased from this set. O(log N)
         T erase(T x) {
             return erase(x, x);
         }
 
-        // erases the range [l, r] and returns the number of intergers erased from this set. amortized O(log N)
+        // erases the range [l, r] and returns the number of integers erased from this set. amortized O(log N)
         T erase(T l, T r) {
             if (l > r) return 0;
             T tl = l, tr = r;

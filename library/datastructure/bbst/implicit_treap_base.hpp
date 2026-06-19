@@ -132,8 +132,8 @@ namespace suisen::internal::implicit_treap {
 
             auto rec = [&](auto rec, size_t heap_index, size_t dat_index_offset) -> std::pair<size_t, node_pointer> {
                 if (heap_index >= n) return { 0, null };
-                auto [lsiz, lch] = rec(rec, 2 * heap_index + 1, dat_index_offset);
-                dat_index_offset += lsiz;
+                auto [left_size, lch] = rec(rec, 2 * heap_index + 1, dat_index_offset);
+                dat_index_offset += left_size;
                 node_pointer root = create_node(std::move(dat[dat_index_offset]));
                 nodes[dat_index_offset] = root;
                 set_priority(root, priorities[heap_index]);
@@ -141,10 +141,10 @@ namespace suisen::internal::implicit_treap {
                     link(nodes[dat_index_offset - 1], root);
                 }
                 dat_index_offset += 1;
-                auto [rsiz, rch] = rec(rec, 2 * heap_index + 2, dat_index_offset);
+                auto [right_size, rch] = rec(rec, 2 * heap_index + 2, dat_index_offset);
                 set_child0(root, lch);
                 set_child1(root, rch);
-                return { lsiz + 1 + rsiz, node_type::update(root) };
+                return { left_size + 1 + right_size, node_type::update(root) };
             };
             return rec(rec, 0, 0).second;
         }
@@ -156,10 +156,10 @@ namespace suisen::internal::implicit_treap {
             static std::vector<node_pointer> lp{}, rp{};
 
             while (true) {
-                if (const size_type lsiz = safe_size(child0(t)); k <= lsiz) {
+                if (const size_type left_size = safe_size(child0(t)); k <= left_size) {
                     if (rp.size()) set_child0(rp.back(), t);
                     rp.push_back(t);
-                    if (k == lsiz) {
+                    if (k == left_size) {
                         if (lp.size()) set_child1(lp.back(), child0(t));
 
                         node_pointer lt = set_child0(t, null), rt = null;
@@ -174,7 +174,7 @@ namespace suisen::internal::implicit_treap {
                     if (lp.size()) set_child1(lp.back(), t);
                     lp.push_back(t);
                     t = child1(t);
-                    k -= lsiz + 1;
+                    k -= left_size + 1;
                 }
             }
         }
@@ -235,15 +235,15 @@ namespace suisen::internal::implicit_treap {
                     }
                     return t;
                 } else {
-                    if (const size_type lsiz = safe_size(child0(t)); k <= lsiz) {
-                        if (k == lsiz) link(new_node, t);
+                    if (const size_type left_size = safe_size(child0(t)); k <= left_size) {
+                        if (k == left_size) link(new_node, t);
                         st.push_back(t), b = false;
                         t = child0(t);
                     } else {
-                        if (k == lsiz + 1) link(t, new_node);
+                        if (k == left_size + 1) link(t, new_node);
                         st.push_back(t), b = true;
                         t = child1(t);
-                        k -= lsiz + 1;
+                        k -= left_size + 1;
                     }
                 }
             }
@@ -254,18 +254,18 @@ namespace suisen::internal::implicit_treap {
         }
 
         static std::pair<node_pointer, value_type> erase(node_pointer t, size_type k) {
-            if (const size_type lsiz = safe_size(child0(t)); k == lsiz) {
+            if (const size_type left_size = safe_size(child0(t)); k == left_size) {
                 delete_node(t);
                 return { merge(child0(t), child1(t)), std::move(value(t)) };
-            } else if (k < lsiz) {
+            } else if (k < left_size) {
                 auto [c0, v] = erase(child0(t), k);
                 set_child0(t, c0);
-                if (is_not_null(c0) and k == lsiz - 1) link(max(c0), t);
+                if (is_not_null(c0) and k == left_size - 1) link(max(c0), t);
                 return { node_type::update(t), std::move(v) };
             } else {
-                auto [c1, v] = erase(child1(t), k - (lsiz + 1));
+                auto [c1, v] = erase(child1(t), k - (left_size + 1));
                 set_child1(t, c1);
-                if (is_not_null(c1) and k == lsiz + 1) link(t, min(c1));
+                if (is_not_null(c1) and k == left_size + 1) link(t, min(c1));
                 return { node_type::update(t), std::move(v) };
             }
         }
@@ -281,13 +281,13 @@ namespace suisen::internal::implicit_treap {
 
         template <typename Func>
         static node_pointer set_update(node_pointer t, size_type k, const Func& f) {
-            if (const size_type lsiz = safe_size(child0(t)); k == lsiz) {
+            if (const size_type left_size = safe_size(child0(t)); k == left_size) {
                 value_type& val = value(t);
                 val = f(const_cast<const value_type&>(val));
-            } else if (k < lsiz) {
+            } else if (k < left_size) {
                 set_child0(t, set_update(child0(t), k, f));
             } else {
-                set_child1(t, set_update(child1(t), k - (lsiz + 1), f));
+                set_child1(t, set_update(child1(t), k - (left_size + 1), f));
             }
             return node_type::update(t);
         }
@@ -327,13 +327,13 @@ namespace suisen::internal::implicit_treap {
                 if (is_null(_cur) and _index != safe_size(_root)) {
                     _cur = _root;
                     for (size_type k = _index;;) {
-                        if (size_type siz = safe_size(child(_cur, reversed)); k == siz) {
+                        if (size_type size = safe_size(child(_cur, reversed)); k == size) {
                             break;
-                        } else if (k < siz) {
+                        } else if (k < size) {
                             _cur = child(_cur, reversed);
                         } else {
                             _cur = child(_cur, not reversed);
-                            k -= siz + 1;
+                            k -= size + 1;
                         }
                     }
                 }

@@ -2,6 +2,7 @@
 #define SUISEN_SPARSE_SEGTREE
 
 #include <cassert>
+#include <cstdint>
 #include <vector>
 
 namespace suisen {
@@ -39,8 +40,8 @@ namespace suisen {
         SparseSegmentTree() : SparseSegmentTree(0) {}
         explicit SparseSegmentTree(IndexType n) : n(n), root(new_node(init(0, n))) {}
 
-        static void reserve(int siz) {
-            pool.reserve(siz);
+        static void reserve(int size) {
+            pool.reserve(size);
         }
 
         value_type get(index_type i) const {

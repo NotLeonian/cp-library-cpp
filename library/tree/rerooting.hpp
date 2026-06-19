@@ -121,15 +121,15 @@ namespace suisen {
                         return v == p ? sum_p : dp[v];
                     };
 
-                    const int siz = g[u].size();
-                    std::vector<DP> sum_r(siz + 1, e());
-                    for (int i = siz - 1; i >= 0; --i) {
+                    const int size = g[u].size();
+                    std::vector<DP> sum_r(size + 1, e());
+                    for (int i = size - 1; i >= 0; --i) {
                         const auto& [v, w] = g[u][i];
                         sum_r[i] = op(sum_r[i + 1], add_subtree_root_(get_sum(v), _w[v], w));
                     }
 
                     DP sum_l = e();
-                    for (int i = 0; i < siz; ++i) {
+                    for (int i = 0; i < size; ++i) {
                         const auto& [v, w] = g[u][i];
                         DP nxt_sum_l = op(sum_l, add_subtree_root_(get_sum(v), _w[v], w));
                         if (v != p) {

@@ -97,13 +97,13 @@ namespace suisen {
             }
 
             template <typename Func>
-            static auto update_leaf(node_pointer_type node, int siz, int i, Func &&f) {
+            static auto update_leaf(node_pointer_type node, int size, int i, Func &&f) {
                 static std::vector<node_pointer_type> path;
 
                 node_pointer_type res = clone(node);
                 node_pointer_type cur = res;
 
-                for (int l = 0, r = siz; r - l > 1;) {
+                for (int l = 0, r = size; r - l > 1;) {
                     path.push_back(cur);
                     push</*do_clone = */false>(cur);
                     int m = (l + r) >> 1;
@@ -120,10 +120,10 @@ namespace suisen {
                 return res;
             }
 
-            static value_type get(node_pointer_type node, int siz, int i) {
+            static value_type get(node_pointer_type node, int size, int i) {
                 operator_type f = id();
                 node_pointer_type cur = node;
-                for (int l = 0, r = siz; r - l > 1;) {
+                for (int l = 0, r = size; r - l > 1;) {
                     f = composition(f, cur->_laz);
                     int m = (l + r) >> 1;
                     if (i < m) {
@@ -137,15 +137,15 @@ namespace suisen {
                 return mapping(f, cur->_dat);
             }
             template <typename Func>
-            static node_pointer_type apply(node_pointer_type node, int siz, int i, Func&& f) {
-                return update_leaf(node, siz, i, [&](const value_type &v) { return f(v); });
+            static node_pointer_type apply(node_pointer_type node, int size, int i, Func&& f) {
+                return update_leaf(node, size, i, [&](const value_type &v) { return f(v); });
             }
-            static node_pointer_type set(node_pointer_type node, int siz, int i, const value_type& dat) {
-                return apply(node, siz, i, [&](const value_type&) { return dat; });
+            static node_pointer_type set(node_pointer_type node, int size, int i, const value_type& dat) {
+                return apply(node, size, i, [&](const value_type&) { return dat; });
             }
 
             template <typename Pred>
-            static int max_right(node_pointer_type node, int siz, int l, Pred&& pred) {
+            static int max_right(node_pointer_type node, int size, int l, Pred&& pred) {
                 assert(pred(e()));
                 auto rec = [&](auto rec, node_pointer_type cur, int tl, int tr, value_type& sum, const operator_type &f) -> int {
                     if (tr <= l) return tr;
@@ -163,10 +163,10 @@ namespace suisen {
                     return res_l != tm ? res_l : rec(rec, cur->_ch[1], tm, tr, sum, g);
                 };
                 value_type sum = e();
-                return rec(rec, node, 0, siz, sum, id());
+                return rec(rec, node, 0, size, sum, id());
             }
             template <typename Pred>
-            static int min_left(node_pointer_type node, int siz, int r, Pred&& pred) {
+            static int min_left(node_pointer_type node, int size, int r, Pred&& pred) {
                 assert(pred(e()));
                 auto rec = [&](auto rec, node_pointer_type cur, int tl, int tr, value_type& sum, const operator_type &f) -> int {
                     if (r <= tl) return tl;
@@ -184,7 +184,7 @@ namespace suisen {
                     return res_r != tm ? res_r : rec(rec, cur->_ch[0], tl, tm, sum, g);
                 };
                 value_type sum = e();
-                return rec(rec, node, 0, siz, sum, id());
+                return rec(rec, node, 0, size, sum, id());
             }
 
             template <typename OutputIterator>
@@ -211,8 +211,8 @@ namespace suisen {
         explicit PersistentLazySegmentTree(int n) : PersistentLazySegmentTree(std::vector<value_type>(n, e())) {}
         PersistentLazySegmentTree(const std::vector<value_type>& dat) : _n(dat.size()), _root(node_type::build(dat)) {}
 
-        static void init_pool(int siz) {
-            node_type::_pool = ObjectPool<node_type>(siz);
+        static void init_pool(int size) {
+            node_type::_pool = ObjectPool<node_type>(size);
         }
         static void clear_pool() {
             node_type::_pool.clear();

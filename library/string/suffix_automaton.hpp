@@ -149,9 +149,9 @@ struct SuffixAutomatonBase {
     }
     OccurrenceEnumerator occurrence_enumerator() const && = delete;
 
-    class FirstOccurenceSearcher {
+    class FirstOccurrenceSearcher {
         public:
-            FirstOccurenceSearcher(const SuffixAutomatonBase *sa) : sa(sa) {
+            FirstOccurrenceSearcher(const SuffixAutomatonBase *sa) : sa(sa) {
                 const std::vector<Node> &nodes = sa->nodes;
                 dp.resize(nodes.size(), std::numeric_limits<int>::max());
                 for (const int u : sa->topological_order(/* reversed = */ true)) {
@@ -173,8 +173,15 @@ struct SuffixAutomatonBase {
             std::vector<int> dp;
     };
 
+    using FirstOccurenceSearcher = FirstOccurrenceSearcher;
+
+    FirstOccurrenceSearcher first_occurrence_searcher() const & {
+        return FirstOccurrenceSearcher(this);
+    }
+    FirstOccurrenceSearcher first_occurrence_searcher() const && = delete;
+
     FirstOccurenceSearcher first_occurence_searcher() const & {
-        return FirstOccurenceSearcher(this);
+        return first_occurrence_searcher();
     }
     FirstOccurenceSearcher first_occurence_searcher() const && = delete;
 

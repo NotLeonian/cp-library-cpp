@@ -61,14 +61,14 @@ namespace suisen {
             }
 
             template <bool do_update, typename F>
-            static auto search_node(node_pointer_type node, int siz, int i, F &&f) {
+            static auto search_node(node_pointer_type node, int size, int i, F &&f) {
                 static std::vector<node_pointer_type> path;
 
                 node_pointer_type res = node;
                 if constexpr (do_update) res = clone(res);
                 node_pointer_type cur = res;
 
-                for (int l = 0, r = siz; r - l > 1;) {
+                for (int l = 0, r = size; r - l > 1;) {
                     if constexpr (do_update) path.push_back(cur);
                     int m = (l + r) >> 1;
                     if (i < m) {
@@ -91,21 +91,21 @@ namespace suisen {
                 }
             }
 
-            static value_type get(node_pointer_type node, int siz, int i) {
+            static value_type get(node_pointer_type node, int size, int i) {
                 value_type res;
-                search_node</* do_update = */false>(node, siz, i, [&](node_pointer_type i_th_node) { res = i_th_node->_dat; });
+                search_node</* do_update = */false>(node, size, i, [&](node_pointer_type i_th_node) { res = i_th_node->_dat; });
                 return res;
             }
             template <typename F>
-            static node_pointer_type apply(node_pointer_type node, int siz, int i, F&& f) {
-                return search_node</* do_update = */true>(node, siz, i, [&](node_pointer_type i_th_node) { i_th_node->_dat = f(i_th_node->_dat); });
+            static node_pointer_type apply(node_pointer_type node, int size, int i, F&& f) {
+                return search_node</* do_update = */true>(node, size, i, [&](node_pointer_type i_th_node) { i_th_node->_dat = f(i_th_node->_dat); });
             }
-            static node_pointer_type set(node_pointer_type node, int siz, int i, const value_type& dat) {
-                return apply(node, siz, i, [&](const value_type&) { return dat; });
+            static node_pointer_type set(node_pointer_type node, int size, int i, const value_type& dat) {
+                return apply(node, size, i, [&](const value_type&) { return dat; });
             }
 
             template <typename F>
-            static int max_right(node_pointer_type node, int siz, int l, F&& f) {
+            static int max_right(node_pointer_type node, int size, int l, F&& f) {
                 assert(f(e()));
                 auto rec = [&](auto rec, node_pointer_type cur, int tl, int tr, value_type& sum) -> int {
                     if (tr <= l) return tr;
@@ -122,10 +122,10 @@ namespace suisen {
                     return res_l != tm ? res_l : rec(rec, cur->_ch[1], tm, tr, sum);
                 };
                 value_type sum = e();
-                return rec(rec, node, 0, siz, sum);
+                return rec(rec, node, 0, size, sum);
             }
             template <typename F>
-            static int min_left(node_pointer_type node, int siz, int r, F&& f) {
+            static int min_left(node_pointer_type node, int size, int r, F&& f) {
                 assert(f(e()));
                 auto rec = [&](auto rec, node_pointer_type cur, int tl, int tr, value_type& sum) -> int {
                     if (r <= tl) return tl;
@@ -142,7 +142,7 @@ namespace suisen {
                     return res_r != tm ? res_r : rec(rec, cur->_ch[0], tl, tm, sum);
                 };
                 value_type sum = e();
-                return rec(rec, node, 0, siz, sum);
+                return rec(rec, node, 0, size, sum);
             }
 
             template <typename OutputIterator>
@@ -168,8 +168,8 @@ namespace suisen {
         explicit PersistentSegmentTree(int n) : PersistentSegmentTree(std::vector<value_type>(n, e())) {}
         PersistentSegmentTree(const std::vector<value_type>& dat) : _n(dat.size()), _root(node_type::build(dat)) {}
 
-        static void init_pool(int siz) {
-            node_type::_pool = ObjectPool<node_type>(siz);
+        static void init_pool(int size) {
+            node_type::_pool = ObjectPool<node_type>(size);
         }
         static void clear_pool() {
             node_type::_pool.clear();

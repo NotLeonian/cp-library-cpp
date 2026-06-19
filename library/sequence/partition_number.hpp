@@ -1,5 +1,5 @@
-#ifndef SUISEN_PARTITON_NUMBER
-#define SUISEN_PARTITON_NUMBER
+#ifndef SUISEN_PARTITION_NUMBER
+#define SUISEN_PARTITION_NUMBER
 
 #include <vector>
 
@@ -21,4 +21,4 @@ namespace suisen {
     }
 } // namespace suisen
 
-#endif // SUISEN_PARTITON_NUMBER
+#endif // SUISEN_PARTITION_NUMBER

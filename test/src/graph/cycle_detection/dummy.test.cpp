@@ -21,9 +21,9 @@ void test_undirected_unweighted1() {
     std::set<std::pair<int, int>> edge_set;
     for (auto [u, v] : edges) edge_set.insert(std::minmax(u, v));
 
-    const int siz = c.size();
-    for (int i = 0; i < siz; ++i) {
-        int u = c[i], v = c[(i + 1) % siz];
+    const int size = c.size();
+    for (int i = 0; i < size; ++i) {
+        int u = c[i], v = c[(i + 1) % size];
         assert(edge_set.count(std::minmax(u, v)));
     }
 }
@@ -52,9 +52,9 @@ void test_directed_unweighted1() {
     std::set<std::pair<int, int>> edge_set;
     for (auto [u, v] : edges) edge_set.insert({ u, v });
 
-    const int siz = c.size();
-    for (int i = 0; i < siz; ++i) {
-        int u = c[i], v = c[(i + 1) % siz];
+    const int size = c.size();
+    for (int i = 0; i < size; ++i) {
+        int u = c[i], v = c[(i + 1) % size];
         assert(edge_set.count({ u, v }));
     }
 }

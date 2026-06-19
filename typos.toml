@@ -1,0 +1,26 @@
+[files]
+extend-exclude = [
+    ".git/**",
+    ".verify-helper/**",
+    "ac-library/**",
+    "library/math/factorial_embeded.hpp",
+    "library/number/montogomery.hpp",
+    "library/sequence/binomial_coefficitnt_enumeration.hpp",
+    "typos.toml",
+]
+
+[default.extend-words]
+nimber = "nimber"
+Nimber = "Nimber"
+NIMBER = "NIMBER"
+
+[default.extend-identifiers]
+mis2 = "mis2"
+factorial_embeded = "factorial_embeded"
+write_embeded_factorial = "write_embeded_factorial"
+SUISEN_FACTORIAL_EMBEDED = "SUISEN_FACTORIAL_EMBEDED"
+sigleton_set = "sigleton_set"
+FirstOccurenceSearcher = "FirstOccurenceSearcher"
+first_occurence = "first_occurence"
+first_occurence_searcher = "first_occurence_searcher"
+enumerate_occurences = "enumerate_occurences"

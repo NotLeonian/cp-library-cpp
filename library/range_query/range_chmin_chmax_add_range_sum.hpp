@@ -15,8 +15,8 @@ namespace suisen {
 
             bool fail = false;
 
-            constexpr DataType() : lo(inf), lo2(inf), hi(-inf), hi2(-inf), sum(0), siz(0), num_lo(0), num_hi(0) {}
-            constexpr DataType(T x, int num = 1) : lo(x), lo2(inf), hi(x), hi2(-inf), sum(x * num), siz(num), num_lo(num), num_hi(num) {}
+            constexpr DataType() : lo(inf), lo2(inf), hi(-inf), hi2(-inf), sum(0), size(0), num_lo(0), num_hi(0) {}
+            constexpr DataType(T x, int num = 1) : lo(x), lo2(inf), hi(x), hi2(-inf), sum(x * num), size(num), num_lo(num), num_hi(num) {}
 
             T get_min() const { return lo; }
             T get_max() const { return hi; }
@@ -27,7 +27,7 @@ namespace suisen {
             T get_sum() const { return sum; }
         private:
             T lo, lo2, hi, hi2, sum;
-            int siz, num_lo, num_hi;
+            int size, num_lo, num_hi;
         };
 
         explicit RangeChMinMaxAddRangeSum(const int n = 0) : RangeChMinMaxAddRangeSum(std::vector<T>(n, 0)) {}
@@ -113,7 +113,7 @@ namespace suisen {
             z.lo2 = second_lo(x.lo, x.lo2, y.lo, y.lo2);
             z.hi2 = second_hi(x.hi, x.hi2, y.hi, y.hi2);
             z.sum = x.sum + y.sum;
-            z.siz = x.siz + y.siz;
+            z.size = x.size + y.size;
             z.num_lo = (z.lo == x.lo) * x.num_lo + (z.lo == y.lo) * y.num_lo;
             z.num_hi = (z.hi == x.hi) * x.num_hi + (z.hi == y.hi) * y.num_hi;
             return z;
@@ -123,10 +123,10 @@ namespace suisen {
         }
     
         static constexpr DataType mapping(F f, DataType x) {
-            if (x.siz == 0) {
+            if (x.size == 0) {
                 return e();
             } else if (x.lo == x.hi or f.lb == f.ub or f.lb >= x.hi or f.ub <= x.lo) {
-                return DataType { std::clamp(x.lo, f.lb, f.ub) + f.add, x.siz };
+                return DataType { std::clamp(x.lo, f.lb, f.ub) + f.add, x.size };
             } else if (x.lo2 == x.hi) { // 2
                 x.lo = x.hi2 = std::max(x.lo, f.lb) + f.add;
                 x.hi = x.lo2 = std::min(x.hi, f.ub) + f.add;
@@ -135,7 +135,7 @@ namespace suisen {
             } else if (f.lb < x.lo2 and f.ub > x.hi2) { // >= 3
                 T nlo = std::max(x.lo, f.lb);
                 T nhi = std::min(x.hi, f.ub);
-                x.sum += (nlo - x.lo) * x.num_lo + (nhi - x.hi) * x.num_hi + f.add * x.siz;
+                x.sum += (nlo - x.lo) * x.num_lo + (nhi - x.hi) * x.num_hi + f.add * x.size;
                 x.lo = nlo + f.add;
                 x.hi = nhi + f.add;
                 x.lo2 += f.add;

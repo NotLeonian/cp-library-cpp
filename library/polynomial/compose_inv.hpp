@@ -28,14 +28,14 @@ namespace suisen {
             while (z < 2 * n - 1) z <<= 1;
             return z;
         }();
-        const mint iz = mint(z).inv();
+        const mint inv_z = mint(z).inv();
         
         f.resize(z);
         atcoder::internal::butterfly(f);
         auto mul_f = [&](std::vector<mint> a) {
             a.resize(z);
             atcoder::internal::butterfly(a);
-            for (int j = 0; j < z; ++j) a[j] *= f[j] * iz;
+            for (int j = 0; j < z; ++j) a[j] *= f[j] * inv_z;
             atcoder::internal::butterfly_inv(a);
             a.resize(n);
             return a;
@@ -53,7 +53,7 @@ namespace suisen {
         auto mul_hB = [&](std::vector<mint> a) {
             a.resize(z);
             atcoder::internal::butterfly(a);
-            for (int j = 0; j < z; ++j) a[j] *= hB[j] * iz;
+            for (int j = 0; j < z; ++j) a[j] *= hB[j] * inv_z;
             atcoder::internal::butterfly_inv(a);
             a.resize(n);
             return a;
@@ -86,16 +86,16 @@ namespace suisen {
             if (q == B - 1) break;
 
             // update I_q
-            const int siz_q = n - q * B;
-            J.assign(siz_q, 0);
+            const int size_q = n - q * B;
+            J.assign(size_q, 0);
             for (int r = 0; r < B; ++r) {
                 const mint gr = g[q * B + r];
-                for (int k = 0; k < siz_q - r; ++k) {
+                for (int k = 0; k < size_q - r; ++k) {
                     J[r + k] += gr * h[r][k];
                 }
             }
-            J *= H.cut_copy(siz_q);
-            for (int k = 0; k < siz_q; ++k) {
+            J *= H.cut_copy(size_q);
+            for (int k = 0; k < size_q; ++k) {
                 I[q * B + k] -= J[k];
             }
 

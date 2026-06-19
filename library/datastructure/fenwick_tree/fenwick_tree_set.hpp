@@ -29,8 +29,8 @@ namespace suisen {
     public:
         fenwick_tree_set() : fenwick_tree_set(0) {}
         // Construct (an empty / a full) set and set the universe as {0,1,...,n-1}
-        explicit fenwick_tree_set(int n, bool fullset = false): _n(n), _wn(std::max((_n + (WORD - 1)) >> LOG_WORD, 1)), _lg(top_setbit(_wn)), _siz(0), _d(_wn + 1), _bs(_wn) {
-            if (fullset) {
+        explicit fenwick_tree_set(int n, bool full_set = false): _n(n), _wn(std::max((_n + (WORD - 1)) >> LOG_WORD, 1)), _lg(top_setbit(_wn)), _size(0), _d(_wn + 1), _bs(_wn) {
+            if (full_set) {
                 std::vector<int> values(n);
                 std::iota(values.begin(), values.end(), 0);
                 construct_from_values(values);
@@ -51,7 +51,7 @@ namespace suisen {
 
         // O(1).
         // Number of elements.
-        int size() const { return _siz; }
+        int size() const { return _size; }
 
         // O(1).
         // Check if `v` is contained. `v` may be out of range.
@@ -85,7 +85,7 @@ namespace suisen {
         // Count elements < `v`. `v` may be out of range.
         int count_lt(int v) const {
             if (v <= 0) return 0;
-            if (v >= _n) return _siz;
+            if (v >= _n) return _size;
             auto [t, u] = index(v);
             int res = __builtin_popcountll(_bs[t] & ((uint64_t(1) << u) - 1));
             for (; t; t &= t - 1) res += _d[t];
@@ -96,16 +96,16 @@ namespace suisen {
         int count_leq(int v) const { return count_lt(v + 1); }
         // O(log n).
         // Count elements > `v`. `v` may be out of range.
-        int count_gt(int v) const { return _siz - count_leq(v); }
+        int count_gt(int v) const { return _size - count_leq(v); }
         // O(log n).
         // Count elements >= `v`. `v` may be out of range.
-        int count_geq(int v) const { return _siz - count_lt(v); }
+        int count_geq(int v) const { return _size - count_lt(v); }
 
         // O(log n).
         // `k`-th smallest element or `-1` if `k` is out of range.
         int kth_element(int k) const {
             // Out of range
-            if (not (0 <= k and k < _siz)) return -1;
+            if (not (0 <= k and k < _size)) return -1;
             // Binary search
             int t = 1 << _lg;
             // (I) non-leaf node
@@ -228,7 +228,7 @@ namespace suisen {
         // O(1).
         iterator begin() const { return iterator(this, 0); }
         // O(1).
-        iterator end() const { return iterator(this, _siz); }
+        iterator end() const { return iterator(this, _size); }
         // O(log n).
         iterator lower_bound(int v) const { return iterator(this, count_lt(v)); }
         // O(log n).
@@ -238,7 +238,7 @@ namespace suisen {
         // O(log n).
         iterator erase(iterator it) { return erase(*it), it; }
     private:
-        int _n, _wn, _lg, _siz;
+        int _n, _wn, _lg, _size;
         std::vector<int> _d;       // Fenwick Tree
         std::vector<uint64_t> _bs; // Bitset
 
@@ -248,7 +248,7 @@ namespace suisen {
                 assert(0 <= v and v < _n);
                 const auto [t, u] = index(v);
                 if ((_bs[t] >> u) & 1) continue;
-                ++_siz;
+                ++_size;
                 ++_d[t + 1];
                 _bs[t] |= uint64_t(1) << u;
             }
@@ -271,7 +271,7 @@ namespace suisen {
         template <int k>
         void add(int v) {
             assert(0 <= v and v < _n);
-            _siz += k;
+            _size += k;
             for (int t = _large(v) + 1; t <= _wn; t += -t & t) _d[t] += k;
         }
     };

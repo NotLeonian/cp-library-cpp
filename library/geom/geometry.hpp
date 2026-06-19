@@ -149,8 +149,8 @@ namespace geometry {
         if (s == Sign::POSITIVE) return ISP::L_CURVE;
         if (s == Sign::NEGATIVE) return ISP::R_CURVE;
         if (sgn(dot(ab, ac)) == Sign::NEGATIVE) return ISP::BACK;
-        Point ba = a - b, bc = c - b;
-        if (sgn(dot(ba, bc)) == Sign::NEGATIVE) return ISP::FRONT;
+        Point b_to_a = a - b, b_to_c = c - b;
+        if (sgn(dot(b_to_a, b_to_c)) == Sign::NEGATIVE) return ISP::FRONT;
         return ISP::MIDDLE;
     }
 

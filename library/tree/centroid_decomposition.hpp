@@ -18,48 +18,48 @@ namespace suisen {
             using graph_type = Graph<WeightType>;
             using weight_type = WeightType;
 
-            CentroidDecomposition(const graph_type& g) : graph_type(g), n(this->size()), cpar(n, -1), cdep(n, std::numeric_limits<int>::max()), csiz(n) {
+            CentroidDecomposition(const graph_type& g) : graph_type(g), n(this->size()), cpar(n, -1), cdep(n, std::numeric_limits<int>::max()), component_size(n) {
                 build();
             }
 
             int dct_parent(int i) const { return cpar[i]; }
             int dct_depth(int i) const { return cdep[i]; }
-            int dct_size(int i) const { return csiz[i]; }
+            int dct_size(int i) const { return component_size[i]; }
 
         private:
             int n;
             std::vector<int> cpar;
             std::vector<int> cdep;
-            std::vector<int> csiz;
+            std::vector<int> component_size;
 
             void build() {
                 std::vector<int> eid(n, 0);
 
-                cpar[0] = -1, csiz[0] = n;
+                cpar[0] = -1, component_size[0] = n;
                 std::deque<std::tuple<int, int>> dq{ { 0, 0 } };
 
                 while (dq.size()) {
                     const auto [r, dep] = dq.front();
-                    const int siz = csiz[r], prev_ctr = cpar[r];
+                    const int size = component_size[r], prev_ctr = cpar[r];
                     dq.pop_front();
 
                     int c = -1;
-                    eid[r] = 0, csiz[r] = 1, cpar[r] = -1;
+                    eid[r] = 0, component_size[r] = 1, cpar[r] = -1;
                     for (int cur = r;;) {
                         for (const int edge_num = int((*this)[cur].size());;) {
                             if (eid[cur] == edge_num) {
-                                if (csiz[cur] * 2 > siz) {
+                                if (component_size[cur] * 2 > size) {
                                     c = cur;
                                 } else {
                                     const int nxt = cpar[cur];
-                                    csiz[nxt] += csiz[cur];
+                                    component_size[nxt] += component_size[cur];
                                     cur = nxt;
                                 }
                                 break;
                             }
                             const int nxt = (*this)[cur][eid[cur]++];
                             if (cdep[nxt] >= dep and nxt != cpar[cur]) {
-                                eid[nxt] = 0, csiz[nxt] = 1, cpar[nxt] = cur;
+                                eid[nxt] = 0, component_size[nxt] = 1, cpar[nxt] = cur;
                                 cur = nxt;
                                 break;
                             }
@@ -67,10 +67,10 @@ namespace suisen {
                         if (c >= 0) break;
                     }
                     for (int v : (*this)[c]) if (cdep[v] >= dep) {
-                        if (cpar[c] == v) cpar[v] = c, csiz[v] = siz - csiz[c];
+                        if (cpar[c] == v) cpar[v] = c, component_size[v] = size - component_size[c];
                         dq.emplace_back(v, dep + 1);
                     }
-                    cpar[c] = prev_ctr, cdep[c] = dep, csiz[c] = siz;
+                    cpar[c] = prev_ctr, cdep[c] = dep, component_size[c] = size;
                 }
             }
         };

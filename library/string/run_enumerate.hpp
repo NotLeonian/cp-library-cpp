@@ -44,7 +44,7 @@ namespace suisen {
             std::reverse(std::begin(rl), std::end(rl));
             std::vector<int> z_rl_rev = atcoder::z_algorithm(rl);
 
-            const int siz = rl.size();
+            const int size = rl.size();
 
             std::vector<Run> result;
 
@@ -65,7 +65,7 @@ namespace suisen {
                     continue;
                 }
                 const int period = run.period;
-                if (z_rl[siz - period] == period) {
+                if (z_rl[size - period] == period) {
                     if (run_m[period].period) {
                         run.r = run_m[period].r;
                         run_m[period] = Run{};
@@ -75,26 +75,26 @@ namespace suisen {
                         add_ans(std::move(run));
                     }
                 } else {
-                    run.r = m + z_rl[siz - period];
+                    run.r = m + z_rl[size - period];
                     add_ans(std::move(run));
                 }
             }
             for (auto& run : run_m) if (run.period) {
                 const int period = run.period;
-                if (z_rl[siz - period] == period) {
-                    if (2 * period <= len_l and z_rl[siz - 2 * period] >= period) continue;
+                if (z_rl[size - period] == period) {
+                    if (2 * period <= len_l and z_rl[size - 2 * period] >= period) continue;
                     run.l = m - period - z_rl_rev[period];
                     add_ans(std::move(run));
                 } else {
-                    run.l = m - z_rl_rev[siz - period];
+                    run.l = m - z_rl_rev[size - period];
                     add_ans(std::move(run));
                 }
             }
 
             for (int period = 1; period <= len_l; ++period) {
                 bool skip_r = 2 * period <= len_r and z_rl[period] >= period;
-                bool skip_l = 2 * period <= len_l and z_rl[siz - 2 * period] >= period;
-                if (z_rl[siz - period] == period) {
+                bool skip_l = 2 * period <= len_l and z_rl[size - 2 * period] >= period;
+                if (z_rl[size - period] == period) {
                     if (skip_l or skip_r) continue;
 
                     const int beg_pos = m - period - z_rl_rev[period];
@@ -102,7 +102,7 @@ namespace suisen {
                     add_ans(Run{ period, beg_pos, end_pos });
                 } else {
                     if (not skip_r) {
-                        const int beg_pos = m - z_rl_rev[siz - period];
+                        const int beg_pos = m - z_rl_rev[size - period];
                         const int end_pos = m + period + z_rl[period];
                         if (end_pos - beg_pos >= 2 * period) {
                             add_ans(Run{ period, beg_pos, end_pos });
@@ -110,7 +110,7 @@ namespace suisen {
                     }
                     if (not skip_l) {
                         const int beg_pos = m - period - z_rl_rev[period];
-                        const int end_pos = m + z_rl[siz - period];
+                        const int end_pos = m + z_rl[size - period];
                         if (end_pos - beg_pos >= 2 * period) {
                             add_ans(Run{ period, beg_pos, end_pos });
                         }

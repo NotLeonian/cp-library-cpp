@@ -18,7 +18,7 @@ namespace suisen {
         decltype(stock.begin()) it;
 
         ObjectPool() : ObjectPool(0) {}
-        ObjectPool(int siz) : pool(siz), stock(siz) {
+        ObjectPool(int size) : pool(size), stock(size) {
             clear();
         }
 
@@ -35,18 +35,18 @@ namespace suisen {
         }
 
         void clear() {
-            int siz = pool.size();
+            int size = pool.size();
             it = stock.begin();
-            for (int i = 0; i < siz; i++) stock[i] = &pool[i];
+            for (int i = 0; i < size; i++) stock[i] = &pool[i];
         }
 
         void ensure() {
             if (it != stock.end()) return;
-            int siz = stock.size();
-            for (int i = siz; i <= siz * 2; ++i) {
+            int size = stock.size();
+            for (int i = size; i <= size * 2; ++i) {
                 stock.push_back(&pool.emplace_back());
             }
-            it = stock.begin() + siz;
+            it = stock.begin() + size;
         }
     };
 } // namespace suisen

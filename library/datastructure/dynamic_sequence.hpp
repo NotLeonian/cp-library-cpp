@@ -17,12 +17,12 @@ struct DynamicSequenceNodeBase {
     using node_ptr_t = Derived *;
 
     T val;
-    int siz;
+    int size_;
     bool rev;
     node_ptr_t ch[2] {nullptr, nullptr};
 
-    DynamicSequenceNodeBase() : val(), siz(1), rev(false) {}
-    DynamicSequenceNodeBase(const T &val) : val(val), siz(1), rev(false) {}
+    DynamicSequenceNodeBase() : val(), size_(1), rev(false) {}
+    DynamicSequenceNodeBase(const T &val) : val(val), size_(1), rev(false) {}
 
     ~DynamicSequenceNodeBase() {
         delete ch[0];
@@ -30,14 +30,14 @@ struct DynamicSequenceNodeBase {
     }
 
     void update() {
-        siz = 1 + size(ch[0]) + size(ch[1]);
+        size_ = 1 + size(ch[0]) + size(ch[1]);
     }
     void push() {
         reverse_all(this->ch[0], rev), reverse_all(this->ch[1], rev);
         rev = false;
     }
     static int size(node_ptr_t node) {
-        return node == nullptr ? 0 : node->siz;
+        return node == nullptr ? 0 : node->size_;
     }
 
     static node_ptr_t rotate(node_ptr_t node, bool is_right) {
@@ -209,7 +209,7 @@ struct DynamicSequenceBase {
             root = SplayNode::reverse(root, l, r);
         }
         void reverse_all() {
-            SplayNode::reverese_all(root);
+            SplayNode::reverse_all(root);
         }
     protected:
         mutable node_ptr_t root;

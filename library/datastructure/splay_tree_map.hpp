@@ -15,11 +15,11 @@ struct MapNodeBase {
 
     Key key;
     Val val;
-    int siz;
+    int size_;
     node_ptr_t ch[2] {nullptr, nullptr};
 
-    MapNodeBase() : key(), val(), siz(1) {}
-    MapNodeBase(const Key &key, const Val &val) : key(key), val(val), siz(1) {}
+    MapNodeBase() : key(), val(), size_(1) {}
+    MapNodeBase(const Key &key, const Val &val) : key(key), val(val), size_(1) {}
 
     ~MapNodeBase() {
         delete ch[0];
@@ -27,12 +27,12 @@ struct MapNodeBase {
     }
 
     void update() {
-        siz = 1 + size(ch[0]) + size(ch[1]);
+        size_ = 1 + size(ch[0]) + size(ch[1]);
     }
     void push() {}
 
     static int size(node_ptr_t node) {
-        return node == nullptr ? 0 : node->siz;
+        return node == nullptr ? 0 : node->size_;
     }
 
     static node_ptr_t rotate(node_ptr_t node, bool is_right) {

@@ -42,8 +42,8 @@ namespace suisen {
                 int u = dq.front();
                 dq.pop_front();
                 for (int v : g[u]) adj[v] = true;
-                std::size_t nsiz = std::partition(s.begin(), s.end(), [&adj](int v) { return adj[v]; }) - s.begin();
-                for (; s.size() > nsiz; s.pop_back()) {
+                std::size_t new_size = std::partition(s.begin(), s.end(), [&adj](int v) { return adj[v]; }) - s.begin();
+                for (; s.size() > new_size; s.pop_back()) {
                     int v = s.back();
                     dist[v] = dist[u] + 1, dq.push_back(v);
                 }

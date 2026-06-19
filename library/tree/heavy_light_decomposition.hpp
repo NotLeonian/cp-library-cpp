@@ -19,12 +19,12 @@ class HeavyLightDecomposition {
         using Graph = std::vector<std::vector<int>>;
 
         HeavyLightDecomposition() = default;
-        HeavyLightDecomposition(Graph &g) : n(g.size()), visit(n), leave(n), head(n), ord(n), siz(n), par(n, -1), dep(n, 0) {
+        HeavyLightDecomposition(Graph &g) : n(g.size()), visit(n), leave(n), head(n), ord(n), subtree_size(n), par(n, -1), dep(n, 0) {
             for (int i = 0; i < n; ++i) if (par[i] < 0) dfs(g, i, -1);
             int time = 0;
             for (int i = 0; i < n; ++i) if (par[i] < 0) hld(g, i, -1, time);
         }
-        HeavyLightDecomposition(Graph &g, const std::vector<int> &roots) : n(g.size()), visit(n), leave(n), head(n), ord(n), siz(n), par(n, -1), dep(n, 0) {
+        HeavyLightDecomposition(Graph &g, const std::vector<int> &roots) : n(g.size()), visit(n), leave(n), head(n), ord(n), subtree_size(n), par(n, -1), dep(n, 0) {
             for (int i : roots) dfs(g, i, -1);
             int time = 0;
             for (int i : roots) hld(g, i, -1, time);
@@ -136,7 +136,7 @@ class HeavyLightDecomposition {
             return ord[k];
         }
         int get_subtree_size(int u) const {
-            return siz[u];
+            return subtree_size[u];
         }
         int get_parent(int u) const {
             return par[u];
@@ -151,21 +151,21 @@ class HeavyLightDecomposition {
         }
     private:
         int n;
-        std::vector<int> visit, leave, head, ord, siz, par, dep;
+        std::vector<int> visit, leave, head, ord, subtree_size, par, dep;
         int dfs(Graph &g, int u, int p) {
             par[u] = p;
-            siz[u] = 1;
+            subtree_size[u] = 1;
             int max_size = 0;
             for (int &v : g[u]) {
                 if (v == p) continue;
                 dep[v] = dep[u] + 1;
-                siz[u] += dfs(g, v, u);
-                if (max_size < siz[v]) {
-                    max_size = siz[v];
+                subtree_size[u] += dfs(g, v, u);
+                if (max_size < subtree_size[v]) {
+                    max_size = subtree_size[v];
                     std::swap(g[u].front(), v);
                 }
             }
-            return siz[u];
+            return subtree_size[u];
         }
         void hld(Graph &g, int u, int p, int &time) {
             visit[u] = time, ord[time] = u, ++time;

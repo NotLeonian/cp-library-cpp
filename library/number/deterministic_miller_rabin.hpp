@@ -8,7 +8,7 @@
 #include <tuple>
 #include <type_traits>
 
-#include "library/number/montogomery.hpp"
+#include "library/number/montgomery.hpp"
 
 namespace suisen::miller_rabin {
     namespace internal {

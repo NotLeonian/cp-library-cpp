@@ -120,16 +120,16 @@ namespace suisen {
         friend FormalPowerSeries operator+(FormalPowerSeries f, const FormalPowerSeries& g) { f += g; return f; }
         friend FormalPowerSeries operator-(FormalPowerSeries f, const FormalPowerSeries& g) { f -= g; return f; }
         friend FormalPowerSeries operator*(const FormalPowerSeries& f, const FormalPowerSeries& g) {
-            const int siz_f = f.size(), siz_g = g.size();
-            if (siz_f < siz_g) return g * f;
-            if (std::min(siz_f, siz_g) <= 60) return atcoder::convolution(f, g);
-            const int deg = siz_f + siz_g - 2;
+            const int size_f = f.size(), size_g = g.size();
+            if (size_f < size_g) return g * f;
+            if (std::min(size_f, size_g) <= 60) return atcoder::convolution(f, g);
+            const int deg = size_f + size_g - 2;
             int fpow2 = 1;
             while ((fpow2 << 1) <= deg) fpow2 <<= 1;
             if (const int dif = deg - fpow2 + 1; dif <= 10) {
                 FormalPowerSeries h = atcoder::convolution(std::vector<mint>(f.begin(), f.end() - dif), g);
                 h.resize(h.size() + dif);
-                for (int i = siz_f - dif; i < siz_f; ++i) for (int j = 0; j < siz_g; ++j) {
+                for (int i = size_f - dif; i < size_f; ++i) for (int j = 0; j < size_g; ++j) {
                     h[i + j] += f[i] * g[j];
                 }
                 return h;
@@ -344,8 +344,8 @@ namespace suisen {
                 for (int i = 0; i < 2 * k; ++i) h_fft[i] = (h_fft[i] - f_fft[i] * f_fft[i]) * g_fft[i];
                 atcoder::internal::butterfly_inv(h_fft);
                 f.resize(2 * k);
-                const value_type iz = value_type(4 * k).inv();
-                for (int i = 0; i < k; ++i) f[k + i] = h_fft[k + i] * iz;
+                const value_type inv_scale = value_type(4 * k).inv();
+                for (int i = 0; i < k; ++i) f[k + i] = h_fft[k + i] * inv_scale;
             }
             f.resize(m), f <<= (tlz / 2);
             return f;
@@ -389,19 +389,19 @@ namespace suisen {
             atcoder::internal::butterfly(fg);
             for (int i = 0; i < 2 * k; ++i) fg[i] *= g_fft[i];
             atcoder::internal::butterfly_inv(fg);
-            const value_type iz = value_type(2 * k).inv(), c = -iz * iz;
+            const value_type inv_scale = value_type(2 * k).inv(), c = -inv_scale * inv_scale;
             g.resize(2 * k);
             for (int i = 0; i < k; ++i) g[k + i] = fg[i] * c;
         }
 
         static FormalPowerSeries div_fps_sparse(const FormalPowerSeries& f, const std::vector<std::pair<int, value_type>>& g, int n) {
-            const int siz = g.size();
-            assert(siz and g[0].first == 0);
+            const int size = g.size();
+            assert(size and g[0].first == 0);
             const value_type inv_g0 = g[0].second.inv();
             FormalPowerSeries h(n);
             for (int i = 0; i < n; ++i) {
                 value_type v = f.safe_get(i);
-                for (int idx = 1; idx < siz; ++idx) {
+                for (int idx = 1; idx < size; ++idx) {
                     const auto& [j, gj] = g[idx];
                     if (j > i) break;
                     v -= gj * h[i - j];
@@ -414,8 +414,8 @@ namespace suisen {
             return div_fps_sparse(FormalPowerSeries{ 1 }, g, n);
         }
         static FormalPowerSeries exp_sparse(const std::vector<std::pair<int, value_type>>& f, const int n) {
-            const int siz = f.size();
-            assert(not siz or f[0].first != 0);
+            const int size = f.size();
+            assert(not size or f[0].first != 0);
             FormalPowerSeries g(n);
             g[0] = 1;
             inv_mods<value_type> invs(n);
@@ -431,10 +431,10 @@ namespace suisen {
             return g;
         }
         static FormalPowerSeries log_sparse(const std::vector<std::pair<int, value_type>>& f, const int n) {
-            const int siz = f.size();
-            assert(siz and f[0].first == 0 and f[0].second == 1);
+            const int size = f.size();
+            assert(size and f[0].first == 0 and f[0].second == 1);
             FormalPowerSeries g(n);
-            for (int idx = 1; idx < siz; ++idx) {
+            for (int idx = 1; idx < size; ++idx) {
                 const auto& [j, fj] = f[idx];
                 if (j >= n) break;
                 g[j] = j * fj;
@@ -442,7 +442,7 @@ namespace suisen {
             inv_mods<value_type> invs(n);
             for (int i = 1; i < n; ++i) {
                 value_type v = g[i];
-                for (int idx = 1; idx < siz; ++idx) {
+                for (int idx = 1; idx < size; ++idx) {
                     const auto& [j, fj] = f[idx];
                     if (j > i) break;
                     v -= fj * g[i - j] * (i - j);
@@ -458,8 +458,8 @@ namespace suisen {
                 res[0] = 1;
                 return res;
             }
-            const int siz = f.size();
-            if (not siz) return FormalPowerSeries(n, 0);
+            const int size = f.size();
+            if (not size) return FormalPowerSeries(n, 0);
             const int p = f[0].first;
             if (p > (n - 1) / k) return FormalPowerSeries(n, 0);
             const value_type inv_f0 = f[0].second.inv();
@@ -469,7 +469,7 @@ namespace suisen {
             inv_mods<value_type> invs(n);
             for (int i = 1; lz + i < n; ++i) {
                 value_type v = 0;
-                for (int idx = 1; idx < siz; ++idx) {
+                for (int idx = 1; idx < size; ++idx) {
                     auto [j, fj] = f[idx];
                     j -= p;
                     if (j > i) break;
@@ -481,8 +481,8 @@ namespace suisen {
             return g;
         }
         static std::optional<FormalPowerSeries> safe_sqrt_sparse(const std::vector<std::pair<int, value_type>>& f, const int n) {
-            const int siz = f.size();
-            if (not siz) return FormalPowerSeries(n, 0);
+            const int size = f.size();
+            if (not size) return FormalPowerSeries(n, 0);
             const int p = f[0].first;
             if (p % 2 == 1) return std::nullopt;
             if (p / 2 >= n) return FormalPowerSeries(n, 0);
@@ -496,7 +496,7 @@ namespace suisen {
             inv_mods<value_type> invs(n);
             for (int i = 1; lz + i < n; ++i) {
                 value_type v = 0;
-                for (int idx = 1; idx < siz; ++idx) {
+                for (int idx = 1; idx < size; ++idx) {
                     auto [j, fj] = f[idx];
                     j -= p;
                     if (j > i) break;

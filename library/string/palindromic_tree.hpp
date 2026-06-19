@@ -26,7 +26,7 @@ namespace suisen {
                 int _suffix_link;
                 int _length;
                 int _multiplicity;
-                int _first_occurence;
+                int _first_occurrence;
             };
 
             using node_type = PalindromicTreeNode;
@@ -40,12 +40,12 @@ namespace suisen {
                 node_pointer_type node_m1 = _new_node();
                 node_m1->_suffix_link = NODE_M1;
                 node_m1->_length = -1;
-                node_m1->_first_occurence = 1;
+                node_m1->_first_occurrence = 1;
 
                 node_pointer_type node_0 = _new_node();
                 node_0->_suffix_link = NODE_M1;
                 node_0->_length = 0;
-                node_0->_first_occurence = 0;
+                node_0->_first_occurrence = 0;
 
                 _active_index = 0;
             }
@@ -96,7 +96,7 @@ namespace suisen {
 
                 new_node->_multiplicity = 1;
                 new_node->_length = par_length + 2;
-                new_node->_first_occurence = _seq.size() - new_node->_length;
+                new_node->_first_occurrence = _seq.size() - new_node->_length;
                 if (new_node->_length == 1) {
                     new_node->_suffix_link = NODE_0;
                 } else {
@@ -117,8 +117,11 @@ namespace suisen {
                 return _nodes[index];
             }
 
+            int first_occurrence(int index) const {
+                return get_node(index)._first_occurrence;
+            }
             int first_occurence(int index) const {
-                return get_node(index)._first_occurence;
+                return first_occurrence(index);
             }
             int length(int index) const {
                 return get_node(index)._length;
@@ -149,7 +152,7 @@ namespace suisen {
 
             const container_type get_palindrome(int index) {
                 if (index == NODE_M1) return container_type{};
-                int l = first_occurence(index), r = l + length(index);
+                int l = first_occurrence(index), r = l + length(index);
                 return container_type{ _seq.begin() + l, _seq.begin() + r };
             }
 

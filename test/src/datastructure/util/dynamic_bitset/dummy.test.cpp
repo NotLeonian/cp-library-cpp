@@ -552,7 +552,7 @@ void test_find() {
     assert(i == n and j == n);
 }
 
-void test_has_intersectoin() {
+void test_has_intersection() {
     DynamicBitSet x(10, true), y;
     assert(not x.has_intersection(y));
     y.resize(10);
@@ -613,7 +613,7 @@ void test() {
     test_set();
     test_reset();
     test_find();
-    test_has_intersectoin();
+    test_has_intersection();
     test_is_disjoint();
 }
 

@@ -22,8 +22,8 @@ namespace suisen {
 
         template <typename T>
         void build(const std::vector<T>& v) {
-            for (int i = 0, j = 0, siz = v.size(); i < siz;) {
-                while (i - j >= 0 and i + j < siz and v[i - j] == v[i + j]) ++j;
+            for (int i = 0, j = 0, size = v.size(); i < size;) {
+                while (i - j >= 0 and i + j < size and v[i - j] == v[i + j]) ++j;
                 _r[i] = j;
                 int k = 1;
                 while (i - k >= 0 and k + _r[i - k] < j) _r[i + k] = _r[i - k], ++k;

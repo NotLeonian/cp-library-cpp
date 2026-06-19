@@ -5,7 +5,7 @@
 #include <optional>
 
 /**
- * refernce: https://37zigen.com/tonelli-shanks-algorithm/
+ * reference: https://37zigen.com/tonelli-shanks-algorithm/
  * calculates x s.t. x^2 = a mod p in O((log p)^2).
  */
 template <typename mint>

@@ -131,10 +131,10 @@ namespace suisen::internal::implicit_treap {
 
             while (true) {
                 node_type::push(t);
-                if (const size_type lsiz = safe_size(child0(t)); k <= lsiz) {
+                if (const size_type left_size = safe_size(child0(t)); k <= left_size) {
                     if (rp.size()) set_child0(rp.back(), t);
                     rp.push_back(t);
-                    if (k == lsiz) {
+                    if (k == left_size) {
                         node_pointer& lch = child0(t);
                         if (lp.size()) set_child1(lp.back(), lch);
 
@@ -148,7 +148,7 @@ namespace suisen::internal::implicit_treap {
                     if (lp.size()) set_child1(lp.back(), t);
                     lp.push_back(t);
                     t = child1(t);
-                    k -= lsiz + 1;
+                    k -= left_size + 1;
                 }
             }
         }
@@ -227,11 +227,11 @@ namespace suisen::internal::implicit_treap {
                 } else {
                     node_type::push(t);
                     st.push_back(t);
-                    if (const size_type lsiz = safe_size(child0(t)); k <= lsiz) {
+                    if (const size_type left_size = safe_size(child0(t)); k <= left_size) {
                         t = *(p = &child0(t));
                     } else {
                         t = *(p = &child1(t));
-                        k -= lsiz + 1;
+                        k -= left_size + 1;
                     }
                 }
             }
@@ -289,15 +289,15 @@ namespace suisen::internal::implicit_treap {
 
         static std::pair<node_pointer, value_type> erase(node_pointer t, size_type k) {
             node_type::push(t);
-            if (const size_type lsiz = safe_size(child0(t)); k == lsiz) {
+            if (const size_type left_size = safe_size(child0(t)); k == left_size) {
                 node_pointer::dealloc(t);
                 return { merge(child0(t), child1(t)), std::move(value(t)) };
-            } else if (k < lsiz) {
+            } else if (k < left_size) {
                 auto [c0, v] = erase(child0(t), k);
                 set_child0(t, c0);
                 return { node_type::update(t), std::move(v) };
             } else {
-                auto [c1, v] = erase(child1(t), k - (lsiz + 1));
+                auto [c1, v] = erase(child1(t), k - (left_size + 1));
                 set_child1(t, c1);
                 return { node_type::update(t), std::move(v) };
             }
@@ -372,12 +372,12 @@ namespace suisen::internal::implicit_treap {
         static value_type& get(node_pointer t, size_type k) {
             while (true) {
                 node_type::push(t);
-                if (const size_type lsiz = safe_size(child0(t)); k == lsiz) {
+                if (const size_type left_size = safe_size(child0(t)); k == left_size) {
                     return value(t);
-                } else if (k < lsiz) {
+                } else if (k < left_size) {
                     t = child0(t);
                 } else {
-                    k -= lsiz + 1;
+                    k -= left_size + 1;
                     t = child1(t);
                 }
             }
@@ -386,13 +386,13 @@ namespace suisen::internal::implicit_treap {
         template <typename Func>
         static node_pointer set_update(node_pointer t, size_type k, const Func& f) {
             node_type::push(t);
-            if (const size_type lsiz = safe_size(child0(t)); k == lsiz) {
+            if (const size_type left_size = safe_size(child0(t)); k == left_size) {
                 value_type& val = value(t);
                 val = f(const_cast<const value_type&>(val));
-            } else if (k < lsiz) {
+            } else if (k < left_size) {
                 set_child0(t, set_update(child0(t), k, f));
             } else {
-                set_child1(t, set_update(child1(t), k - (lsiz + 1), f));
+                set_child1(t, set_update(child1(t), k - (left_size + 1), f));
             }
             return node_type::update(t);
         }
@@ -477,7 +477,7 @@ namespace suisen::internal::implicit_treap {
             using value_type = ReversibleNode::value_type;
             using pointer = std::conditional_t<constant, ReversibleNode::const_pointer, ReversibleNode::pointer>;
             using reference = std::conditional_t<constant, ReversibleNode::const_reference, ReversibleNode::reference>;
-            using iterator_cateogory = std::random_access_iterator_tag;
+            using iterator_category = std::random_access_iterator_tag;
 
             NodeIterator(): root(empty_node()), index(0) {}
 
@@ -528,12 +528,12 @@ namespace suisen::internal::implicit_treap {
                     node_type::push(t);
                     stk.push_back(t);
 
-                    if (size_type siz = safe_size(child(t, not positive)); k == siz) {
+                    if (size_type size = safe_size(child(t, not positive)); k == size) {
                         break;
-                    } else if (k < siz) {
+                    } else if (k < size) {
                         t = child(t, not positive);
                     } else {
-                        k -= siz + 1;
+                        k -= size + 1;
                         t = child(t, positive);
                     }
                 }
@@ -546,9 +546,9 @@ namespace suisen::internal::implicit_treap {
                 const bool positive = k < 0 ? (k = -k, reversed) : not reversed;
                 while (k) {
                     node_pointer t = child(stk.back(), positive);
-                    if (difference_type siz = safe_size(t); k > siz) {
+                    if (difference_type size = safe_size(t); k > size) {
                         up(positive);
-                        k -= siz + 1;
+                        k -= size + 1;
                     } else {
                         down(t, k - 1, positive);
                         break;
