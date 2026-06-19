@@ -30,6 +30,9 @@ namespace suisen {
         hash_type singleton_set(const value_type& val) {
             return (*this)(val);
         }
+        hash_type sigleton_set(const value_type& val) {
+            return singleton_set(val);
+        }
         hash_type flip(hash_type old_hash, const value_type& val) {
             return old_hash ^ (*this)(val);
         }

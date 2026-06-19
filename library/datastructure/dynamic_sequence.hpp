@@ -242,12 +242,12 @@ struct DynamicSequence : public DynamicSequenceBase<T, internal::dynamic_sequenc
         }
 
         T& operator[](int k) {
-            this->index_bounds_check(k, this->size_());
+            this->index_bounds_check(k, this->size());
             this->root = Node::splay(this->root, k);
             return this->root->val;
         }
         const T& operator[](int k) const {
-            this->index_bounds_check(k, this->size_());
+            this->index_bounds_check(k, this->size());
             this->root = Node::splay(this->root, k);
             return this->root->val;
         }
@@ -258,10 +258,10 @@ struct DynamicSequence : public DynamicSequenceBase<T, internal::dynamic_sequenc
             return (*this)[0];
         }
         T& back() {
-            return (*this)[this->size_() - 1];
+            return (*this)[this->size() - 1];
         }
         const T& back() const {
-            return (*this)[this->size_() - 1];
+            return (*this)[this->size() - 1];
         }
 
         DynamicSequence& operator+=(DynamicSequence &&right) {
@@ -279,7 +279,7 @@ struct DynamicSequence : public DynamicSequenceBase<T, internal::dynamic_sequenc
         // erases [k, size()) and returns [k, size())
         // template <typename T = decltype(*this), constraints_t<std::is_same<typename T::Node, Node>> = nullptr>
         DynamicSequence split(int k) {
-            this->index_bounds_check(k, this->size_() + 1);
+            this->index_bounds_check(k, this->size() + 1);
             auto [l, r] = Node::split(this->root, k);
             this->root = l;
             return DynamicSequence(r);
