@@ -478,18 +478,24 @@ data:
     \ mint>\nsuisen::FPS<mint> inv(suisen::FPS<mint> a) {\n    return a.inv();\n}\n\
     \n\n#line 1 \"library/polynomial/polynomial_taylor_shift.hpp\"\n\n\n\n#line 5\
     \ \"library/polynomial/polynomial_taylor_shift.hpp\"\n\n#line 1 \"library/math/factorial.hpp\"\
-    \n\n\n\n#line 6 \"library/math/factorial.hpp\"\n\nnamespace suisen {\n    template\
-    \ <typename T, typename U = T>\n    struct factorial {\n        factorial() =\
-    \ default;\n        factorial(int n) { ensure(n); }\n\n        static void ensure(const\
-    \ int n) {\n            int sz = _fac.size();\n            if (n + 1 <= sz) return;\n\
-    \            int new_size = std::max(n + 1, sz * 2);\n            _fac.resize(new_size),\
-    \ _fac_inv.resize(new_size);\n            for (int i = sz; i < new_size; ++i)\
-    \ _fac[i] = _fac[i - 1] * i;\n            _fac_inv[new_size - 1] = U(1) / _fac[new_size\
-    \ - 1];\n            for (int i = new_size - 1; i > sz; --i) _fac_inv[i - 1] =\
-    \ _fac_inv[i] * i;\n        }\n\n        T fac(const int i) {\n            ensure(i);\n\
-    \            return _fac[i];\n        }\n        T operator()(int i) {\n     \
-    \       return fac(i);\n        }\n        U fac_inv(const int i) {\n        \
-    \    ensure(i);\n            return _fac_inv[i];\n        }\n        U binom(const\
+    \n\n\n\n#line 6 \"library/math/factorial.hpp\"\n\nnamespace suisen {\n    // \u5F15\
+    \u6570\u3068\u3057\u3066\u4E0E\u3048\u308B\u5024\u306B\u5BFE\u3057\u3066\u3001\
+    \u6CD5\u304C\u5341\u5206\u5927\u304D\u3044\u3053\u3068\u3092\u4EEE\u5B9A\u3059\
+    \u308B\n    template <typename T, typename U = T>\n    struct factorial {\n  \
+    \      factorial() = default;\n        factorial(int n) { ensure(n); }\n\n   \
+    \     static void ensure(const int n) {\n            int sz = _fac.size();\n \
+    \           if (n + 1 <= sz) return;\n            int new_size = std::max(n +\
+    \ 1, sz * 2);\n            _fac.resize(new_size), _fac_inv.resize(new_size);\n\
+    \            for (int i = sz; i < new_size; ++i) _fac[i] = _fac[i - 1] * i;\n\
+    \            _fac_inv[new_size - 1] = U(1) / _fac[new_size - 1];\n           \
+    \ for (int i = new_size - 1; i > sz; --i) _fac_inv[i - 1] = _fac_inv[i] * i;\n\
+    \        }\n\n        T fac(const int i) {\n            ensure(i);\n         \
+    \   return _fac[i];\n        }\n        T operator()(int i) {\n            return\
+    \ fac(i);\n        }\n        U fac_inv(const int i) {\n            ensure(i);\n\
+    \            return _fac_inv[i];\n        }\n        // i \u306E\u9006\u6570\n\
+    \        // i = 0 \u306E\u5834\u5408\u306F assert \u9055\u53CD\u3068\u306A\u308B\
+    \n        U inv(const int i) {\n            assert(i > 0);\n            ensure(i);\n\
+    \            return _fac_inv[i] * _fac[i - 1];\n        }\n        U binom(const\
     \ int n, const int r) {\n            if (n < 0 or r < 0 or n < r) return 0;\n\
     \            ensure(n);\n            return _fac[n] * _fac_inv[r] * _fac_inv[n\
     \ - r];\n        }\n        // binom(n, r) \u306E\u9006\u6570\n        // binom(n,\
@@ -566,7 +572,7 @@ data:
   isVerificationFile: true
   path: test/src/polynomial/polynomial_taylor_shift/polynomial_taylor_shift.test.cpp
   requiredBy: []
-  timestamp: '2026-06-19 20:35:33+09:00'
+  timestamp: '2026-06-28 22:26:07+09:00'
   verificationStatus: TEST_ACCEPTED
   verifiedWith: []
 documentation_of: test/src/polynomial/polynomial_taylor_shift/polynomial_taylor_shift.test.cpp
