@@ -32,7 +32,7 @@ namespace suisen {
             return _fac_inv[i];
         }
         // i の逆数
-        // i = 0 の場合は assert 違反となる
+        // i ≡ 0 の場合は assert 違反となる
         U inv(const int i) {
             assert(i > 0);
             ensure(i);
