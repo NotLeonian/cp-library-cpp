@@ -5,6 +5,7 @@
 #include <vector>
 
 namespace suisen {
+    // 引数として与える値に対して、法が十分大きいことを仮定する
     template <typename T, typename U = T>
     struct factorial {
         factorial() = default;
@@ -32,7 +33,7 @@ namespace suisen {
             return _fac_inv[i];
         }
         // i の逆数
-        // i ≡ 0 の場合は assert 違反となる
+        // i = 0 の場合は assert 違反となる
         U inv(const int i) {
             assert(i > 0);
             ensure(i);
