@@ -31,6 +31,13 @@ namespace suisen {
             ensure(i);
             return _fac_inv[i];
         }
+        // i の逆数
+        // i = 0 の場合は assert 違反となる
+        U inv(const int i) {
+            assert(i > 0);
+            ensure(i);
+            return _fac_inv[i] * _fac[i - 1];
+        }
         U binom(const int n, const int r) {
             if (n < 0 or r < 0 or n < r) return 0;
             ensure(n);
