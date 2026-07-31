@@ -578,9 +578,9 @@ data:
   verifiedWith:
   - test/src/number/primitive_root/dummy.test.cpp
   - test/src/number/primitive_root/primitive_root.test.cpp
+  - test/src/convolution/multi_variate_convolution_circular/bitwise_xor_convolution.test.cpp
   - test/src/convolution/multi_variate_convolution_circular/dummy.test.cpp
   - test/src/convolution/multi_variate_convolution_circular/multivariate_convolution_cyclic.test.cpp
-  - test/src/convolution/multi_variate_convolution_circular/bitwise_xor_convolution.test.cpp
 documentation_of: library/number/order_Z_mZ.hpp
 layout: document
 title: Order of $x \in (\mathbb{Z}/m\mathbb{Z}) ^ \ast$

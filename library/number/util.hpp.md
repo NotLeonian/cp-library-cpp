@@ -177,9 +177,9 @@ data:
   timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test/src/number/mod_sqrt/dummy.test.cpp
-  - test/src/number/util/abc222_g.test.cpp
   - test/src/number/primitive_root/dummy.test.cpp
+  - test/src/number/util/abc222_g.test.cpp
+  - test/src/number/mod_sqrt/dummy.test.cpp
 documentation_of: library/number/util.hpp
 layout: document
 title: Util
