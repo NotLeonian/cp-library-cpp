@@ -257,15 +257,15 @@ data:
   isVerificationFile: false
   path: library/string/suffix_automaton.hpp
   requiredBy:
-  - library/debug/suffix_automaton.hpp
   - library/string/substring_set.hpp
+  - library/debug/suffix_automaton.hpp
   timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test/src/string/suffix_automaton/yuki430.test.cpp
-  - test/src/string/suffix_automaton/longest_common_substring.test.cpp
-  - test/src/string/substring_set/number_of_substrings.test.cpp
   - test/src/string/substring_set/arc097_a.test.cpp
+  - test/src/string/substring_set/number_of_substrings.test.cpp
+  - test/src/string/suffix_automaton/longest_common_substring.test.cpp
+  - test/src/string/suffix_automaton/yuki430.test.cpp
 documentation_of: library/string/suffix_automaton.hpp
 layout: document
 title: Suffix Automaton

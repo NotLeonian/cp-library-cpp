@@ -46,8 +46,8 @@ data:
   timestamp: '2022-10-20 19:29:51+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test/src/number/count_square_free/counting_squarefrees.test.cpp
   - test/src/number/kth_root_round/kth_root_integer.test.cpp
+  - test/src/number/count_square_free/counting_squarefrees.test.cpp
 documentation_of: library/number/kth_root_round.hpp
 layout: document
 title: $\lfloor a ^ {\frac{1}{k}}\rfloor, \lceil a ^ {\frac{1}{k}}\rceil$

@@ -253,8 +253,8 @@ data:
   timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test/src/string/palindromic_tree/yuki263.test.cpp
   - test/src/string/palindromic_tree/abc237_h.test.cpp
+  - test/src/string/palindromic_tree/yuki263.test.cpp
 documentation_of: library/string/palindromic_tree.hpp
 layout: document
 title: "Palindromic Tree (\u56DE\u6587\u6728)"

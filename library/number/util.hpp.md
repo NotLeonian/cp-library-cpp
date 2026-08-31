@@ -178,8 +178,8 @@ data:
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/number/primitive_root/dummy.test.cpp
-  - test/src/number/util/abc222_g.test.cpp
   - test/src/number/mod_sqrt/dummy.test.cpp
+  - test/src/number/util/abc222_g.test.cpp
 documentation_of: library/number/util.hpp
 layout: document
 title: Util

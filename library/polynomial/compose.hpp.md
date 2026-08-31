@@ -114,8 +114,8 @@ data:
   timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test/src/polynomial/compose/dummy.test.cpp
   - test/src/polynomial/compose/composition_of_formal_power_series.test.cpp
+  - test/src/polynomial/compose/dummy.test.cpp
 documentation_of: library/polynomial/compose.hpp
 layout: document
 title: "\u5408\u6210"

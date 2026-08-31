@@ -683,8 +683,8 @@ data:
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
   - test/src/datastructure/bbst/reversible_implicit_treap/abc237_d.test.cpp
-  - test/src/datastructure/bbst/reversible_implicit_treap/dummy.test.cpp
   - test/src/datastructure/bbst/reversible_implicit_treap/yuki649.test.cpp
+  - test/src/datastructure/bbst/reversible_implicit_treap/dummy.test.cpp
 documentation_of: library/datastructure/bbst/reversible_implicit_treap.hpp
 layout: document
 title: Reversible Implicit Treap

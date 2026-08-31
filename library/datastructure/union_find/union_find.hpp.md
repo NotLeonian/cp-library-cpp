@@ -80,8 +80,8 @@ data:
   path: library/datastructure/union_find/union_find.hpp
   requiredBy:
   - library/datastructure/union_find/linked_union_find.hpp
-  - library/datastructure/union_find/union_find_component_sum.hpp
   - library/datastructure/union_find/union_find_lazy.hpp
+  - library/datastructure/union_find/union_find_component_sum.hpp
   timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:

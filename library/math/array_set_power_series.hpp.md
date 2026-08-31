@@ -548,9 +548,9 @@ data:
   timestamp: '2026-06-19 20:35:33+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
-  - test/src/math/array_set_power_series/abc213_g.test.cpp
-  - test/src/math/array_set_power_series/abc236_h.test.cpp
   - test/src/math/array_set_power_series/abc253_h_2.test.cpp
+  - test/src/math/array_set_power_series/abc236_h.test.cpp
+  - test/src/math/array_set_power_series/abc213_g.test.cpp
   - test/src/math/array_set_power_series/arc105_f.test.cpp
   - test/src/math/array_set_power_series/abc253_h.test.cpp
 documentation_of: library/math/array_set_power_series.hpp
