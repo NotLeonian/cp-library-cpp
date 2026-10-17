@@ -150,9 +150,9 @@ data:
   verifiedWith:
   - test/src/graph/minmax_floyd_warshall/abc287_h.test.cpp
   - test/src/math/set_power_series/abc253_h.test.cpp
+  - test/src/util/subset_iterator/dummy_all_subset.test.cpp
   - test/src/util/subset_iterator/dummy_all_setbit.test.cpp
   - test/src/util/subset_iterator/dummy_all_subset_k.test.cpp
-  - test/src/util/subset_iterator/dummy_all_subset.test.cpp
 documentation_of: library/util/subset_iterator.hpp
 layout: document
 title: Subset Iterator

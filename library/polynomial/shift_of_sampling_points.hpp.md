@@ -161,9 +161,9 @@ data:
   - test/src/polynomial/shift_of_sampling_points/shift_of_sampling_points_of_polynomial.test.cpp
   - test/src/math/sum_i^d_r^i/sum_of_exponential_times_polynomial.test.cpp
   - test/src/math/sum_i^d_r^i/sum_of_exponential_times_polynomial_limit.test.cpp
+  - test/src/math/factorial_large/dummy.test.cpp
   - test/src/math/factorial_large/many_factorials.test.cpp
   - test/src/math/factorial_large/factorial.test.cpp
-  - test/src/math/factorial_large/dummy.test.cpp
 documentation_of: library/polynomial/shift_of_sampling_points.hpp
 layout: document
 title: Shift of Sampling Points of Polynomial

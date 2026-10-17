@@ -65,9 +65,9 @@ data:
   isVerificationFile: false
   path: library/number/ext_gcd.hpp
   requiredBy:
-  - library/number/bezout_equation.hpp
-  - library/number/garner.hpp
   - library/convolution/multi_variate_convolution_circular.hpp
+  - library/number/garner.hpp
+  - library/number/bezout_equation.hpp
   timestamp: '2023-09-06 20:35:15+09:00'
   verificationStatus: LIBRARY_ALL_AC
   verifiedWith:
