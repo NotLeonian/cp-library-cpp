@@ -287,4 +287,7 @@ jobs:
         python3 -m py_compile "${patch}"
         export PYTHONPATH="${patch_dir}${PYTHONPATH:+:${PYTHONPATH}}"
 
-        PATH="${wrapper_dir}:${PATH}" REAL_GXX="${real_gxx}" CXX="${wrapper}" oj-verify docs
+        # oj-verify 5.6.0 only deploys docs for push events. This step is
+        # restricted to successful main runs, including manual ones.
+        GITHUB_EVENT_NAME=push PATH="${wrapper_dir}:${PATH}" \
+          REAL_GXX="${real_gxx}" CXX="${wrapper}" oj-verify docs
